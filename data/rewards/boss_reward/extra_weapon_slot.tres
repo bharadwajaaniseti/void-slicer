@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="RewardData" format=3 uid="uid://cbb68dg3rdwj0"]
+
+[ext_resource type="Script" uid="uid://yi55q1xonpt0" path="res://scripts/rewards/reward_data.gd" id="1_iwaqa"]
+
+[resource]
+script = ExtResource("1_iwaqa")
+reward_id = "extra_weapon_slot"
+display_name = "WEAPON SLOT"
+description = "Adds another weapon slot to your combat loadout."
+reward_type = 5
+rarity = 4
+stat_line_1 = " +1 Weapon Slot"
+stat_line_2 = "Equip One Additional Weapon"
+stat_line_3 = "Maximum Slots Still Apply"
+stat_id = "maximum_weapon_slots"
+primary_value = 1.0
+maximum_stacks = 3
+boss_reward_only = true
+metadata/_custom_type_script = "uid://yi55q1xonpt0"

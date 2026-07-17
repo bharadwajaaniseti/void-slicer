@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bgl2tonk3yclx"]
+
+[ext_resource type="Script" uid="uid://cv1iestnhs2m8" path="res://scripts/combat/beam_fx.gd" id="1_oayo7"]
+
+[node name="BeamFx" type="Node2D" unique_id=781365383]
+script = ExtResource("1_oayo7")

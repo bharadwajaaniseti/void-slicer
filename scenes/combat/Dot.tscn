@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://d1ocuum5i81g7"]
+
+[ext_resource type="Script" uid="uid://bgqlcn0web70k" path="res://scripts/combat/dot.gd" id="1_huepq"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6waqw"]
+
+[node name="Dot" type="Area2D" unique_id=1226071501]
+script = ExtResource("1_huepq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1353523388]
+shape = SubResource("CircleShape2D_6waqw")

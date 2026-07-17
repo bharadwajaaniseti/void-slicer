@@ -1,0 +1,270 @@
+[gd_scene format=3 uid="uid://2yaaj1vl4mfj"]
+
+[ext_resource type="Script" uid="uid://dku7lvebbl07r" path="res://scenes/ui/rewards/reward_selection_modal.gd" id="1_2hmro"]
+[ext_resource type="PackedScene" uid="uid://bggredvcwguua" path="res://scenes/ui/rewards/reward_card.tscn" id="1_ux36v"]
+[ext_resource type="Texture2D" uid="uid://binnpbs7q3bi1" path="res://assets/ui/voidslice logo.png" id="2_0l38d"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jxh7r"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.54901963, 0.38039216, 0.92941177, 1)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+shadow_color = Color(0.39607844, 0.22352941, 0.80784315, 0.27058825)
+shadow_size = 20
+shadow_offset = Vector2(0, 8)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ux36v"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.52156866, 0.3254902, 0.9372549, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y3mow"]
+bg_color = Color(0.08627451, 0.45490196, 0.9607843, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0l38d"]
+bg_color = Color(0.95686275, 0.93333334, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.41960785, 0.14509805, 0.95686275, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2hmro"]
+bg_color = Color(0.96862745, 0.9607843, 0.9882353, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2kxdc"]
+bg_color = Color(0.08627451, 0.45490196, 0.9607843, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5mscy"]
+bg_color = Color(0.52156866, 0.3254902, 0.9372549, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j6ntf"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.08627451, 0.45490196, 0.9607843, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="RewardSelectionModal" type="CanvasLayer" unique_id=269704532]
+process_mode = 3
+layer = 50
+script = ExtResource("1_2hmro")
+modal_root_path = NodePath("ModalRoot")
+dim_background_path = NodePath("ModalRoot/DimBackground")
+modal_panel_path = NodePath("ModalRoot/ModalCenter/ModalPanel")
+title_label_path = NodePath("ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/HeaderVBox/TitleRow/TitleLabel")
+subtitle_label_path = NodePath("ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/HeaderVBox/SubtitleLabel")
+reward_symbol_path = NodePath("ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/HeaderVBox/RewardSymbolCenter/RewardSymbol")
+cards_container_path = NodePath("ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/CardsHBox")
+reroll_button_path = NodePath("ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/FooterHBox/RerollButton")
+lock_count_label_path = NodePath("ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/FooterHBox/LockInfoPanel/LockInfoHBox/LockCountLabel")
+skip_button_path = NodePath("ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/FooterHBox/LockInfoPanel/LockInfoHBox/SkipButton")
+reward_card_1_path = NodePath("ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/CardsHBox/RewardCard")
+reward_card_2_path = NodePath("ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/CardsHBox/RewardCard2")
+reward_card_3_path = NodePath("ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/CardsHBox/RewardCard3")
+
+[node name="ModalRoot" type="Control" parent="." unique_id=1911774141]
+process_mode = 3
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DimBackground" type="ColorRect" parent="ModalRoot" unique_id=1130649862]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.057412412, 0.099158764, 0.19671138, 0.1882353)
+
+[node name="ModalCenter" type="CenterContainer" parent="ModalRoot" unique_id=186458444]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ModalPanel" type="PanelContainer" parent="ModalRoot/ModalCenter" unique_id=578483820]
+custom_minimum_size = Vector2(1080, 680)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jxh7r")
+
+[node name="ModalMargin" type="MarginContainer" parent="ModalRoot/ModalCenter/ModalPanel" unique_id=1637683174]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 22
+
+[node name="ModalVBox" type="VBoxContainer" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin" unique_id=508238209]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="HeaderVBox" type="VBoxContainer" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox" unique_id=317920531]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="RewardSymbolCenter" type="CenterContainer" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/HeaderVBox" unique_id=872582315]
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+
+[node name="RewardSymbol" type="TextureRect" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/HeaderVBox/RewardSymbolCenter" unique_id=1616288665]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TitleRow" type="HBoxContainer" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/HeaderVBox" unique_id=1306928479]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="LeftLine" type="ColorRect" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/HeaderVBox/TitleRow" unique_id=668134801]
+custom_minimum_size = Vector2(245, 2)
+layout_mode = 2
+color = Color(0.54509807, 0.36078432, 1, 1)
+
+[node name="TitleLabel" type="Label" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/HeaderVBox/TitleRow" unique_id=866728894]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.30980393, 0.1254902, 0.8, 1)
+theme_override_font_sizes/font_size = 34
+text = "ASCENSION REWARD"
+horizontal_alignment = 1
+
+[node name="RightLine" type="ColorRect" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/HeaderVBox/TitleRow" unique_id=670036268]
+custom_minimum_size = Vector2(245, 2)
+layout_mode = 2
+color = Color(0.54509807, 0.36078432, 1, 1)
+
+[node name="SubtitleLabel" type="Label" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/HeaderVBox" unique_id=1343681830]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.20392157, 0.2509804, 0.32941177, 1)
+theme_override_font_sizes/font_size = 14
+text = "◆  CHOOSE 1 REWARD TO CONTINUE  ◆"
+horizontal_alignment = 1
+
+[node name="CardsHBox" type="HBoxContainer" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox" unique_id=1053054802]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="RewardCard" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/CardsHBox" unique_id=320184682 instance=ExtResource("1_ux36v")]
+layout_mode = 2
+
+[node name="RewardCard2" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/CardsHBox" unique_id=1898752826 instance=ExtResource("1_ux36v")]
+layout_mode = 2
+
+[node name="RewardCard3" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/CardsHBox" unique_id=893636677 instance=ExtResource("1_ux36v")]
+layout_mode = 2
+
+[node name="FooterHBox" type="HBoxContainer" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox" unique_id=1224217253]
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+theme_override_constants/separation = 22
+alignment = 1
+
+[node name="RerollButton" type="Button" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/FooterHBox" unique_id=558507159]
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.30980393, 0.09411765, 0.8509804, 1)
+theme_override_colors/font_hover_color = Color(0.52156866, 0.3254902, 0.9372549, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_ux36v")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_y3mow")
+theme_override_styles/hover = SubResource("StyleBoxFlat_0l38d")
+text = "REROLL     ◆ 50"
+
+[node name="LockInfoPanel" type="PanelContainer" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/FooterHBox" unique_id=1680468497]
+custom_minimum_size = Vector2(440, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2hmro")
+
+[node name="LockInfoHBox" type="HBoxContainer" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/FooterHBox/LockInfoPanel" unique_id=554930253]
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="LockIcon" type="TextureRect" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/FooterHBox/LockInfoPanel/LockInfoHBox" unique_id=1332661242]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("2_0l38d")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LockInfoLabel" type="Label" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/FooterHBox/LockInfoPanel/LockInfoHBox" unique_id=207098748]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3553136, 0.35531354, 0.35531357, 1)
+text = "Locked cards stay on reroll"
+
+[node name="InfoDivider" type="VSeparator" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/FooterHBox/LockInfoPanel/LockInfoHBox" unique_id=905816594]
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
+
+[node name="LockCountLabel" type="Label" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/FooterHBox/LockInfoPanel/LockInfoHBox" unique_id=692320588]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.39215687, 0.1882353, 0.9098039, 1)
+text = "🔒  2 locks available"
+horizontal_alignment = 1
+
+[node name="SkipButton" type="Button" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/FooterHBox/LockInfoPanel/LockInfoHBox" unique_id=1624040678]
+custom_minimum_size = Vector2(220, 50)
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0.08627451, 0.45490196, 0.9607843, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_2kxdc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5mscy")
+theme_override_styles/hover = SubResource("StyleBoxFlat_j6ntf")
+text = "SKIP REWARD (10)"

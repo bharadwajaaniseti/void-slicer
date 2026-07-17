@@ -1,0 +1,428 @@
+[gd_scene format=3 uid="uid://ib0rp31ysfg"]
+
+[ext_resource type="Script" uid="uid://d3loufg07cpec" path="res://scripts/screens/main_game_screen.gd" id="1_grrcs"]
+[ext_resource type="PackedScene" uid="uid://cde0t00butoj7" path="res://scenes/tabs/HomeTab.tscn" id="2_6ettp"]
+[ext_resource type="Texture2D" uid="uid://binnpbs7q3bi1" path="res://assets/ui/voidslice logo.png" id="2_i3845"]
+[ext_resource type="PackedScene" uid="uid://by3qfap2m58x0" path="res://scenes/tabs/SkillTreeTab.tscn" id="3_02ygd"]
+[ext_resource type="PackedScene" uid="uid://cosfyvraeqohl" path="res://scenes/tabs/UpgradesTab.tscn" id="4_11pai"]
+[ext_resource type="PackedScene" uid="uid://jcxgxbbt02tj" path="res://scenes/tabs/ResearchTab.tscn" id="5_jtoky"]
+[ext_resource type="PackedScene" uid="uid://bbg7qj3qlstnf" path="res://scenes/tabs/ShopTab.tscn" id="6_s7ggu"]
+[ext_resource type="PackedScene" uid="uid://bgo5y64228y0f" path="res://scenes/tabs/PrestigeTab.tscn" id="7_75s8p"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grrcs"]
+bg_color = Color(1, 1, 1, 0.8666667)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0.5411765, 0.3019608, 1, 0.1254902)
+shadow_size = 10
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i3845"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.5411765, 0.3019608, 1, 0.07058824)
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ci4yn"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7mjuy"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+corner_detail = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ftonl"]
+bg_color = Color(0.3093363, 0.0009406674, 0.7281569, 1)
+border_width_left = 1
+border_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+corner_detail = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w0s4o"]
+bg_color = Color(0.4509804, 0.16078432, 1, 1)
+border_width_left = 1
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4cokn"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6ettp"]
+bg_color = Color(1, 1, 1, 0.93333334)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0.5411765, 0.3019608, 1, 0.07058824)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[node name="MainGameScreenRoot" type="Control" unique_id=975337012]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_grrcs")
+home_scene = ExtResource("2_6ettp")
+skills_scene = ExtResource("3_02ygd")
+upgrades_scene = ExtResource("4_11pai")
+research_scene = ExtResource("5_jtoky")
+shop_scene = ExtResource("6_s7ggu")
+prestige_scene = ExtResource("7_75s8p")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1884941381]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.9843137, 0.9843137, 1, 1)
+
+[node name="BackgroundVoid" type="ColorRect" parent="." unique_id=1617925792]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0.1882353)
+
+[node name="TopBar" type="PanelContainer" parent="." unique_id=1863174359]
+custom_minimum_size = Vector2(0, 78)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+offset_bottom = 78.0
+grow_horizontal = 2
+pivot_offset = Vector2(28, 82)
+pivot_offset_ratio = Vector2(-28, 82)
+theme_override_styles/panel = SubResource("StyleBoxFlat_grrcs")
+
+[node name="TopBarMargin" type="MarginContainer" parent="TopBar" unique_id=1812074313]
+custom_minimum_size = Vector2(0, 78)
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 7
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 7
+
+[node name="TopBarHBox" type="HBoxContainer" parent="TopBar/TopBarMargin" unique_id=1197834446]
+custom_minimum_size = Vector2(0, 78)
+layout_mode = 2
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="LogoBlock" type="HBoxContainer" parent="TopBar/TopBarMargin/TopBarHBox" unique_id=626716323]
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+
+[node name="LogoIcon" type="TextureRect" parent="TopBar/TopBarMargin/TopBarHBox/LogoBlock" unique_id=1122008383]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+texture = ExtResource("2_i3845")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="LogoTextBox" type="VBoxContainer" parent="TopBar/TopBarMargin/TopBarHBox/LogoBlock" unique_id=419390348]
+layout_mode = 2
+
+[node name="GameTitle" type="Label" parent="TopBar/TopBarMargin/TopBarHBox/LogoBlock/LogoTextBox" unique_id=1106217162]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.019607844, 0.043137256, 1)
+theme_override_font_sizes/font_size = 28
+text = "VOID SLICER"
+
+[node name="GameSubTitle" type="Label" parent="TopBar/TopBarMargin/TopBarHBox/LogoBlock/LogoTextBox" unique_id=643083940]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.019607844, 0.043137256, 1)
+theme_override_font_sizes/font_size = 15
+text = "---------- I D L E ----------"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MiddleSpacer" type="Control" parent="TopBar/TopBarMargin/TopBarHBox" unique_id=1406576765]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GalaxySelector" type="PanelContainer" parent="TopBar/TopBarMargin/TopBarHBox" unique_id=1019801549]
+custom_minimum_size = Vector2(330, 54)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_i3845")
+
+[node name="GalaxyHBox" type="HBoxContainer" parent="TopBar/TopBarMargin/TopBarHBox/GalaxySelector" unique_id=23506923]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="GalaxyIcon" type="TextureRect" parent="TopBar/TopBarMargin/TopBarHBox/GalaxySelector/GalaxyHBox" unique_id=297222327]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+texture = ExtResource("2_i3845")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="GalaxyLabel" type="Label" parent="TopBar/TopBarMargin/TopBarHBox/GalaxySelector/GalaxyHBox" unique_id=1100020276]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.019607844, 0.043137256, 1)
+theme_override_font_sizes/font_size = 17
+text = "GALAXY 2: CRIMSON"
+
+[node name="DropIcon" type="Label" parent="TopBar/TopBarMargin/TopBarHBox/GalaxySelector/GalaxyHBox" unique_id=252605999]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.019607844, 0.043137256, 1)
+text = "▼    "
+
+[node name="MiddleSpacer2" type="Control" parent="TopBar/TopBarMargin/TopBarHBox" unique_id=626954399]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MoneyLabel" type="Label" parent="TopBar/TopBarMargin/TopBarHBox" unique_id=1821810864]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.019607844, 0.043137256, 1)
+theme_override_font_sizes/font_size = 54
+text = "$832k"
+horizontal_alignment = 1
+
+[node name="StatDivider1" type="ColorRect" parent="TopBar/TopBarMargin/TopBarHBox" unique_id=1612430330]
+custom_minimum_size = Vector2(2, 50)
+layout_mode = 2
+color = Color(0.8901961, 0.8784314, 0.93333334, 1)
+
+[node name="WaveBox" type="VBoxContainer" parent="TopBar/TopBarMargin/TopBarHBox" unique_id=1079579759]
+layout_mode = 2
+
+[node name="WaveTitle" type="Label" parent="TopBar/TopBarMargin/TopBarHBox/WaveBox" unique_id=84727007]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3647059, 0.3764706, 0.45882353, 1)
+theme_override_font_sizes/font_size = 14
+text = "WAVE"
+horizontal_alignment = 1
+
+[node name="WaveValue" type="Label" parent="TopBar/TopBarMargin/TopBarHBox/WaveBox" unique_id=1602706577]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4509804, 0.16078432, 1, 1)
+theme_override_font_sizes/font_size = 25
+text = "248"
+horizontal_alignment = 1
+
+[node name="StatDivider2" type="ColorRect" parent="TopBar/TopBarMargin/TopBarHBox" unique_id=375175638]
+custom_minimum_size = Vector2(2, 50)
+layout_mode = 2
+color = Color(0.8901961, 0.8784314, 0.93333334, 1)
+
+[node name="DpsBox" type="VBoxContainer" parent="TopBar/TopBarMargin/TopBarHBox" unique_id=1032220000]
+layout_mode = 2
+
+[node name="DpsTitle" type="Label" parent="TopBar/TopBarMargin/TopBarHBox/DpsBox" unique_id=1089039606]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3647059, 0.3764706, 0.45882353, 1)
+theme_override_font_sizes/font_size = 14
+text = "DPS"
+horizontal_alignment = 1
+
+[node name="DpsValue" type="Label" parent="TopBar/TopBarMargin/TopBarHBox/DpsBox" unique_id=597948926]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.14117648, 0.46666667, 1, 1)
+theme_override_font_sizes/font_size = 25
+text = "1.25M"
+horizontal_alignment = 1
+
+[node name="GemPanel" type="PanelContainer" parent="TopBar/TopBarMargin/TopBarHBox" unique_id=97624189]
+custom_minimum_size = Vector2(185, 54)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ci4yn")
+
+[node name="GemHBox" type="HBoxContainer" parent="TopBar/TopBarMargin/TopBarHBox/GemPanel" unique_id=1458592654]
+layout_mode = 2
+
+[node name="GemIcon" type="TextureRect" parent="TopBar/TopBarMargin/TopBarHBox/GemPanel/GemHBox" unique_id=1577277964]
+layout_mode = 2
+texture = ExtResource("2_i3845")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="GemValue" type="Label" parent="TopBar/TopBarMargin/TopBarHBox/GemPanel/GemHBox" unique_id=692124241]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.019607844, 0.043137256, 1)
+theme_override_font_sizes/font_size = 20
+text = "15,420"
+
+[node name="GemPlus" type="Button" parent="TopBar/TopBarMargin/TopBarHBox/GemPanel/GemHBox" unique_id=1297943017]
+custom_minimum_size = Vector2(40, 34)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4509804, 0.16078432, 1, 1)
+theme_override_font_sizes/font_size = 25
+theme_override_styles/normal = SubResource("StyleBoxFlat_7mjuy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ftonl")
+theme_override_styles/hover = SubResource("StyleBoxFlat_w0s4o")
+text = "+"
+
+[node name="TimePanel" type="PanelContainer" parent="TopBar/TopBarMargin/TopBarHBox" unique_id=259415676]
+custom_minimum_size = Vector2(140, 54)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4cokn")
+
+[node name="TimeHBox" type="HBoxContainer" parent="TopBar/TopBarMargin/TopBarHBox/TimePanel" unique_id=878773249]
+layout_mode = 2
+alignment = 1
+
+[node name="TimeIcon" type="Label" parent="TopBar/TopBarMargin/TopBarHBox/TimePanel/TimeHBox" unique_id=372691394]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4509804, 0.16078432, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "⏱"
+
+[node name="TimeLabel" type="Label" parent="TopBar/TopBarMargin/TopBarHBox/TimePanel/TimeHBox" unique_id=1421904499]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4509804, 0.16078432, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "12:45"
+
+[node name="SettingsPanel" type="PanelContainer" parent="TopBar/TopBarMargin/TopBarHBox" unique_id=2043275597]
+custom_minimum_size = Vector2(185, 54)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ci4yn")
+
+[node name="GemHBox" type="HBoxContainer" parent="TopBar/TopBarMargin/TopBarHBox/SettingsPanel" unique_id=343292135]
+layout_mode = 2
+alignment = 1
+
+[node name="GemPlus" type="Button" parent="TopBar/TopBarMargin/TopBarHBox/SettingsPanel/GemHBox" unique_id=455823696]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.4509804, 0.16078432, 1, 1)
+theme_override_font_sizes/font_size = 25
+theme_override_styles/normal = SubResource("StyleBoxFlat_7mjuy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ftonl")
+theme_override_styles/hover = SubResource("StyleBoxFlat_w0s4o")
+text = "Settings"
+
+[node name="NavBar" type="PanelContainer" parent="." unique_id=633715555]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+offset_left = 28.0
+offset_top = 96.0
+offset_right = -28.0
+offset_bottom = 160.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6ettp")
+
+[node name="NavHBox" type="HBoxContainer" parent="NavBar" unique_id=1668117688]
+layout_mode = 2
+theme_override_constants/separation = 36
+alignment = 1
+
+[node name="HomeButton" type="Button" parent="NavBar/NavHBox" unique_id=1470135016]
+custom_minimum_size = Vector2(220, 58)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4509804, 0.16078432, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "🏠 HOME"
+flat = true
+
+[node name="SkillsButton" type="Button" parent="NavBar/NavHBox" unique_id=1472960015]
+custom_minimum_size = Vector2(220, 58)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.019607844, 0.043137256, 1)
+theme_override_font_sizes/font_size = 18
+text = "⚡SKILLS"
+flat = true
+
+[node name="UpgradesButton" type="Button" parent="NavBar/NavHBox" unique_id=1326684410]
+custom_minimum_size = Vector2(220, 58)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.019607844, 0.043137256, 1)
+theme_override_font_sizes/font_size = 18
+text = "⚗ UPGRADES"
+flat = true
+
+[node name="ResearchButton" type="Button" parent="NavBar/NavHBox" unique_id=1755367003]
+custom_minimum_size = Vector2(220, 58)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.019607844, 0.043137256, 1)
+theme_override_font_sizes/font_size = 18
+text = "🧪 RESEARCH"
+flat = true
+
+[node name="ShopButton" type="Button" parent="NavBar/NavHBox" unique_id=376490765]
+custom_minimum_size = Vector2(220, 58)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.019607844, 0.043137256, 1)
+theme_override_font_sizes/font_size = 18
+text = "🛒 SHOP"
+flat = true
+
+[node name="PrestigeButton" type="Button" parent="NavBar/NavHBox" unique_id=2086737763]
+custom_minimum_size = Vector2(220, 58)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.019607844, 0.043137256, 1)
+theme_override_font_sizes/font_size = 18
+text = "◈ PRESTIGE"
+flat = true
+
+[node name="ContentHost" type="Control" parent="." unique_id=273223519]
+layout_mode = 1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 165.0
+offset_right = -10.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2

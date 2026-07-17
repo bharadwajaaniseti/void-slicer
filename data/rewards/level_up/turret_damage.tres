@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="RewardData" format=3 uid="uid://sq8jqwefou33"]
+
+[ext_resource type="Script" uid="uid://yi55q1xonpt0" path="res://scripts/rewards/reward_data.gd" id="1_e1cx2"]
+
+[resource]
+script = ExtResource("1_e1cx2")
+reward_id = "turret_damage"
+display_name = "TURRET AMPLIFIER"
+description = "Enhances the damage output of all standard turrets."
+reward_type = 2
+stat_line_1 = "+20% Turret Damage"
+stat_line_2 = "+5% Turret Range"
+stat_line_3 = "Requires Turret equipped"
+stat_id = "weapon_damage_multiplier"
+primary_value = 0.2
+secondary_stat_id = "weapon_range_multiplier"
+secondary_value = 0.05
+weapon_id = "turret"
+maximum_stacks = 8
+requires_equipped_weapon = true
+required_weapon_id = "turret"
+level_up_reward_only = true
+metadata/_custom_type_script = "uid://yi55q1xonpt0"

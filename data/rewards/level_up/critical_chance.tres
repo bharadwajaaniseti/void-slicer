@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="RewardData" format=3 uid="uid://ba0nlt7p3r6h6"]
+
+[ext_resource type="Script" uid="uid://yi55q1xonpt0" path="res://scripts/rewards/reward_data.gd" id="1_5vkh2"]
+
+[resource]
+script = ExtResource("1_5vkh2")
+reward_id = "critical_chance"
+display_name = "PRECISION CORE"
+description = "Improves the chance for attacks to deal critical damage."
+rarity = 2
+stat_line_1 = "+8% Critical Chance"
+stat_line_2 = "+10% Critical Damage"
+stat_line_3 = "Maximum critical chance applies"
+stat_id = "critical_chance"
+primary_value = 0.08
+secondary_stat_id = "critical_damage_multiplier"
+secondary_value = 0.1
+maximum_stacks = 6
+level_up_reward_only = true
+metadata/_custom_type_script = "uid://yi55q1xonpt0"

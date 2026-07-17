@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="RewardData" format=3 uid="uid://00ehy3ignu32"]
+
+[ext_resource type="Script" uid="uid://yi55q1xonpt0" path="res://scripts/rewards/reward_data.gd" id="1_x1gvg"]
+
+[resource]
+script = ExtResource("1_x1gvg")
+reward_id = "global_damage"
+display_name = "GLOBAL DAMAGE"
+description = "Amplify your arsenal's destructive power."
+rarity = 2
+stat_line_1 = "✦ +25% Weapon Damage"
+stat_line_2 = "◎ +12% Boss Damage"
+stat_line_3 = "♨ +8% Critical Chance"
+stat_id = "global_damage_multiplier"
+primary_value = 0.25
+maximum_stacks = 10
+level_up_reward_only = true
+metadata/_custom_type_script = "uid://yi55q1xonpt0"

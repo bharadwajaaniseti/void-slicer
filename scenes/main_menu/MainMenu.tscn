@@ -1,0 +1,163 @@
+[gd_scene format=3 uid="uid://7u3e1tvxh8dj"]
+
+[ext_resource type="Script" uid="uid://cj2vhm1ngnx04" path="res://scripts/main_menu/main_menu.gd" id="1_ucygd"]
+[ext_resource type="Texture2D" uid="uid://blcqpep5nxgoq" path="res://assets/background/Main Background.png" id="1_yqorp"]
+[ext_resource type="Texture2D" uid="uid://binnpbs7q3bi1" path="res://assets/ui/voidslice logo.png" id="2_0ykhv"]
+[ext_resource type="PackedScene" uid="uid://0da4d7bdxad4" path="res://scenes/ui/MenuButton.tscn" id="3_826wr"]
+[ext_resource type="Texture2D" uid="uid://bde81gyec5fgf" path="res://assets/icons/Combat Icon White.png" id="4_ucygd"]
+[ext_resource type="Texture2D" uid="uid://4dqfk6lweini" path="res://assets/icons/about Icon.png" id="5_mipys"]
+[ext_resource type="Texture2D" uid="uid://cs0l8dhqt53am" path="res://assets/icons/credsits Icon.png" id="6_8a8k8"]
+
+[node name="MainMenuRoot" type="Control" unique_id=1220174717]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ucygd")
+
+[node name="BackgroundImage" type="TextureRect" parent="." unique_id=82820639]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("1_yqorp")
+expand_mode = 2
+stretch_mode = 6
+
+[node name="SafeArea" type="Control" parent="." unique_id=556833592]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LogoContainer" type="Control" parent="SafeArea" unique_id=1391670193]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 210.0
+offset_top = 145.0
+offset_right = 870.0
+offset_bottom = 295.0
+
+[node name="TextureRect" type="TextureRect" parent="SafeArea/LogoContainer" unique_id=2041341070]
+layout_mode = 0
+offset_top = 10.0
+offset_right = 120.0
+offset_bottom = 130.0
+texture = ExtResource("2_0ykhv")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TitleLabel" type="Label" parent="SafeArea/LogoContainer" unique_id=1984430209]
+layout_mode = 0
+offset_left = 150.0
+offset_top = 20.0
+offset_right = 202.0
+offset_bottom = 90.0
+theme_override_colors/font_color = Color(0.019607844, 0.019607844, 0.03529412, 1)
+theme_override_font_sizes/font_size = 66
+text = "VOID SLICER"
+vertical_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="SafeArea/LogoContainer" unique_id=995459846]
+layout_mode = 0
+offset_left = 295.0
+offset_top = 92.0
+offset_right = 475.0
+offset_bottom = 136.0
+theme_override_colors/font_color = Color(0.06666667, 0.06666667, 0.08627451, 1)
+theme_override_font_sizes/font_size = 32
+text = "I D L E"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LeftLine" type="ColorRect" parent="SafeArea/LogoContainer" unique_id=839604346]
+layout_mode = 0
+offset_left = 150.0
+offset_top = 114.0
+offset_right = 280.0
+offset_bottom = 117.0
+mouse_filter = 2
+color = Color(0.5411765, 0.16862746, 1, 1)
+
+[node name="RightLIne" type="ColorRect" parent="SafeArea/LogoContainer" unique_id=1400033291]
+layout_mode = 0
+offset_left = 490.0
+offset_top = 114.0
+offset_right = 620.0
+offset_bottom = 117.0
+mouse_filter = 2
+color = Color(0.5411765, 0.16862746, 1, 1)
+
+[node name="TaglineLabel" type="RichTextLabel" parent="SafeArea" unique_id=668001300]
+layout_mode = 1
+offset_left = 235.0
+offset_top = 360.0
+offset_right = 1107.0
+offset_bottom = 405.0
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.38039216, 0.41568628, 0.5137255, 1)
+theme_override_font_sizes/normal_font_size = 22
+bbcode_enabled = true
+text = "ENTER THE [color=#7B22FF]VOID[/color]. BEGIN THE [color=#7B22FF]ASCENSION[/color]."
+fit_content = true
+scroll_active = false
+
+[node name="ButtonColumn" type="VBoxContainer" parent="SafeArea" unique_id=509960678]
+layout_mode = 1
+offset_left = 220.0
+offset_top = 455.0
+offset_right = 830.0
+offset_bottom = 795.0
+theme_override_constants/separation = 22
+
+[node name="StartButton" parent="SafeArea/ButtonColumn" unique_id=201169873 instance=ExtResource("3_826wr")]
+layout_mode = 2
+button_text = "BEGIN"
+icon_texture = ExtResource("4_ucygd")
+normal_glow_alpha = 0.18
+hover_glow_alpha = 0.45
+
+[node name="AboutButton" parent="SafeArea/ButtonColumn" unique_id=1369399257 instance=ExtResource("3_826wr")]
+custom_minimum_size = Vector2(600, 90)
+layout_mode = 2
+button_text = "ABOUT"
+icon_texture = ExtResource("5_mipys")
+primary_button = false
+button_size = Vector2(600, 90)
+normal_glow_alpha = 0.18
+hover_glow_alpha = 0.45
+
+[node name="CreditsButton" parent="SafeArea/ButtonColumn" unique_id=885794988 instance=ExtResource("3_826wr")]
+custom_minimum_size = Vector2(600, 90)
+layout_mode = 2
+button_text = "CREDITS"
+icon_texture = ExtResource("6_8a8k8")
+primary_button = false
+button_size = Vector2(600, 90)
+normal_glow_alpha = 0.18
+hover_glow_alpha = 0.45
+
+[node name="VersionLabel" type="Label" parent="." unique_id=1474784362]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -58.0
+offset_right = 100.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.46666667, 0.48235294, 0.5647059, 1)
+text = "v1.0.0"
+horizontal_alignment = 1
+vertical_alignment = 1

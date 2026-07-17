@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="RewardData" format=3 uid="uid://jrc465755a5v"]
+
+[ext_resource type="Script" uid="uid://yi55q1xonpt0" path="res://scripts/rewards/reward_data.gd" id="1_kj3l4"]
+
+[resource]
+script = ExtResource("1_kj3l4")
+reward_id = "ability_cooldown"
+display_name = "TEMPORAL CIRCUIT"
+description = "Reduces the cooldown of all manually activated abilities."
+rarity = 3
+stat_line_1 = "-10% Ability Cooldown"
+stat_line_2 = "Frenzy recharges faster"
+stat_line_3 = "Black Hole recharges faster"
+stat_id = "ability_cooldown_reduction"
+primary_value = 0.1
+maximum_stacks = 5
+level_up_reward_only = true
+metadata/_custom_type_script = "uid://yi55q1xonpt0"

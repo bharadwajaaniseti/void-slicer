@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="RewardData" format=3 uid="uid://cc3pjp3eiuffh"]
+
+[ext_resource type="Script" uid="uid://yi55q1xonpt0" path="res://scripts/rewards/reward_data.gd" id="1_5178o"]
+
+[resource]
+script = ExtResource("1_5178o")
+reward_id = "unlock_railgun"
+display_name = "RAILGUN"
+description = "Unlocks a high-powered weapon that pierces multiple enemies."
+reward_type = 3
+rarity = 3
+tier = 1
+stat_line_1 = "Unlock New Weapon"
+stat_line_2 = "Pierces 4 Enemies"
+stat_line_3 = "High Single-Shot Damage"
+weapon_id = "railgun"
+boss_reward_only = true
+metadata/_custom_type_script = "uid://yi55q1xonpt0"

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dh68htdp12jt4"]
+
+[ext_resource type="Script" uid="uid://c1kimc483dc88" path="res://scripts/combat/slash_fx.gd" id="1_rcqub"]
+
+[node name="SlashFx" type="Node2D" unique_id=749055606]
+script = ExtResource("1_rcqub")

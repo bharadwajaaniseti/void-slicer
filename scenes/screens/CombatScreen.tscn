@@ -1,0 +1,2269 @@
+[gd_scene format=3 uid="uid://b8devwum2hn6s"]
+
+[ext_resource type="Script" uid="uid://chivjh8a0v5mg" path="res://scripts/screens/combat_screen.gd" id="1_egb78"]
+[ext_resource type="Texture2D" uid="uid://binnpbs7q3bi1" path="res://assets/ui/voidslice logo.png" id="2_b32md"]
+[ext_resource type="Script" uid="uid://c2gbx0sf8ftei" path="res://scripts/screens/combat_arena.gd" id="3_du8md"]
+[ext_resource type="PackedScene" uid="uid://d1ocuum5i81g7" path="res://scenes/combat/Dot.tscn" id="4_3vgso"]
+[ext_resource type="PackedScene" uid="uid://dh68htdp12jt4" path="res://scenes/combat/SlashFx.tscn" id="5_rt7mn"]
+[ext_resource type="PackedScene" uid="uid://rxuelmis28tf" path="res://scenes/combat/Projectile.tscn" id="6_b01tc"]
+[ext_resource type="PackedScene" uid="uid://bgl2tonk3yclx" path="res://scenes/combat/BeamFx.tscn" id="7_4ega6"]
+[ext_resource type="PackedScene" uid="uid://bwx7obpymlela" path="res://scenes/combat/Turret.tscn" id="8_1plxt"]
+[ext_resource type="PackedScene" uid="uid://b6jtmqi40ej6i" path="res://scenes/combat/ImpactFx.tscn" id="8_27ai4"]
+[ext_resource type="PackedScene" uid="uid://cj5m0eveub71x" path="res://scenes/combat/Boss.tscn" id="9_dy2hj"]
+[ext_resource type="PackedScene" uid="uid://qot1e5r7denl" path="res://scenes/combat/BlackHole.tscn" id="9_vb6yh"]
+[ext_resource type="Script" uid="uid://c0rewqqe0ysrr" path="res://scripts/combat/CombatAbilityCard.gd" id="11_u2nmm"]
+[ext_resource type="PackedScene" uid="uid://dk3lcsmr7q4pd" path="res://scenes/combat/Drone.tscn" id="12_oukn8"]
+[ext_resource type="PackedScene" uid="uid://x0su2ph3mdmb" path="res://scenes/combat/WeaponSlot.tscn" id="13_5fvx2"]
+[ext_resource type="PackedScene" uid="uid://2yaaj1vl4mfj" path="res://scenes/ui/rewards/RewardSelectionModal.tscn" id="15_l3eay"]
+[ext_resource type="Script" uid="uid://dle70dqgqpo8o" path="res://scripts/rewards/reward_manager.gd" id="16_au2jy"]
+[ext_resource type="Script" uid="uid://yi55q1xonpt0" path="res://scripts/rewards/reward_data.gd" id="17_78y3d"]
+[ext_resource type="Resource" uid="uid://00ehy3ignu32" path="res://data/rewards/level_up/global_damage.tres" id="18_5ww6k"]
+[ext_resource type="Resource" uid="uid://cq5tba0uykuae" path="res://data/rewards/level_up/focus_fire_upgrade.tres" id="19_0q685"]
+[ext_resource type="Resource" uid="uid://br3f305q47cmc" path="res://data/rewards/level_up/global_attack_speed.tres" id="19_4q4hc"]
+[ext_resource type="Resource" uid="uid://ba0nlt7p3r6h6" path="res://data/rewards/level_up/critical_chance.tres" id="20_d8ewh"]
+[ext_resource type="Resource" uid="uid://gp5kwi7vdqhj" path="res://data/rewards/boss_reward/unlock_tesla_coil.tres" id="20_si8ho"]
+[ext_resource type="Resource" uid="uid://jrc465755a5v" path="res://data/rewards/level_up/ability_cooldown.tres" id="21_xfw3w"]
+[ext_resource type="Resource" uid="uid://wutwpk2cyedd" path="res://data/rewards/level_up/xp_gain.tres" id="22_6v5l2"]
+[ext_resource type="Resource" uid="uid://sq8jqwefou33" path="res://data/rewards/level_up/turret_damage.tres" id="23_47gn8"]
+[ext_resource type="Resource" uid="uid://bdlac51i841o8" path="res://data/rewards/level_up/tesla_chain_range.tres" id="24_ujuty"]
+[ext_resource type="Resource" uid="uid://cc3pjp3eiuffh" path="res://data/rewards/boss_reward/unlock_railgun.tres" id="27_jh1g1"]
+[ext_resource type="Resource" uid="uid://b0sf3je3bvf7l" path="res://data/rewards/boss_reward/unlock_pulse_cannon.tres" id="28_wh7no"]
+[ext_resource type="Resource" uid="uid://c6e2r7lvflao5" path="res://data/rewards/boss_reward/turret_tier_2.tres" id="29_c80mf"]
+[ext_resource type="Resource" uid="uid://bkwksyn5e7ljr" path="res://data/rewards/boss_reward/railgun_tier_2.tres" id="30_edgei"]
+[ext_resource type="Resource" uid="uid://cbb68dg3rdwj0" path="res://data/rewards/boss_reward/extra_weapon_slot.tres" id="31_l351l"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_egb78"]
+bg_color = Color(1, 1, 1, 1)
+border_width_bottom = 1
+border_color = Color(0.9137255, 0.92941177, 0.9647059, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_du8md"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0.5411765, 0.3019608, 1, 0.07058824)
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_27ai4"]
+bg_color = Color(0.9137255, 0.92941177, 0.9647059, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u2nmm"]
+bg_color = Color(0.45490196, 0.21568628, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rt7mn"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3vgso"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b01tc"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+corner_detail = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4ega6"]
+bg_color = Color(0.3093363, 0.0009406674, 0.7281569, 1)
+border_width_left = 1
+border_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+corner_detail = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1plxt"]
+bg_color = Color(0.4509804, 0.16078432, 1, 1)
+border_width_left = 1
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tunnf"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8901961, 0.9019608, 0.93333334, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0.78431374, 0.8, 0.84705883, 0.3137255)
+shadow_size = 16
+shadow_offset = Vector2(0, 6)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4q4hc"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8862745, 0.8980392, 0.93333334, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d8ewh"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.95686275, 0.9411765, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xfw3w"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.45490196, 0.21960784, 1, 0.25)
+shadow_size = 14
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6v5l2"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8862745, 0.8980392, 0.93333334, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_47gn8"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.95686275, 0.9411765, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ujuty"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.45490196, 0.21960784, 1, 0.25)
+shadow_size = 14
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jh1g1"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8862745, 0.8980392, 0.93333334, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wh7no"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.95686275, 0.9411765, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c80mf"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.45490196, 0.21960784, 1, 0.25)
+shadow_size = 14
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_edgei"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8862745, 0.8980392, 0.93333334, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l351l"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.95686275, 0.9411765, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5iud6"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.45490196, 0.21960784, 1, 0.25)
+shadow_size = 14
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qo0dm"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8862745, 0.8980392, 0.93333334, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qmmk3"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.95686275, 0.9411765, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_54hxx"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.45490196, 0.21960784, 1, 0.25)
+shadow_size = 14
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rv831"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8862745, 0.8980392, 0.93333334, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_st33s"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.95686275, 0.9411765, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_prpvj"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.45490196, 0.21960784, 1, 0.25)
+shadow_size = 14
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lamkd"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8862745, 0.8980392, 0.93333334, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8hw0n"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.95686275, 0.9411765, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7e5tr"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.45490196, 0.21960784, 1, 0.25)
+shadow_size = 14
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i7pmh"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8862745, 0.8980392, 0.93333334, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2o7yx"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.95686275, 0.9411765, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cdjsp"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.45490196, 0.21960784, 1, 0.25)
+shadow_size = 14
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q1nma"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8862745, 0.8980392, 0.93333334, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k5j5l"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.95686275, 0.9411765, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r6ebs"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.45490196, 0.21960784, 1, 0.25)
+shadow_size = 14
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_opfhj"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8862745, 0.8980392, 0.93333334, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cf7ad"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.95686275, 0.9411765, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nj0mf"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.45490196, 0.21960784, 1, 0.25)
+shadow_size = 14
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tbn7p"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8862745, 0.8980392, 0.93333334, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4qpj1"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.95686275, 0.9411765, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2hxjg"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.45490196, 0.21960784, 1, 0.25)
+shadow_size = 14
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o10wv"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8862745, 0.8980392, 0.93333334, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yd5ec"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.95686275, 0.9411765, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ouxbu"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.45490196, 0.21960784, 1, 0.25)
+shadow_size = 14
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c4682"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8862745, 0.8980392, 0.93333334, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o2q60"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.95686275, 0.9411765, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gkvbd"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.45490196, 0.21960784, 1, 0.25)
+shadow_size = 14
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_evw2j"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8862745, 0.8980392, 0.93333334, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bnryv"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.95686275, 0.9411765, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iyh56"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.45490196, 0.21960784, 1, 0.25)
+shadow_size = 14
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p3fa8"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8862745, 0.8980392, 0.93333334, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xpgt3"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.95686275, 0.9411765, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ejb8b"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.45490196, 0.21960784, 1, 0.25)
+shadow_size = 14
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dy2hj"]
+bg_color = Color(1, 1, 1, 1)
+border_width_top = 1
+border_color = Color(0.9137255, 0.92941177, 0.9647059, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ogj87"]
+bg_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ulbud"]
+bg_color = Color(0, 0.72156864, 0.30980393, 0.99215686)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vb6yh"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9137255, 0.92941177, 0.9647059, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.039215688)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eqbfr"]
+bg_color = Color(0.88235295, 0.4509804, 0.45490196, 0.21176471)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jxw0d"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.039215688)
+shadow_size = 2
+shadow_offset = Vector2(3, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oukn8"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.70575476, 0.0011657749, 0.0006392726, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5fvx2"]
+bg_color = Color(0.7058824, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l3eay"]
+bg_color = Color(0.9998968, 0.43491322, 0.36624965, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.7058824, 0, 0, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0q685"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_si8ho"]
+bg_color = Color(2.1057203e-06, 0.05217436, 0.21855107, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.30980393, 0.09411765, 0.8509804, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xf2oy"]
+bg_color = Color(0.09162874, 2.0269063e-05, 0.111731015, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_au2jy"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4509804, 0.16078432, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bxg7v"]
+bg_color = Color(0.4509804, 0.16078432, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fn8o0"]
+bg_color = Color(0.63511276, 0.5751975, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4509804, 0.16078432, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uwxkk"]
+bg_color = Color(0.45490196, 0.21568628, 1, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.8509804, 0.8, 1, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0.45490196, 0.21568628, 1, 0.2)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_78y3d"]
+bg_color = Color(0.30588236, 0.07058824, 0.78039217, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.7490196, 0.6627451, 1, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0.45490196, 0.21568628, 1, 0.13333334)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5ww6k"]
+bg_color = Color(0.40392157, 0.13725491, 0.95686275, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.7490196, 0.6627451, 1, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0.45490196, 0.21568628, 1, 0.26666668)
+shadow_size = 10
+shadow_offset = Vector2(0, 4)
+
+[node name="CombatScreenRoot" type="Control" unique_id=638465478]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_egb78")
+boss_kill_xp = 30
+
+[node name="MainVBox" type="VBoxContainer" parent="." unique_id=83873281]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="TopBar" type="PanelContainer" parent="MainVBox" unique_id=2127472477]
+custom_minimum_size = Vector2(0, 108)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_egb78")
+
+[node name="TopBarMargin" type="MarginContainer" parent="MainVBox/TopBar" unique_id=1238766247]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 14
+
+[node name="TopBarHBox" type="HBoxContainer" parent="MainVBox/TopBar/TopBarMargin" unique_id=2057083394]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="LeftCluster" type="HBoxContainer" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox" unique_id=1933605090]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="GalaxySelector" type="PanelContainer" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster" unique_id=1590742082]
+custom_minimum_size = Vector2(300, 70)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_du8md")
+
+[node name="GalaxyHBox" type="HBoxContainer" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster/GalaxySelector" unique_id=488871006]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="GalaxyIcon" type="TextureRect" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster/GalaxySelector/GalaxyHBox" unique_id=1540779192]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+texture = ExtResource("2_b32md")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="GalaxyLabel" type="Label" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster/GalaxySelector/GalaxyHBox" unique_id=898569441]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.019607844, 0.043137256, 1)
+theme_override_font_sizes/font_size = 17
+text = "GALAXY 2: CRIMSON"
+
+[node name="DropIcon" type="Label" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster/GalaxySelector/GalaxyHBox" unique_id=1684120029]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.019607844, 0.043137256, 1)
+text = "▼    "
+
+[node name="CenterSpacer" type="Control" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster" unique_id=1796901840]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CenterCluster" type="VBoxContainer" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster" unique_id=1866735578]
+custom_minimum_size = Vector2(844, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="CurrencyCard" type="PanelContainer" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster/CenterCluster" unique_id=385840507]
+custom_minimum_size = Vector2(250, 72)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_du8md")
+
+[node name="CurrencyBox" type="HBoxContainer" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster/CenterCluster/CurrencyCard" unique_id=98954707]
+custom_minimum_size = Vector2(250, 72)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 1
+
+[node name="CurrencyLabel" type="Label" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster/CenterCluster/CurrencyCard/CurrencyBox" unique_id=2128615447]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.03137255, 0.08627451, 1)
+theme_override_font_sizes/font_size = 48
+text = "$832k"
+horizontal_alignment = 2
+
+[node name="CpsLabel" type="Label" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster/CenterCluster/CurrencyCard/CurrencyBox" unique_id=937897081]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.72156864, 0.30980393, 0.99215686)
+theme_override_font_sizes/font_size = 16
+text = "+24.8k / sec"
+horizontal_alignment = 1
+
+[node name="ProgressRow" type="HBoxContainer" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster/CenterCluster" unique_id=1328282356]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="BossCard" type="PanelContainer" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster/CenterCluster/ProgressRow" unique_id=1513216992]
+custom_minimum_size = Vector2(150, 28)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_du8md")
+
+[node name="ProgressHBox" type="HBoxContainer" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster/CenterCluster/ProgressRow/BossCard" unique_id=1949904618]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="BossLabel" type="Label" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster/CenterCluster/ProgressRow/BossCard/ProgressHBox" unique_id=795473997]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+theme_override_font_sizes/font_size = 12
+text = "Boss"
+
+[node name="XPLabel" type="Label" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster/CenterCluster/ProgressRow/BossCard/ProgressHBox" unique_id=1601300640]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+theme_override_font_sizes/font_size = 12
+text = "150/2000"
+
+[node name="ProgressBar" type="ProgressBar" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster/CenterCluster/ProgressRow" unique_id=103212455]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("StyleBoxFlat_27ai4")
+theme_override_styles/fill = SubResource("StyleBoxFlat_u2nmm")
+value = 100.0
+show_percentage = false
+
+[node name="RightSpacer" type="ColorRect" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox" unique_id=546648664]
+custom_minimum_size = Vector2(2, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RightCluster" type="HBoxContainer" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox" unique_id=485351843]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/separation = 14
+
+[node name="WaveVBox" type="VBoxContainer" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/RightCluster" unique_id=466152374]
+custom_minimum_size = Vector2(70, 64)
+layout_mode = 2
+alignment = 1
+
+[node name="WaveTitle" type="Label" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/RightCluster/WaveVBox" unique_id=1108666124]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3647059, 0.3764706, 0.45882353, 1)
+theme_override_font_sizes/font_size = 14
+text = "WAVE"
+horizontal_alignment = 1
+
+[node name="WaveValueLabel" type="Label" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/RightCluster/WaveVBox" unique_id=1974568739]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4509804, 0.16078432, 1, 1)
+theme_override_font_sizes/font_size = 25
+text = "0"
+horizontal_alignment = 1
+
+[node name="StatDivider2" type="ColorRect" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/RightCluster" unique_id=454856198]
+custom_minimum_size = Vector2(2, 50)
+layout_mode = 2
+color = Color(0.8901961, 0.8784314, 0.93333334, 1)
+
+[node name="DpsVBox" type="VBoxContainer" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/RightCluster" unique_id=1505404565]
+custom_minimum_size = Vector2(70, 64)
+layout_mode = 2
+alignment = 1
+
+[node name="DpsTitle" type="Label" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/RightCluster/DpsVBox" unique_id=631188290]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3647059, 0.3764706, 0.45882353, 1)
+theme_override_font_sizes/font_size = 14
+text = "DPS"
+horizontal_alignment = 1
+
+[node name="DpsValueLabel" type="Label" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/RightCluster/DpsVBox" unique_id=1313348114]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.14117648, 0.46666667, 1, 1)
+theme_override_font_sizes/font_size = 25
+text = "0"
+horizontal_alignment = 1
+
+[node name="TimeCard" type="PanelContainer" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/RightCluster" unique_id=143578092]
+custom_minimum_size = Vector2(110, 64)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rt7mn")
+
+[node name="TimeHBox" type="HBoxContainer" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/RightCluster/TimeCard" unique_id=1264471205]
+layout_mode = 2
+alignment = 1
+
+[node name="TimeIcon" type="Label" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/RightCluster/TimeCard/TimeHBox" unique_id=332752852]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4509804, 0.16078432, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "⏱"
+
+[node name="TimeLabel" type="Label" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/RightCluster/TimeCard/TimeHBox" unique_id=1263741471]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4509804, 0.16078432, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "12:45"
+
+[node name="SettingsPanel" type="PanelContainer" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/RightCluster" unique_id=1995062050]
+custom_minimum_size = Vector2(120, 64)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3vgso")
+
+[node name="GemHBox" type="HBoxContainer" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/RightCluster/SettingsPanel" unique_id=921019243]
+layout_mode = 2
+alignment = 1
+
+[node name="GemPlus" type="Button" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/RightCluster/SettingsPanel/GemHBox" unique_id=214928029]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.4509804, 0.16078432, 1, 1)
+theme_override_font_sizes/font_size = 25
+theme_override_styles/normal = SubResource("StyleBoxFlat_b01tc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_4ega6")
+theme_override_styles/hover = SubResource("StyleBoxFlat_1plxt")
+text = "Settings"
+
+[node name="CombatArena" type="Control" parent="MainVBox" unique_id=1233011658]
+process_mode = 1
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 6.18
+script = ExtResource("3_du8md")
+dot_scene = ExtResource("4_3vgso")
+dot_layer_path = NodePath("DotLayer")
+slash_fx_scene = ExtResource("5_rt7mn")
+fx_layer_path = NodePath("FxLayer")
+projectile_scene = ExtResource("6_b01tc")
+projectile_layer_path = NodePath("ProjectileLayer")
+beam_fx_scene = ExtResource("7_4ega6")
+impact_fx_scene = ExtResource("8_27ai4")
+black_hole_scene = ExtResource("9_vb6yh")
+turret_scene = ExtResource("8_1plxt")
+turret_layer_path = NodePath("TurretLayer")
+boss_scene = ExtResource("9_dy2hj")
+boss_layer_path = NodePath("BossLayer")
+drone_scene = ExtResource("12_oukn8")
+drone_layer_path = NodePath("DroneLayer")
+play_area_frame_path = NodePath("ArenaFrame")
+starting_dot_count = 120
+
+[node name="ArenaBackground" type="ColorRect" parent="MainVBox/CombatArena" unique_id=448349880]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.972549, 0.972549, 0.9843137, 1)
+
+[node name="ArenaFrame" type="Panel" parent="MainVBox/CombatArena" unique_id=590257965]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 117.0
+offset_top = 16.0
+offset_right = -114.0
+offset_bottom = -106.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tunnf")
+
+[node name="LeftSlotRail" type="VBoxContainer" parent="MainVBox/CombatArena" unique_id=986678967]
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 110.0
+offset_right = 112.0
+offset_bottom = -120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="left_1" parent="MainVBox/CombatArena/LeftSlotRail" unique_id=661480623 instance=ExtResource("13_5fvx2")]
+modulate = Color(1, 1, 1, 0.45)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_4q4hc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_d8ewh")
+theme_override_styles/hover = SubResource("StyleBoxFlat_xfw3w")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_4q4hc")
+disabled = true
+is_unlocked = false
+
+[node name="left_2" parent="MainVBox/CombatArena/LeftSlotRail" unique_id=1476942229 instance=ExtResource("13_5fvx2")]
+modulate = Color(1, 1, 1, 0.45)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_6v5l2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_47gn8")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ujuty")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_6v5l2")
+disabled = true
+is_unlocked = false
+
+[node name="left_3" parent="MainVBox/CombatArena/LeftSlotRail" unique_id=840109482 instance=ExtResource("13_5fvx2")]
+modulate = Color(1, 1, 1, 0.45)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_jh1g1")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_wh7no")
+theme_override_styles/hover = SubResource("StyleBoxFlat_c80mf")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_jh1g1")
+disabled = true
+is_unlocked = false
+
+[node name="left_4" parent="MainVBox/CombatArena/LeftSlotRail" unique_id=1660004552 instance=ExtResource("13_5fvx2")]
+modulate = Color(1, 1, 1, 0.45)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_edgei")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_l351l")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5iud6")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_edgei")
+disabled = true
+is_unlocked = false
+
+[node name="RightSlotRail" type="VBoxContainer" parent="MainVBox/CombatArena" unique_id=301744185]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -112.0
+offset_top = 110.0
+offset_right = -16.0
+offset_bottom = -120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="right_1" parent="MainVBox/CombatArena/RightSlotRail" unique_id=1761095149 instance=ExtResource("13_5fvx2")]
+modulate = Color(1, 1, 1, 0.45)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_qo0dm")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_qmmk3")
+theme_override_styles/hover = SubResource("StyleBoxFlat_54hxx")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_qo0dm")
+disabled = true
+is_unlocked = false
+
+[node name="right_2" parent="MainVBox/CombatArena/RightSlotRail" unique_id=6207811 instance=ExtResource("13_5fvx2")]
+modulate = Color(1, 1, 1, 0.45)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_rv831")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_st33s")
+theme_override_styles/hover = SubResource("StyleBoxFlat_prpvj")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_rv831")
+disabled = true
+is_unlocked = false
+
+[node name="right_3" parent="MainVBox/CombatArena/RightSlotRail" unique_id=700097924 instance=ExtResource("13_5fvx2")]
+modulate = Color(1, 1, 1, 0.45)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_lamkd")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_8hw0n")
+theme_override_styles/hover = SubResource("StyleBoxFlat_7e5tr")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_lamkd")
+disabled = true
+is_unlocked = false
+
+[node name="right_4" parent="MainVBox/CombatArena/RightSlotRail" unique_id=649146990 instance=ExtResource("13_5fvx2")]
+modulate = Color(1, 1, 1, 0.45)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_i7pmh")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2o7yx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cdjsp")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_i7pmh")
+disabled = true
+is_unlocked = false
+
+[node name="BottomMountRail" type="HBoxContainer" parent="MainVBox/CombatArena" unique_id=882289163]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -440.0
+offset_top = -100.0
+offset_right = 440.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="BottomSlot1" parent="MainVBox/CombatArena/BottomMountRail" unique_id=443976911 instance=ExtResource("13_5fvx2")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_q1nma")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_k5j5l")
+theme_override_styles/hover = SubResource("StyleBoxFlat_r6ebs")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_q1nma")
+
+[node name="BottomSlot3" parent="MainVBox/CombatArena/BottomMountRail" unique_id=1105783259 instance=ExtResource("13_5fvx2")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_opfhj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_cf7ad")
+theme_override_styles/hover = SubResource("StyleBoxFlat_nj0mf")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_opfhj")
+
+[node name="BottomSlot4" parent="MainVBox/CombatArena/BottomMountRail" unique_id=105600418 instance=ExtResource("13_5fvx2")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_tbn7p")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_4qpj1")
+theme_override_styles/hover = SubResource("StyleBoxFlat_2hxjg")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_tbn7p")
+
+[node name="BottomSlot5" parent="MainVBox/CombatArena/BottomMountRail" unique_id=1847026944 instance=ExtResource("13_5fvx2")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_o10wv")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_yd5ec")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ouxbu")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_o10wv")
+
+[node name="BottomSlot6" parent="MainVBox/CombatArena/BottomMountRail" unique_id=695946846 instance=ExtResource("13_5fvx2")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_c4682")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_o2q60")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gkvbd")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_c4682")
+
+[node name="BottomSlot7" parent="MainVBox/CombatArena/BottomMountRail" unique_id=679491213 instance=ExtResource("13_5fvx2")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_evw2j")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bnryv")
+theme_override_styles/hover = SubResource("StyleBoxFlat_iyh56")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_evw2j")
+
+[node name="BottomSlot8" parent="MainVBox/CombatArena/BottomMountRail" unique_id=572918597 instance=ExtResource("13_5fvx2")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_p3fa8")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_xpgt3")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ejb8b")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_p3fa8")
+
+[node name="DotLayer" type="Node2D" parent="MainVBox/CombatArena" unique_id=353426882]
+
+[node name="FxLayer" type="Node2D" parent="MainVBox/CombatArena" unique_id=1260944448]
+
+[node name="ProjectileLayer" type="Node2D" parent="MainVBox/CombatArena" unique_id=1227708548]
+
+[node name="TurretLayer" type="Node2D" parent="MainVBox/CombatArena" unique_id=849523702]
+
+[node name="BossLayer" type="Node2D" parent="MainVBox/CombatArena" unique_id=2131156946]
+
+[node name="DroneLayer" type="Node2D" parent="MainVBox/CombatArena" unique_id=106995764]
+
+[node name="BottomBar" type="PanelContainer" parent="MainVBox" unique_id=625261743]
+custom_minimum_size = Vector2(0, 132)
+layout_mode = 2
+size_flags_vertical = 10
+theme_override_styles/panel = SubResource("StyleBoxFlat_dy2hj")
+
+[node name="BottomBarMargin" type="MarginContainer" parent="MainVBox/BottomBar" unique_id=1682121482]
+layout_mode = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 14
+
+[node name="BottomVBoxContainer" type="VBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin" unique_id=1579876881]
+layout_mode = 2
+alignment = 1
+
+[node name="XPHBoxContainer" type="HBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer" unique_id=299909270]
+layout_mode = 2
+
+[node name="XPLabel" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/XPHBoxContainer" unique_id=1000104055]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.72156864, 0.30980393, 0.99215686)
+text = "XP"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="XPProgressBar" type="ProgressBar" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/XPHBoxContainer" unique_id=1887875227]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("StyleBoxFlat_ogj87")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ulbud")
+value = 50.0
+show_percentage = false
+
+[node name="LevelLabel" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/XPHBoxContainer" unique_id=1897207495]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.270559, 0.54506344, 0.37280673, 1)
+text = "LV.24"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/XPHBoxContainer" unique_id=1490877583]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+
+[node name="BottomBarHBox" type="HBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer" unique_id=876905956]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="FrenzySkillCard" type="PanelContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox" unique_id=1119277652]
+custom_minimum_size = Vector2(185, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_vb6yh")
+script = ExtResource("11_u2nmm")
+description_text = "Turret attack speed +200%"
+cooldown_duration = 10.0
+title_label_path = NodePath("FrenzySkillCooldownProgressBar/FrenzySkillMargin/FrenzySkillHBox/FrenzySkillTextVBox/FrenzySkillTitleHBox/FrenzySkillTitle")
+level_label_path = NodePath("FrenzySkillCooldownProgressBar/FrenzySkillMargin/FrenzySkillHBox/FrenzySkillTextVBox/FrenzySkillTitleHBox/FrenzySkillLevel")
+desc_label_path = NodePath("FrenzySkillCooldownProgressBar/FrenzySkillMargin/FrenzySkillHBox/FrenzySkillTextVBox/FrenzySkillDesc")
+cooldown_label_path = NodePath("FrenzySkillCooldownProgressBar/FrenzySkillMargin/FrenzySkillHBox/FrenzySkillTextVBox/FrenzySkillBottomHBox/FrenzySkillCooldown")
+state_button_path = NodePath("FrenzySkillCooldownProgressBar/FrenzySkillMargin/FrenzySkillHBox/FrenzySkillTextVBox/FrenzySkillBottomHBox/FrenzySkillStateButton")
+cooldown_progress_bar_path = NodePath("FrenzySkillCooldownProgressBar")
+
+[node name="FrenzySkillCooldownProgressBar" type="ProgressBar" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FrenzySkillCard" unique_id=692081674]
+custom_minimum_size = Vector2(185, 92)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_eqbfr")
+theme_override_styles/fill = SubResource("StyleBoxFlat_jxw0d")
+show_percentage = false
+
+[node name="FrenzySkillMargin" type="MarginContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FrenzySkillCard/FrenzySkillCooldownProgressBar" unique_id=1329846198]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="FrenzySkillHBox" type="HBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FrenzySkillCard/FrenzySkillCooldownProgressBar/FrenzySkillMargin" unique_id=1198053286]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="FrenzySkillIcon" type="TextureRect" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FrenzySkillCard/FrenzySkillCooldownProgressBar/FrenzySkillMargin/FrenzySkillHBox" unique_id=1951764780]
+custom_minimum_size = Vector2(64, 44)
+layout_mode = 2
+texture = ExtResource("2_b32md")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="FrenzySkillTextVBox" type="VBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FrenzySkillCard/FrenzySkillCooldownProgressBar/FrenzySkillMargin/FrenzySkillHBox" unique_id=1525832775]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="FrenzySkillTitleHBox" type="HBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FrenzySkillCard/FrenzySkillCooldownProgressBar/FrenzySkillMargin/FrenzySkillHBox/FrenzySkillTextVBox" unique_id=148008620]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="FrenzySkillTitle" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FrenzySkillCard/FrenzySkillCooldownProgressBar/FrenzySkillMargin/FrenzySkillHBox/FrenzySkillTextVBox/FrenzySkillTitleHBox" unique_id=873401778]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+theme_override_font_sizes/font_size = 14
+text = "FRENZY"
+clip_text = true
+
+[node name="FrenzySkillLevel" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FrenzySkillCard/FrenzySkillCooldownProgressBar/FrenzySkillMargin/FrenzySkillHBox/FrenzySkillTextVBox/FrenzySkillTitleHBox" unique_id=89267621]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+text = "Lv. 12"
+horizontal_alignment = 2
+
+[node name="FrenzySkillDesc" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FrenzySkillCard/FrenzySkillCooldownProgressBar/FrenzySkillMargin/FrenzySkillHBox/FrenzySkillTextVBox" unique_id=1614923993]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25490198, 0.31764707, 0.41960785, 1)
+theme_override_font_sizes/font_size = 13
+text = "Turret attack speed +200%"
+clip_text = true
+
+[node name="FrenzySkillBottomHBox" type="HBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FrenzySkillCard/FrenzySkillCooldownProgressBar/FrenzySkillMargin/FrenzySkillHBox/FrenzySkillTextVBox" unique_id=1743206816]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="FrenzySkillCooldown" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FrenzySkillCard/FrenzySkillCooldownProgressBar/FrenzySkillMargin/FrenzySkillHBox/FrenzySkillTextVBox/FrenzySkillBottomHBox" unique_id=1485445498]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.25490198, 0.31764707, 0.41960785, 1)
+theme_override_font_sizes/font_size = 12
+text = "⏱ 12.4s"
+clip_text = true
+
+[node name="FrenzySkillStateButton" type="Button" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FrenzySkillCard/FrenzySkillCooldownProgressBar/FrenzySkillMargin/FrenzySkillHBox/FrenzySkillTextVBox/FrenzySkillBottomHBox" unique_id=718323868]
+custom_minimum_size = Vector2(64, 30)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7058824, 0, 0, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_oukn8")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5fvx2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_l3eay")
+text = "READY"
+
+[node name="DotRainSkillCard" type="PanelContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox" unique_id=1728320509]
+custom_minimum_size = Vector2(185, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_vb6yh")
+script = ExtResource("11_u2nmm")
+ability_id = "dot_rain"
+title_text = "DOT RAIN"
+level_text = "Lv. 12"
+description_text = "Spawns 200% more dots"
+cooldown_duration = 60.0
+title_label_path = NodePath("DotRainCooldownProgressBar/DotRainSkillMargin/DotRainSkillHBox/DotRainSkillTextVBox/DotRainSkillTitleHBox/DotRainSkillTitle")
+level_label_path = NodePath("DotRainCooldownProgressBar/DotRainSkillMargin/DotRainSkillHBox/DotRainSkillTextVBox/DotRainSkillTitleHBox/DotRainSkillLevel")
+desc_label_path = NodePath("DotRainCooldownProgressBar/DotRainSkillMargin/DotRainSkillHBox/DotRainSkillTextVBox/DotRainSkillDesc")
+cooldown_label_path = NodePath("DotRainCooldownProgressBar/DotRainSkillMargin/DotRainSkillHBox/DotRainSkillTextVBox/DotRainSkillBottomHBox/DotRainSkillCooldown")
+state_button_path = NodePath("DotRainCooldownProgressBar/DotRainSkillMargin/DotRainSkillHBox/DotRainSkillTextVBox/DotRainSkillBottomHBox/DotRainSkillStateButton")
+cooldown_progress_bar_path = NodePath("DotRainCooldownProgressBar")
+
+[node name="DotRainCooldownProgressBar" type="ProgressBar" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DotRainSkillCard" unique_id=621428419]
+custom_minimum_size = Vector2(185, 92)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_eqbfr")
+theme_override_styles/fill = SubResource("StyleBoxFlat_jxw0d")
+show_percentage = false
+
+[node name="DotRainSkillMargin" type="MarginContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DotRainSkillCard/DotRainCooldownProgressBar" unique_id=1730483623]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="DotRainSkillHBox" type="HBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DotRainSkillCard/DotRainCooldownProgressBar/DotRainSkillMargin" unique_id=1905546088]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="DotRainSkillIcon" type="TextureRect" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DotRainSkillCard/DotRainCooldownProgressBar/DotRainSkillMargin/DotRainSkillHBox" unique_id=720626021]
+custom_minimum_size = Vector2(64, 44)
+layout_mode = 2
+texture = ExtResource("2_b32md")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="DotRainSkillTextVBox" type="VBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DotRainSkillCard/DotRainCooldownProgressBar/DotRainSkillMargin/DotRainSkillHBox" unique_id=1756501354]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="DotRainSkillTitleHBox" type="HBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DotRainSkillCard/DotRainCooldownProgressBar/DotRainSkillMargin/DotRainSkillHBox/DotRainSkillTextVBox" unique_id=1830093526]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="DotRainSkillTitle" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DotRainSkillCard/DotRainCooldownProgressBar/DotRainSkillMargin/DotRainSkillHBox/DotRainSkillTextVBox/DotRainSkillTitleHBox" unique_id=2114384691]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+theme_override_font_sizes/font_size = 14
+text = "Dot Rain"
+clip_text = true
+
+[node name="DotRainSkillLevel" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DotRainSkillCard/DotRainCooldownProgressBar/DotRainSkillMargin/DotRainSkillHBox/DotRainSkillTextVBox/DotRainSkillTitleHBox" unique_id=636632322]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+text = "Lv. 12"
+horizontal_alignment = 2
+
+[node name="DotRainSkillDesc" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DotRainSkillCard/DotRainCooldownProgressBar/DotRainSkillMargin/DotRainSkillHBox/DotRainSkillTextVBox" unique_id=1876161076]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25490198, 0.31764707, 0.41960785, 1)
+theme_override_font_sizes/font_size = 13
+text = "Spawns 200% more dots across"
+clip_text = true
+
+[node name="DotRainSkillBottomHBox" type="HBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DotRainSkillCard/DotRainCooldownProgressBar/DotRainSkillMargin/DotRainSkillHBox/DotRainSkillTextVBox" unique_id=1609109505]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="DotRainSkillCooldown" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DotRainSkillCard/DotRainCooldownProgressBar/DotRainSkillMargin/DotRainSkillHBox/DotRainSkillTextVBox/DotRainSkillBottomHBox" unique_id=1232761091]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.25490198, 0.31764707, 0.41960785, 1)
+theme_override_font_sizes/font_size = 12
+text = "⏱ 60.0s"
+clip_text = true
+
+[node name="DotRainSkillStateButton" type="Button" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DotRainSkillCard/DotRainCooldownProgressBar/DotRainSkillMargin/DotRainSkillHBox/DotRainSkillTextVBox/DotRainSkillBottomHBox" unique_id=1170168855]
+custom_minimum_size = Vector2(64, 30)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_0q685")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_si8ho")
+theme_override_styles/hover = SubResource("StyleBoxFlat_xf2oy")
+text = "READY"
+
+[node name="BlackHoleSkillCard" type="PanelContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox" unique_id=785984912]
+custom_minimum_size = Vector2(185, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_vb6yh")
+script = ExtResource("11_u2nmm")
+ability_id = "black_hole"
+title_text = "BLACK HOLE"
+level_text = "Lv. 12"
+description_text = "Pulls and devours dots"
+cooldown_duration = 12.4
+title_label_path = NodePath("BlackHoleSkillCooldownProgressBar/BlackHoleSkillMargin/BlackHoleSkillHBox/BlackHoleSkillTextVBox/BlackHoleSkillTitleHBox/BlackHoleSkillTitle")
+level_label_path = NodePath("BlackHoleSkillCooldownProgressBar/BlackHoleSkillMargin/BlackHoleSkillHBox/BlackHoleSkillTextVBox/BlackHoleSkillTitleHBox/BlackHoleSkillLevel")
+desc_label_path = NodePath("BlackHoleSkillCooldownProgressBar/BlackHoleSkillMargin/BlackHoleSkillHBox/BlackHoleSkillTextVBox/BlackHoleSkillDesc")
+cooldown_label_path = NodePath("BlackHoleSkillCooldownProgressBar/BlackHoleSkillMargin/BlackHoleSkillHBox/BlackHoleSkillTextVBox/BlackHoleSkillBottomHBox/BlackHoleSkillCooldown")
+state_button_path = NodePath("BlackHoleSkillCooldownProgressBar/BlackHoleSkillMargin/BlackHoleSkillHBox/BlackHoleSkillTextVBox/BlackHoleSkillBottomHBox/BlackHoleSkillStateButton")
+cooldown_progress_bar_path = NodePath("BlackHoleSkillCooldownProgressBar")
+
+[node name="BlackHoleSkillCooldownProgressBar" type="ProgressBar" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/BlackHoleSkillCard" unique_id=245756952]
+custom_minimum_size = Vector2(185, 92)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_eqbfr")
+theme_override_styles/fill = SubResource("StyleBoxFlat_jxw0d")
+value = 50.0
+show_percentage = false
+
+[node name="BlackHoleSkillMargin" type="MarginContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/BlackHoleSkillCard/BlackHoleSkillCooldownProgressBar" unique_id=1834843375]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="BlackHoleSkillHBox" type="HBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/BlackHoleSkillCard/BlackHoleSkillCooldownProgressBar/BlackHoleSkillMargin" unique_id=701141819]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="BlackHoleSkillIcon" type="TextureRect" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/BlackHoleSkillCard/BlackHoleSkillCooldownProgressBar/BlackHoleSkillMargin/BlackHoleSkillHBox" unique_id=2059896462]
+custom_minimum_size = Vector2(64, 44)
+layout_mode = 2
+texture = ExtResource("2_b32md")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="BlackHoleSkillTextVBox" type="VBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/BlackHoleSkillCard/BlackHoleSkillCooldownProgressBar/BlackHoleSkillMargin/BlackHoleSkillHBox" unique_id=1725089939]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="BlackHoleSkillTitleHBox" type="HBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/BlackHoleSkillCard/BlackHoleSkillCooldownProgressBar/BlackHoleSkillMargin/BlackHoleSkillHBox/BlackHoleSkillTextVBox" unique_id=327179764]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="BlackHoleSkillTitle" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/BlackHoleSkillCard/BlackHoleSkillCooldownProgressBar/BlackHoleSkillMargin/BlackHoleSkillHBox/BlackHoleSkillTextVBox/BlackHoleSkillTitleHBox" unique_id=619910020]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+theme_override_font_sizes/font_size = 14
+text = "Black Hole"
+clip_text = true
+
+[node name="BlackHoleSkillLevel" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/BlackHoleSkillCard/BlackHoleSkillCooldownProgressBar/BlackHoleSkillMargin/BlackHoleSkillHBox/BlackHoleSkillTextVBox/BlackHoleSkillTitleHBox" unique_id=883385543]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+text = "Lv. 12"
+horizontal_alignment = 2
+
+[node name="BlackHoleSkillDesc" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/BlackHoleSkillCard/BlackHoleSkillCooldownProgressBar/BlackHoleSkillMargin/BlackHoleSkillHBox/BlackHoleSkillTextVBox" unique_id=1995800300]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25490198, 0.31764707, 0.41960785, 1)
+theme_override_font_sizes/font_size = 13
+text = "A Blackhole that pulls dots"
+clip_text = true
+
+[node name="BlackHoleSkillBottomHBox" type="HBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/BlackHoleSkillCard/BlackHoleSkillCooldownProgressBar/BlackHoleSkillMargin/BlackHoleSkillHBox/BlackHoleSkillTextVBox" unique_id=822141660]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="BlackHoleSkillCooldown" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/BlackHoleSkillCard/BlackHoleSkillCooldownProgressBar/BlackHoleSkillMargin/BlackHoleSkillHBox/BlackHoleSkillTextVBox/BlackHoleSkillBottomHBox" unique_id=676683445]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.25490198, 0.31764707, 0.41960785, 1)
+theme_override_font_sizes/font_size = 12
+text = "⏱ 12.4s"
+clip_text = true
+
+[node name="BlackHoleSkillStateButton" type="Button" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/BlackHoleSkillCard/BlackHoleSkillCooldownProgressBar/BlackHoleSkillMargin/BlackHoleSkillHBox/BlackHoleSkillTextVBox/BlackHoleSkillBottomHBox" unique_id=1316996921]
+custom_minimum_size = Vector2(64, 30)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7058824, 0, 0, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_oukn8")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5fvx2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_l3eay")
+text = "READY"
+
+[node name="FocusFireSkillCard" type="PanelContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox" unique_id=4952041]
+custom_minimum_size = Vector2(185, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_vb6yh")
+script = ExtResource("11_u2nmm")
+ability_id = "focus_fire"
+title_text = "FOCUS FIRE"
+level_text = "Lv. 12"
+description_text = "Turrets ignore dots and attack boss"
+cooldown_duration = 12.4
+title_label_path = NodePath("FocusFireSkillCooldownProgressBar/FocusFireSkillMargin/FocusFireSkillHBox/FocusFireSkillTextVBox/FocusFireSkillTitleHBox/FocusFireSkillTitle")
+level_label_path = NodePath("FocusFireSkillCooldownProgressBar/FocusFireSkillMargin/FocusFireSkillHBox/FocusFireSkillTextVBox/FocusFireSkillTitleHBox/FocusFireSkillLevel")
+desc_label_path = NodePath("FocusFireSkillCooldownProgressBar/FocusFireSkillMargin/FocusFireSkillHBox/FocusFireSkillTextVBox/FocusFireSkillDesc")
+cooldown_label_path = NodePath("FocusFireSkillCooldownProgressBar/FocusFireSkillMargin/FocusFireSkillHBox/FocusFireSkillTextVBox/FocusFireSkillBottomHBox/FocusFireSkillCooldown")
+state_button_path = NodePath("FocusFireSkillCooldownProgressBar/FocusFireSkillMargin/FocusFireSkillHBox/FocusFireSkillTextVBox/FocusFireSkillBottomHBox/FocusFireSkillStateButton")
+cooldown_progress_bar_path = NodePath("FocusFireSkillCooldownProgressBar")
+
+[node name="FocusFireSkillCooldownProgressBar" type="ProgressBar" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FocusFireSkillCard" unique_id=963136268]
+custom_minimum_size = Vector2(185, 92)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_eqbfr")
+theme_override_styles/fill = SubResource("StyleBoxFlat_jxw0d")
+value = 50.0
+show_percentage = false
+
+[node name="FocusFireSkillMargin" type="MarginContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FocusFireSkillCard/FocusFireSkillCooldownProgressBar" unique_id=1043376677]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="FocusFireSkillHBox" type="HBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FocusFireSkillCard/FocusFireSkillCooldownProgressBar/FocusFireSkillMargin" unique_id=415079436]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="FocusFireSkillIcon" type="TextureRect" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FocusFireSkillCard/FocusFireSkillCooldownProgressBar/FocusFireSkillMargin/FocusFireSkillHBox" unique_id=330734175]
+custom_minimum_size = Vector2(64, 44)
+layout_mode = 2
+texture = ExtResource("2_b32md")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="FocusFireSkillTextVBox" type="VBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FocusFireSkillCard/FocusFireSkillCooldownProgressBar/FocusFireSkillMargin/FocusFireSkillHBox" unique_id=432265586]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="FocusFireSkillTitleHBox" type="HBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FocusFireSkillCard/FocusFireSkillCooldownProgressBar/FocusFireSkillMargin/FocusFireSkillHBox/FocusFireSkillTextVBox" unique_id=548937121]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="FocusFireSkillTitle" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FocusFireSkillCard/FocusFireSkillCooldownProgressBar/FocusFireSkillMargin/FocusFireSkillHBox/FocusFireSkillTextVBox/FocusFireSkillTitleHBox" unique_id=2040942288]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+theme_override_font_sizes/font_size = 14
+text = "Focus Fire"
+clip_text = true
+
+[node name="FocusFireSkillLevel" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FocusFireSkillCard/FocusFireSkillCooldownProgressBar/FocusFireSkillMargin/FocusFireSkillHBox/FocusFireSkillTextVBox/FocusFireSkillTitleHBox" unique_id=988091364]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+text = "Lv. 12"
+horizontal_alignment = 2
+
+[node name="FocusFireSkillDesc" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FocusFireSkillCard/FocusFireSkillCooldownProgressBar/FocusFireSkillMargin/FocusFireSkillHBox/FocusFireSkillTextVBox" unique_id=1756505334]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25490198, 0.31764707, 0.41960785, 1)
+theme_override_font_sizes/font_size = 13
+text = "Ignore dots and attack boss"
+clip_text = true
+
+[node name="FocusFireSkillBottomHBox" type="HBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FocusFireSkillCard/FocusFireSkillCooldownProgressBar/FocusFireSkillMargin/FocusFireSkillHBox/FocusFireSkillTextVBox" unique_id=1744441608]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="FocusFireSkillCooldown" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FocusFireSkillCard/FocusFireSkillCooldownProgressBar/FocusFireSkillMargin/FocusFireSkillHBox/FocusFireSkillTextVBox/FocusFireSkillBottomHBox" unique_id=636952416]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.25490198, 0.31764707, 0.41960785, 1)
+theme_override_font_sizes/font_size = 12
+text = "⏱ 12.4s"
+clip_text = true
+
+[node name="FocusFireSkillStateButton" type="Button" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/FocusFireSkillCard/FocusFireSkillCooldownProgressBar/FocusFireSkillMargin/FocusFireSkillHBox/FocusFireSkillTextVBox/FocusFireSkillBottomHBox" unique_id=939509387]
+custom_minimum_size = Vector2(64, 30)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7058824, 0, 0, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_oukn8")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5fvx2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_l3eay")
+text = "READY"
+
+[node name="DroneSwarmSkillCard" type="PanelContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox" unique_id=558887270]
+custom_minimum_size = Vector2(185, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_vb6yh")
+script = ExtResource("11_u2nmm")
+ability_id = "drone_swarm"
+title_text = "DRONE SWARM"
+level_text = "Lv. 31"
+description_text = "12 Drones"
+ready_text = "AUTO ON"
+cooldown_duration = 28.7
+is_auto_ability = true
+title_label_path = NodePath("DroneSwarmSkillMargin/DroneSwarmSkillHBox/DroneSwarmSkillTextVBox/DroneSwarmSkillTitleHBox/DroneSwarmSkillTitle")
+level_label_path = NodePath("DroneSwarmSkillMargin/DroneSwarmSkillHBox/DroneSwarmSkillTextVBox/DroneSwarmSkillTitleHBox/DroneSwarmSkillLevel")
+desc_label_path = NodePath("DroneSwarmSkillMargin/DroneSwarmSkillHBox/DroneSwarmSkillTextVBox/DroneSwarmSkillDesc")
+cooldown_label_path = NodePath("DroneSwarmSkillMargin/DroneSwarmSkillHBox/DroneSwarmSkillTextVBox/DroneSwarmSkillBottomHBox/DroneSwarmSkillCooldown")
+state_button_path = NodePath("DroneSwarmSkillMargin/DroneSwarmSkillHBox/DroneSwarmSkillTextVBox/DroneSwarmSkillBottomHBox/DroneSwarmSkillStateButton")
+
+[node name="DroneSwarmSkillMargin" type="MarginContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DroneSwarmSkillCard" unique_id=305514164]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="DroneSwarmSkillHBox" type="HBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DroneSwarmSkillCard/DroneSwarmSkillMargin" unique_id=277553084]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="DroneSwarmSkillIcon" type="TextureRect" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DroneSwarmSkillCard/DroneSwarmSkillMargin/DroneSwarmSkillHBox" unique_id=298854700]
+custom_minimum_size = Vector2(64, 44)
+layout_mode = 2
+texture = ExtResource("2_b32md")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="DroneSwarmSkillTextVBox" type="VBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DroneSwarmSkillCard/DroneSwarmSkillMargin/DroneSwarmSkillHBox" unique_id=1899037206]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="DroneSwarmSkillTitleHBox" type="HBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DroneSwarmSkillCard/DroneSwarmSkillMargin/DroneSwarmSkillHBox/DroneSwarmSkillTextVBox" unique_id=642646670]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="DroneSwarmSkillTitle" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DroneSwarmSkillCard/DroneSwarmSkillMargin/DroneSwarmSkillHBox/DroneSwarmSkillTextVBox/DroneSwarmSkillTitleHBox" unique_id=621317003]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+theme_override_font_sizes/font_size = 14
+text = "DRONE SWARM"
+clip_text = true
+
+[node name="DroneSwarmSkillLevel" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DroneSwarmSkillCard/DroneSwarmSkillMargin/DroneSwarmSkillHBox/DroneSwarmSkillTextVBox/DroneSwarmSkillTitleHBox" unique_id=1964284001]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+text = "Lv. 31"
+horizontal_alignment = 2
+
+[node name="DroneSwarmSkillDesc" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DroneSwarmSkillCard/DroneSwarmSkillMargin/DroneSwarmSkillHBox/DroneSwarmSkillTextVBox" unique_id=758041152]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25490198, 0.31764707, 0.41960785, 1)
+theme_override_font_sizes/font_size = 13
+text = "12 Drones"
+clip_text = true
+
+[node name="DroneSwarmSkillBottomHBox" type="HBoxContainer" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DroneSwarmSkillCard/DroneSwarmSkillMargin/DroneSwarmSkillHBox/DroneSwarmSkillTextVBox" unique_id=1740441390]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="DroneSwarmSkillCooldown" type="Label" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DroneSwarmSkillCard/DroneSwarmSkillMargin/DroneSwarmSkillHBox/DroneSwarmSkillTextVBox/DroneSwarmSkillBottomHBox" unique_id=319499497]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.25490198, 0.31764707, 0.41960785, 1)
+theme_override_font_sizes/font_size = 12
+text = "⏱ 28.7s"
+clip_text = true
+
+[node name="DroneSwarmSkillStateButton" type="Button" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox/DroneSwarmSkillCard/DroneSwarmSkillMargin/DroneSwarmSkillHBox/DroneSwarmSkillTextVBox/DroneSwarmSkillBottomHBox" unique_id=1816922012]
+custom_minimum_size = Vector2(64, 30)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4509804, 0.16078432, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_au2jy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bxg7v")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fn8o0")
+text = "AUTO ON"
+
+[node name="EndCombatButton" type="Button" parent="MainVBox/BottomBar/BottomBarMargin/BottomVBoxContainer/BottomBarHBox" unique_id=1187829510]
+custom_minimum_size = Vector2(170, 92)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_uwxkk")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_78y3d")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5ww6k")
+text = "END COMBAT"
+
+[node name="RewardSelectionModal" parent="." unique_id=269704532 instance=ExtResource("15_l3eay")]
+
+[node name="RewardManager" type="Node2D" parent="." unique_id=1214899439]
+script = ExtResource("16_au2jy")
+level_up_rewards = Array[ExtResource("17_78y3d")]([ExtResource("18_5ww6k"), ExtResource("19_4q4hc"), ExtResource("20_d8ewh"), ExtResource("21_xfw3w"), ExtResource("22_6v5l2"), ExtResource("23_47gn8"), ExtResource("24_ujuty"), ExtResource("19_0q685")])
+boss_rewards = Array[ExtResource("17_78y3d")]([ExtResource("20_si8ho"), ExtResource("27_jh1g1"), ExtResource("28_wh7no"), ExtResource("29_c80mf"), ExtResource("30_edgei"), ExtResource("31_l351l")])

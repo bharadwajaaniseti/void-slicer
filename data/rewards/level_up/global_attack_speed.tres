@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="RewardData" format=3 uid="uid://br3f305q47cmc"]
+
+[ext_resource type="Script" uid="uid://yi55q1xonpt0" path="res://scripts/rewards/reward_data.gd" id="1_544qa"]
+
+[resource]
+script = ExtResource("1_544qa")
+reward_id = "global_attack_speed"
+display_name = "OVERCLOCK"
+description = " Accelerates the firing speed of all equipped weapons."
+rarity = 1
+stat_line_1 = "+12% Attack Speed"
+stat_line_2 = "Faster automatic weapons"
+stat_line_3 = " Does not affect abilities"
+stat_id = "global_attack_speed_multiplier"
+primary_value = 0.12
+maximum_stacks = 8
+level_up_reward_only = true
+metadata/_custom_type_script = "uid://yi55q1xonpt0"

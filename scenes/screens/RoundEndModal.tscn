@@ -1,0 +1,918 @@
+[gd_scene format=3 uid="uid://y6p4vevrbfdb"]
+
+[ext_resource type="Script" uid="uid://cus75f5qme3p6" path="res://scripts/screens/round_end_modal.gd" id="1_aa8ms"]
+[ext_resource type="Texture2D" uid="uid://binnpbs7q3bi1" path="res://assets/ui/voidslice logo.png" id="2_6vrku"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aa8ms"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8039216, 0.7411765, 1, 1)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_right = 28
+corner_radius_bottom_left = 28
+shadow_color = Color(0.45490196, 0.21568628, 1, 0.14901961)
+shadow_size = 28
+shadow_offset = Vector2(0, 8)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6vrku"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8862745, 0.9098039, 0.9411765, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.03137255)
+shadow_size = 5
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xf7jp"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8862745, 0.9098039, 0.9411765, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4jwqy"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8862745, 0.9098039, 0.9411765, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dl5ii"]
+bg_color = Color(0.9843137, 0.98039216, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8862745, 0.8509804, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0.45490196, 0.21568628, 1, 0.07058824)
+shadow_size = 8
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_asesh"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7254902, 0.654902, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gyxu0"]
+bg_color = Color(0.972549, 0.9607843, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21568628, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sihlp"]
+bg_color = Color(0.45490196, 0.21568628, 1, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8039216, 0.7411765, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.45490196, 0.21568628, 1, 0.33333334)
+shadow_size = 16
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ks10"]
+bg_color = Color(0.29803923, 0.078431375, 0.7490196, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8039216, 0.7411765, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7f14v"]
+bg_color = Color(0.3882353, 0.14117648, 0.9098039, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.45490196, 0.21568628, 1, 0.46666667)
+shadow_size = 20
+shadow_offset = Vector2(0, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jr83c"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7254902, 0.654902, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o6vpf"]
+bg_color = Color(0.972549, 0.9607843, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21568628, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="RoundEndModalRoot" type="CanvasLayer" unique_id=1056599985]
+layer = 50
+script = ExtResource("1_aa8ms")
+reveal_buttons_after_results = false
+
+[node name="OverlayRoot" type="Control" parent="." unique_id=1464958543]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DimBackground" type="ColorRect" parent="OverlayRoot" unique_id=2071426762]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.39688927, 0.39688927, 0.39688924, 0.7294118)
+
+[node name="ModalCenter" type="CenterContainer" parent="OverlayRoot/DimBackground" unique_id=1386287142]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ModalPanel" type="PanelContainer" parent="OverlayRoot/DimBackground/ModalCenter" unique_id=970906035]
+custom_minimum_size = Vector2(1180, 660)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_aa8ms")
+
+[node name="ModalMargin" type="MarginContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel" unique_id=227947406]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="ModalVBox" type="VBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin" unique_id=377744674]
+layout_mode = 2
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="HeaderBox" type="VBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox" unique_id=1108061819]
+layout_mode = 2
+alignment = 1
+
+[node name="TitleHBox" type="HBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/HeaderBox" unique_id=259651617]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/HeaderBox/TitleHBox" unique_id=150400140]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("2_6vrku")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TitleLabel" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/HeaderBox/TitleHBox" unique_id=2063315092]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.30980393, 0.09411765, 0.8509804, 1)
+theme_override_font_sizes/font_size = 50
+text = "VOID COLLAPSED"
+horizontal_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/HeaderBox" unique_id=727547787]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.25490198, 0.33333334, 1)
+theme_override_font_sizes/font_size = 20
+text = "C O M B A T   C O M P L E T E"
+horizontal_alignment = 1
+
+[node name="StatsGrid" type="GridContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox" unique_id=896203489]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 6
+
+[node name="CashCard" type="PanelContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid" unique_id=678572602]
+custom_minimum_size = Vector2(170, 135)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_6vrku")
+
+[node name="CashMargin" type="MarginContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/CashCard" unique_id=1103570234]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="CashVBox" type="VBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/CashCard/CashMargin" unique_id=1338995788]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="CashTopHBox" type="HBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/CashCard/CashMargin/CashVBox" unique_id=1797809047]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="CashIcon" type="TextureRect" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/CashCard/CashMargin/CashVBox/CashTopHBox" unique_id=1121577158]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("2_6vrku")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="CashTitle" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/CashCard/CashMargin/CashVBox/CashTopHBox" unique_id=1193609848]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+theme_override_font_sizes/font_size = 12
+text = "CASH EARNED"
+
+[node name="CashValue" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/CashCard/CashMargin/CashVBox" unique_id=877972856]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.03137255, 0.08627451, 1)
+theme_override_font_sizes/font_size = 28
+text = "$1.28M"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CashBonus" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/CashCard/CashMargin/CashVBox" unique_id=429918262]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.72156864, 0.30980393, 0.99215686)
+text = "+128.4k"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ShardsCard" type="PanelContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid" unique_id=99242024]
+custom_minimum_size = Vector2(170, 135)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_6vrku")
+
+[node name="ShardsMargin" type="MarginContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/ShardsCard" unique_id=2014028250]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="ShardsVBox" type="VBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/ShardsCard/ShardsMargin" unique_id=1523000615]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="ShardsTopHBox" type="HBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/ShardsCard/ShardsMargin/ShardsVBox" unique_id=1702922327]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="ShardsIcon" type="TextureRect" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/ShardsCard/ShardsMargin/ShardsVBox/ShardsTopHBox" unique_id=341185627]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("2_6vrku")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="ShardsTitle" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/ShardsCard/ShardsMargin/ShardsVBox/ShardsTopHBox" unique_id=2098190533]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+theme_override_font_sizes/font_size = 12
+text = "SHARDS EARNED"
+
+[node name="ShardsValue" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/ShardsCard/ShardsMargin/ShardsVBox" unique_id=210820208]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.03137255, 0.08627451, 1)
+theme_override_font_sizes/font_size = 28
+text = "2,450"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ShardsBonus" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/ShardsCard/ShardsMargin/ShardsVBox" unique_id=1569175573]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.30980393, 0.09411765, 0.8509804, 1)
+text = "+245"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimeCard" type="PanelContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid" unique_id=314786382]
+custom_minimum_size = Vector2(170, 135)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_6vrku")
+
+[node name="TimeMargin" type="MarginContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/TimeCard" unique_id=875688165]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="TimeVBox" type="VBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/TimeCard/TimeMargin" unique_id=73744563]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="TimeTopHBox" type="HBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/TimeCard/TimeMargin/TimeVBox" unique_id=917463797]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="TimeIcon" type="TextureRect" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/TimeCard/TimeMargin/TimeVBox/TimeTopHBox" unique_id=1077656721]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("2_6vrku")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TimeTitle" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/TimeCard/TimeMargin/TimeVBox/TimeTopHBox" unique_id=427470979]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+theme_override_font_sizes/font_size = 12
+text = "TIME SURVIVED"
+
+[node name="TimeValue" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/TimeCard/TimeMargin/TimeVBox" unique_id=2082290119]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.03137255, 0.08627451, 1)
+theme_override_font_sizes/font_size = 28
+text = "12:45"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimeBonus" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/TimeCard/TimeMargin/TimeVBox" unique_id=1040147450]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.43137255, 1, 1)
+text = "New Best!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WaveCard" type="PanelContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid" unique_id=1594025295]
+custom_minimum_size = Vector2(170, 135)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_6vrku")
+
+[node name="WaveMargin" type="MarginContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/WaveCard" unique_id=1302412388]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="WaveVBox" type="VBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/WaveCard/WaveMargin" unique_id=1885497037]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="WaveTopHBox" type="HBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/WaveCard/WaveMargin/WaveVBox" unique_id=1271399446]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="WaveIcon" type="TextureRect" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/WaveCard/WaveMargin/WaveVBox/WaveTopHBox" unique_id=557739845]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("2_6vrku")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="WaveTitle" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/WaveCard/WaveMargin/WaveVBox/WaveTopHBox" unique_id=820160128]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+theme_override_font_sizes/font_size = 12
+text = "HIGHEST WAVE"
+
+[node name="WaveValue" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/WaveCard/WaveMargin/WaveVBox" unique_id=1197828926]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.03137255, 0.08627451, 1)
+theme_override_font_sizes/font_size = 28
+text = "248"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WaveBonus" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/WaveCard/WaveMargin/WaveVBox" unique_id=1190904803]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.43137255, 1, 1)
+text = "New Best!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EnemiesCard" type="PanelContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid" unique_id=143649616]
+custom_minimum_size = Vector2(170, 135)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_6vrku")
+
+[node name="EnemiesMargin" type="MarginContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/EnemiesCard" unique_id=1315293984]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="EnemiesVBox" type="VBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/EnemiesCard/EnemiesMargin" unique_id=1937977590]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="EnemiesTopHBox" type="HBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/EnemiesCard/EnemiesMargin/EnemiesVBox" unique_id=1070302332]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="EnemiesIcon" type="TextureRect" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/EnemiesCard/EnemiesMargin/EnemiesVBox/EnemiesTopHBox" unique_id=379424972]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("2_6vrku")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="EnemiesTitle" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/EnemiesCard/EnemiesMargin/EnemiesVBox/EnemiesTopHBox" unique_id=1949921268]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+theme_override_font_sizes/font_size = 12
+text = "ENEMIES DESTROYED"
+
+[node name="EnemiesValue" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/EnemiesCard/EnemiesMargin/EnemiesVBox" unique_id=1468603336]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.03137255, 0.08627451, 1)
+theme_override_font_sizes/font_size = 28
+text = "38,762"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EnemiesBonus" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/EnemiesCard/EnemiesMargin/EnemiesVBox" unique_id=1765854135]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.30980393, 0.09411765, 0.8509804, 1)
+text = "+100%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DpsCard" type="PanelContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid" unique_id=499726938]
+custom_minimum_size = Vector2(170, 135)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_6vrku")
+
+[node name="DpsMargin" type="MarginContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/DpsCard" unique_id=1274119342]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="DpsVBox" type="VBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/DpsCard/DpsMargin" unique_id=1067605807]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="DpsTopHBox" type="HBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/DpsCard/DpsMargin/DpsVBox" unique_id=1491083960]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="DpsIcon" type="TextureRect" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/DpsCard/DpsMargin/DpsVBox/DpsTopHBox" unique_id=1678142110]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("2_6vrku")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="DpsTitle" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/DpsCard/DpsMargin/DpsVBox/DpsTopHBox" unique_id=2098510285]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+theme_override_font_sizes/font_size = 12
+text = "PEAK DPS"
+
+[node name="DpsValue" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/DpsCard/DpsMargin/DpsVBox" unique_id=1188210526]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.03137255, 0.08627451, 1)
+theme_override_font_sizes/font_size = 28
+text = "2.18M"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DpsBonus" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StatsGrid/DpsCard/DpsMargin/DpsVBox" unique_id=1152842155]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.43137255, 1, 1)
+text = "New Best!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BonusHeaderHBox" type="HBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox" unique_id=1155942010]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="LeftLine" type="ColorRect" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/BonusHeaderHBox" unique_id=828027262]
+custom_minimum_size = Vector2(50, 2)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+color = Color(0.7254902, 0.654902, 1, 1)
+
+[node name="BonusTitleLabel" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/BonusHeaderHBox" unique_id=582176767]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.25490198, 0.33333334, 1)
+text = " ◆  B O N U S   R E W A R D S  ◆"
+horizontal_alignment = 1
+
+[node name="RightLine" type="ColorRect" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/BonusHeaderHBox" unique_id=983961709]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+color = Color(0.7254902, 0.654902, 1, 1)
+
+[node name="RewardsHBox" type="HBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox" unique_id=308787589]
+custom_minimum_size = Vector2(0, 135)
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="RewardsGrid" type="GridContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox" unique_id=267265915]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/h_separation = 0
+columns = 6
+
+[node name="VoidShardReward" type="PanelContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid" unique_id=456577473]
+custom_minimum_size = Vector2(115, 115)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_xf7jp")
+
+[node name="VoidShardRewardMargin" type="MarginContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/VoidShardReward" unique_id=647951705]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="VoidShardRewardVBox" type="VBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/VoidShardReward/VoidShardRewardMargin" unique_id=460364575]
+layout_mode = 2
+
+[node name="VoidShardRewardName" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/VoidShardReward/VoidShardRewardMargin/VoidShardRewardVBox" unique_id=1065848578]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45490196, 0.21568628, 1, 1)
+theme_override_font_sizes/font_size = 12
+text = "VOID SHARD"
+horizontal_alignment = 1
+
+[node name="VoidShardHBoxContainer" type="HBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/VoidShardReward/VoidShardRewardMargin/VoidShardRewardVBox" unique_id=1823065138]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="VoidShardRewardIcon" type="TextureRect" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/VoidShardReward/VoidShardRewardMargin/VoidShardRewardVBox/VoidShardHBoxContainer" unique_id=1732410238]
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+texture = ExtResource("2_6vrku")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VoidShardRewardAmount" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/VoidShardReward/VoidShardRewardMargin/VoidShardRewardVBox/VoidShardHBoxContainer" unique_id=2134417047]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45490196, 0.21568628, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "x450"
+horizontal_alignment = 1
+
+[node name="DarkMatterReward" type="PanelContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid" unique_id=1612816789]
+custom_minimum_size = Vector2(0, 125)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_4jwqy")
+
+[node name="DarkMatterRewardMargin" type="MarginContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/DarkMatterReward" unique_id=1815178890]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="DarkMatterRewardVBox" type="VBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/DarkMatterReward/DarkMatterRewardMargin" unique_id=1221817513]
+layout_mode = 2
+
+[node name="DarkMatterRewardName" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/DarkMatterReward/DarkMatterRewardMargin/DarkMatterRewardVBox" unique_id=254166932]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.07058824, 0, 0.14117648, 1)
+theme_override_font_sizes/font_size = 12
+text = "DARK MATTER"
+horizontal_alignment = 1
+
+[node name="DarkMatterHBoxContainer" type="HBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/DarkMatterReward/DarkMatterRewardMargin/DarkMatterRewardVBox" unique_id=1669842292]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="DarkMatterRewardIcon" type="TextureRect" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/DarkMatterReward/DarkMatterRewardMargin/DarkMatterRewardVBox/DarkMatterHBoxContainer" unique_id=252516875]
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+texture = ExtResource("2_6vrku")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DarkMatterRewardAmount" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/DarkMatterReward/DarkMatterRewardMargin/DarkMatterRewardVBox/DarkMatterHBoxContainer" unique_id=1090915252]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.07058824, 0, 0.14117648, 1)
+theme_override_font_sizes/font_size = 18
+text = "x120"
+horizontal_alignment = 1
+
+[node name="PrismCoreReward" type="PanelContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid" unique_id=1547828321]
+custom_minimum_size = Vector2(0, 125)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_4jwqy")
+
+[node name="PrismCoreRewardMargin" type="MarginContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/PrismCoreReward" unique_id=2045211416]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="PrismCoreRewardVBox" type="VBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/PrismCoreReward/PrismCoreRewardMargin" unique_id=2055696814]
+layout_mode = 2
+
+[node name="PrismCoreRewardName" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/PrismCoreReward/PrismCoreRewardMargin/PrismCoreRewardVBox" unique_id=1297980570]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.53333336, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "PRISM CORE"
+horizontal_alignment = 1
+
+[node name="PrismCoreHBoxContainer" type="HBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/PrismCoreReward/PrismCoreRewardMargin/PrismCoreRewardVBox" unique_id=751646785]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="PrismCoreRewardIcon" type="TextureRect" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/PrismCoreReward/PrismCoreRewardMargin/PrismCoreRewardVBox/PrismCoreHBoxContainer" unique_id=395278666]
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+texture = ExtResource("2_6vrku")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PrismCoreRewardAmount" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/PrismCoreReward/PrismCoreRewardMargin/PrismCoreRewardVBox/PrismCoreHBoxContainer" unique_id=500915107]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.53333336, 0, 1)
+theme_override_font_sizes/font_size = 18
+text = "x8"
+horizontal_alignment = 1
+
+[node name="TechCoreReward" type="PanelContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid" unique_id=1046372005]
+custom_minimum_size = Vector2(0, 125)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_4jwqy")
+
+[node name="TechCoreRewardMargin" type="MarginContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/TechCoreReward" unique_id=1625308001]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="TechCoreRewardVBox" type="VBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/TechCoreReward/TechCoreRewardMargin" unique_id=1693788598]
+layout_mode = 2
+
+[node name="TechCoreRewardName" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/TechCoreReward/TechCoreRewardMargin/TechCoreRewardVBox" unique_id=518460917]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.46666667, 1, 1)
+theme_override_font_sizes/font_size = 12
+text = "TECH CORE"
+horizontal_alignment = 1
+
+[node name="TechCoreHBoxContainer" type="HBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/TechCoreReward/TechCoreRewardMargin/TechCoreRewardVBox" unique_id=2019280375]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="TechCoreRewardIcon" type="TextureRect" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/TechCoreReward/TechCoreRewardMargin/TechCoreRewardVBox/TechCoreHBoxContainer" unique_id=779130814]
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+texture = ExtResource("2_6vrku")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TechCoreRewardAmount" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/TechCoreReward/TechCoreRewardMargin/TechCoreRewardVBox/TechCoreHBoxContainer" unique_id=781345358]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.46666667, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "x12"
+horizontal_alignment = 1
+
+[node name="AiChipReward" type="PanelContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid" unique_id=213336316]
+custom_minimum_size = Vector2(0, 125)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_4jwqy")
+
+[node name="AiChipRewardMargin" type="MarginContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/AiChipReward" unique_id=376550198]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="AiChipRewardVBox" type="VBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/AiChipReward/AiChipRewardMargin" unique_id=507877206]
+layout_mode = 2
+
+[node name="AiChipRewardName" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/AiChipReward/AiChipRewardMargin/AiChipRewardVBox" unique_id=1338200284]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.72156864, 0.41960785, 1)
+theme_override_font_sizes/font_size = 12
+text = "AI CHIP"
+horizontal_alignment = 1
+
+[node name="AiChipHBoxContainer" type="HBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/AiChipReward/AiChipRewardMargin/AiChipRewardVBox" unique_id=1980007182]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="AiChipRewardIcon" type="TextureRect" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/AiChipReward/AiChipRewardMargin/AiChipRewardVBox/AiChipHBoxContainer" unique_id=405469061]
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+texture = ExtResource("2_6vrku")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AiChipRewardAmount" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/AiChipReward/AiChipRewardMargin/AiChipRewardVBox/AiChipHBoxContainer" unique_id=299972606]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.72156864, 0.41960785, 1)
+theme_override_font_sizes/font_size = 18
+text = "x16"
+horizontal_alignment = 1
+
+[node name="CreditsReward" type="PanelContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid" unique_id=86695717]
+custom_minimum_size = Vector2(0, 125)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_4jwqy")
+
+[node name="CreditsRewardMargin" type="MarginContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/CreditsReward" unique_id=489566099]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="CreditsRewardVBox" type="VBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/CreditsReward/CreditsRewardMargin" unique_id=1258345551]
+layout_mode = 2
+
+[node name="CreditsRewardName" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/CreditsReward/CreditsRewardMargin/CreditsRewardVBox" unique_id=38627230]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2784314, 0.33333334, 0.4117647, 1)
+theme_override_font_sizes/font_size = 12
+text = "CREDITS CACHE"
+horizontal_alignment = 1
+
+[node name="CreditsHBoxContainer" type="HBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/CreditsReward/CreditsRewardMargin/CreditsRewardVBox" unique_id=1907689750]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="CreditsRewardIcon" type="TextureRect" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/CreditsReward/CreditsRewardMargin/CreditsRewardVBox/CreditsHBoxContainer" unique_id=1823200034]
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+texture = ExtResource("2_6vrku")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CreditsRewardAmount" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/RewardsGrid/CreditsReward/CreditsRewardMargin/CreditsRewardVBox/CreditsHBoxContainer" unique_id=1358531242]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2784314, 0.33333334, 0.4117647, 1)
+theme_override_font_sizes/font_size = 18
+text = "x3"
+horizontal_alignment = 1
+
+[node name="TotalValueCard" type="PanelContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox" unique_id=1874682258]
+custom_minimum_size = Vector2(270, 125)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_dl5ii")
+
+[node name="TextureRect" type="TextureRect" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/TotalValueCard" unique_id=1414202580]
+layout_mode = 2
+
+[node name="TotalValueVBox" type="VBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/TotalValueCard" unique_id=90011877]
+layout_mode = 2
+alignment = 1
+
+[node name="TotalTitleLabel" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/TotalValueCard/TotalValueVBox" unique_id=1323199980]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.30980393, 0.09411765, 0.8509804, 1)
+text = "TOTAL REWARDS VALUE"
+horizontal_alignment = 1
+
+[node name="TotalValueLabel" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/RewardsHBox/TotalValueCard/TotalValueVBox" unique_id=1097000751]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.30980393, 0.09411765, 0.8509804, 1)
+theme_override_font_sizes/font_size = 38
+text = "$1.63M"
+horizontal_alignment = 1
+
+[node name="ButtonHBox" type="HBoxContainer" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox" unique_id=1950441260]
+custom_minimum_size = Vector2(0, 95)
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="RestartButton" type="Button" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/ButtonHBox" unique_id=629363610]
+custom_minimum_size = Vector2(280, 78)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.30980393, 0.09411765, 0.8509804, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_asesh")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gyxu0")
+text = " ↻  RESTART"
+
+[node name="ClaimButton" type="Button" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/ButtonHBox" unique_id=1641323722]
+custom_minimum_size = Vector2(380, 82)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_sihlp")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_8ks10")
+theme_override_styles/hover = SubResource("StyleBoxFlat_7f14v")
+text = "🎁  CLAIM REWARDS"
+
+[node name="ReturnButton" type="Button" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox/ButtonHBox" unique_id=953778917]
+custom_minimum_size = Vector2(280, 78)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.30980393, 0.09411765, 0.8509804, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_jr83c")
+theme_override_styles/hover = SubResource("StyleBoxFlat_o6vpf")
+text = "⟲  RETURN"
+
+[node name="FooterLabel" type="Label" parent="OverlayRoot/DimBackground/ModalCenter/ModalPanel/ModalMargin/ModalVBox" unique_id=1505164146]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.39215687, 0.45490196, 0.54509807, 1)
+theme_override_font_sizes/font_size = 13
+text = " T H E   V O I D   H A S   B E E N   S T I L L E D . . .   F O R   N O W ."
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://qot1e5r7denl"]
+
+[ext_resource type="Script" uid="uid://d2ua6qmjdlr4a" path="res://scripts/combat/black_hole.gd" id="1_ow8ry"]
+
+[node name="BlackHole" type="Node2D" unique_id=550868897]
+script = ExtResource("1_ow8ry")

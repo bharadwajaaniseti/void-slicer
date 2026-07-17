@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="RewardData" format=3 uid="uid://bkwksyn5e7ljr"]
+
+[ext_resource type="Script" uid="uid://yi55q1xonpt0" path="res://scripts/rewards/reward_data.gd" id="1_q1gyu"]
+
+[resource]
+script = ExtResource("1_q1gyu")
+reward_id = "railgun_tier_2"
+display_name = "RAILGUN TIER II"
+description = "Upgrades the Railgun with stronger penetration and damage."
+reward_type = 4
+rarity = 4
+tier = 2
+stat_line_1 = "+50% Railgun Damage"
+stat_line_2 = "+2 Pierce Targets"
+stat_line_3 = "-10% Reload Time"
+stat_id = "railgun_tier"
+primary_value = 2.0
+weapon_id = "railgun"
+requires_equipped_weapon = true
+required_weapon_id = "railgun"
+minimum_weapon_tier = 1
+boss_reward_only = true
+metadata/_custom_type_script = "uid://yi55q1xonpt0"

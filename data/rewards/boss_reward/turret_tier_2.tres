@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="RewardData" format=3 uid="uid://c6e2r7lvflao5"]
+
+[ext_resource type="Script" uid="uid://yi55q1xonpt0" path="res://scripts/rewards/reward_data.gd" id="1_noxhi"]
+
+[resource]
+script = ExtResource("1_noxhi")
+reward_id = "turret_tier_2"
+display_name = "TURRET TIER II"
+description = "Upgrades the standard turret into a stronger combat platform."
+reward_type = 4
+rarity = 2
+tier = 2
+stat_line_1 = "+40% Base Damage"
+stat_line_2 = "+20% Attack Speed"
+stat_line_3 = "Unlocks Dual Barrel"
+stat_id = "turret_tier"
+primary_value = 2.0
+weapon_id = "turret"
+requires_equipped_weapon = true
+required_weapon_id = "turret"
+minimum_weapon_tier = 1
+boss_reward_only = true
+metadata/_custom_type_script = "uid://yi55q1xonpt0"

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="RewardData" format=3 uid="uid://cq5tba0uykuae"]
+
+[ext_resource type="Script" uid="uid://yi55q1xonpt0" path="res://scripts/rewards/reward_data.gd" id="1_aktxf"]
+
+[resource]
+script = ExtResource("1_aktxf")
+reward_id = "focus_fire_upgrade"
+display_name = "FOCUS FIRE"
+description = "Improves Focus Fire and strengthens attacks against priority targets.
+Icon: Focus Fire ability icon"
+reward_type = 1
+rarity = 3
+stat_line_1 = "-15% Focus Fire Cooldown"
+stat_line_2 = "+20% Damage To Elites"
+stat_line_3 = "+10% Critical Chance During Focus Fire"
+stat_id = "focus_fire_cooldown_reduction"
+primary_value = 0.15
+secondary_stat_id = "elite_damage_multiplier"
+secondary_value = 0.2
+ability_id = "focus_fire"
+maximum_stacks = 4
+level_up_reward_only = true
+metadata/_custom_type_script = "uid://yi55q1xonpt0"

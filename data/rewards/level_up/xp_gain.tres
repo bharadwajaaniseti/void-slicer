@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="RewardData" format=3 uid="uid://wutwpk2cyedd"]
+
+[ext_resource type="Script" uid="uid://yi55q1xonpt0" path="res://scripts/rewards/reward_data.gd" id="1_x6b2l"]
+
+[resource]
+script = ExtResource("1_x6b2l")
+reward_id = "xp_gain"
+display_name = "VOID KNOWLEDGE"
+description = "Increases the amount of combat XP gained from enemies."
+rarity = 1
+stat_line_1 = "+20% XP From Dots"
+stat_line_2 = "+10% XP From Bosses"
+stat_line_3 = "Faster level progression"
+stat_id = "dot_xp_multiplier"
+primary_value = 0.2
+secondary_stat_id = "boss_xp_multiplier"
+secondary_value = 0.1
+maximum_stacks = 5
+level_up_reward_only = true
+metadata/_custom_type_script = "uid://yi55q1xonpt0"

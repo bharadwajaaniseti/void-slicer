@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="RewardData" format=3 uid="uid://bdlac51i841o8"]
+
+[ext_resource type="Script" uid="uid://yi55q1xonpt0" path="res://scripts/rewards/reward_data.gd" id="1_gtxu3"]
+
+[resource]
+script = ExtResource("1_gtxu3")
+reward_id = "tesla_chain_range"
+display_name = "ARC EXPANSION"
+description = "Extends Tesla Coil chain distance and improves chain damage."
+reward_type = 2
+rarity = 2
+stat_line_1 = "+25% Chain Range"
+stat_line_2 = "+12% Chain Damage"
+stat_line_3 = "Requires Tesla Coil"
+stat_id = "tesla_chain_range_multiplier"
+primary_value = 0.25
+secondary_stat_id = "tesla_chain_damage_multiplier"
+secondary_value = 0.12
+weapon_id = "tesla_coil"
+maximum_stacks = 3
+requires_equipped_weapon = true
+minimum_weapon_tier = 1
+level_up_reward_only = true
+metadata/_custom_type_script = "uid://yi55q1xonpt0"

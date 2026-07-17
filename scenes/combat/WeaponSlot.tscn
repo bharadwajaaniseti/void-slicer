@@ -1,0 +1,96 @@
+[gd_scene format=3 uid="uid://x0su2ph3mdmb"]
+
+[ext_resource type="Script" uid="uid://c6ned8fa2n28i" path="res://scripts/combat/weapon_slot.gd" id="1_8ook6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ook6"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8862745, 0.8980392, 0.93333334, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ul5md"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.95686275, 0.9411765, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.7254902, 0.7490196, 0.8156863, 0.1882353)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t4hlv"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45490196, 0.21960784, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.45490196, 0.21960784, 1, 0.25)
+shadow_size = 14
+shadow_offset = Vector2(0, 3)
+
+[node name="WeaponSlot" type="Button" unique_id=661480623]
+custom_minimum_size = Vector2(82, 100)
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.0627451, 0.07450981, 0.10980392, 1)
+theme_override_colors/font_pressed_color = Color(0.45490196, 0.21960784, 1, 1)
+theme_override_colors/font_hover_color = Color(0.45490196, 0.21960784, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_8ook6")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ul5md")
+theme_override_styles/hover = SubResource("StyleBoxFlat_t4hlv")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_8ook6")
+script = ExtResource("1_8ook6")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=600200441]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="SlotIcon" type="Label" parent="VBoxContainer" unique_id=155272219]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45490196, 0.21960784, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "⌗"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SlotLabel" type="Label" parent="VBoxContainer" unique_id=478686822]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06666667, 0.07450981, 0.101960786, 1)
+theme_override_font_sizes/font_size = 11
+horizontal_alignment = 1

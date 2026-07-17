@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="RewardData" format=3 uid="uid://b0sf3je3bvf7l"]
+
+[ext_resource type="Script" uid="uid://yi55q1xonpt0" path="res://scripts/rewards/reward_data.gd" id="1_kjr8y"]
+
+[resource]
+script = ExtResource("1_kjr8y")
+reward_id = "unlock_pulse_cannon"
+display_name = "PULSE CANNON"
+description = "Unlocks a rapid pulse weapon with strong area coverage."
+reward_type = 3
+rarity = 2
+tier = 1
+stat_line_1 = "Unlock New Weapon"
+stat_line_2 = "Fast Projectile Speed"
+stat_line_3 = "Small Impact Explosion"
+weapon_id = "pulse_cannon"
+boss_reward_only = true
+metadata/_custom_type_script = "uid://yi55q1xonpt0"
