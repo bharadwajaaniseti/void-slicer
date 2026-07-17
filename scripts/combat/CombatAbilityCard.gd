@@ -143,6 +143,22 @@ func force_ready() -> void:
 	_update_visuals()
 
 
+func reduce_cooldown(amount: float) -> void:
+	if is_auto_ability:
+		return
+
+	if is_ready:
+		return
+
+	cooldown_left = maxf(cooldown_left - maxf(amount, 0.0), 0.0)
+
+	if cooldown_left <= 0.0:
+		cooldown_left = 0.0
+		is_ready = true
+
+	_update_visuals()
+
+
 func set_auto_enabled(enabled: bool) -> void:
 	is_auto_ability = true
 	is_ready = true

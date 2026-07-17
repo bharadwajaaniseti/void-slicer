@@ -10,6 +10,10 @@ signal boss_destroyed
 signal enemy_xp_gained(amount: float)
 signal boss_xp_gained(amount: float)
 signal stage_completed(sector: int, stage: int)
+signal ability_cooldown_reduction_requested(amount: float)
+
+
+const DamageContextScript: Script = preload("res://scripts/combat/damage_context.gd")
 
 
 class DamageEvent:
@@ -97,6 +101,25 @@ class DamageEvent:
 @export_group("Slicing")
 @export var slice_damage: float = 90.0
 @export var slice_width: float = 22.0
+@export var mark_duration: float = 5.0
+@export var mark_damage_bonus: float = 0.25
+@export var mark_cash_bonus: float = 0.20
+@export var boss_mark_effectiveness: float = 0.50
+@export var weak_point_duration: float = 3.0
+@export var weak_point_critical_chance_bonus: float = 0.15
+@export var weak_point_critical_damage_bonus: float = 0.50
+@export var weak_point_multi_hit_threshold: int = 10
+@export var boss_weak_point_min_slice_length: float = 260.0
+@export var boss_weak_point_min_slice_speed: float = 950.0
+@export var normal_enemy_slice_energy: float = 1.0
+@export var boss_slice_energy: float = 10.0
+@export var cooldown_reduction_per_enemy_sliced: float = 0.05
+@export var cooldown_reduction_per_boss_sliced: float = 0.5
+@export var maximum_cooldown_reduction_per_slice: float = 2.0
+@export var void_burst_enemy_damage_multiplier: float = 10.0
+@export var void_burst_boss_damage_multiplier: float = 2.5
+@export var void_burst_attack_speed_bonus: float = 0.5
+@export var void_burst_attack_speed_duration: float = 5.0
 
 
 @export_group("Boss Progress")
@@ -226,6 +249,20 @@ var unlocked_combat_weapons: Array[String] = []
 var run_state: RunState
 var run_balance: RunBalance
 var run_upgrade_manager: RunUpgradeManager
+var weapon_upgrade_manager: Node
+var slice_combo_manager: Node
+
+var slice_gesture_id_counter: int = 0
+var active_slice_gesture_id: int = 0
+var slice_gesture_active: bool = false
+var slice_gesture_start_time: float = 0.0
+var slice_gesture_start_position: Vector2 = Vector2.ZERO
+var slice_gesture_end_position: Vector2 = Vector2.ZERO
+var slice_gesture_path_points: Array[Vector2] = []
+var slice_gesture_hit_dots: Array[DotEnemy] = []
+var slice_gesture_hit_boss: bool = false
+var slice_gesture_path_length: float = 0.0
+var void_burst_attack_speed_timer: float = 0.0
 
 
 func configure_incremental_systems(
@@ -241,6 +278,22 @@ func configure_incremental_systems(
 		run_balance = RunBalance.new()
 
 	_apply_current_stage_to_legacy_values()
+
+
+func configure_weapon_upgrade_manager(
+	new_weapon_upgrade_manager: Node
+) -> void:
+	weapon_upgrade_manager = new_weapon_upgrade_manager
+	_sync_weapon_upgrade_manager_modifiers()
+
+	if arena_initialized:
+		_rebuild_turrets()
+
+
+func configure_slice_combo_manager(
+	new_slice_combo_manager: Node
+) -> void:
+	slice_combo_manager = new_slice_combo_manager
 
 
 func _ready() -> void:
@@ -662,11 +715,13 @@ func _process(delta: float) -> void:
 	_update_ability_timers(delta)
 
 	if is_forming_boss:
+		_update_slice_systems(delta)
 		_update_drones(delta)
 		_update_dps(delta)
 		queue_redraw()
 		return
 
+	_update_slice_systems(delta)
 	_update_wave(delta)
 	_update_spawning(delta)
 	_update_boss(delta)
@@ -695,15 +750,17 @@ func _gui_input(event: InputEvent) -> void:
 		var mouse_button: InputEventMouseButton = event as InputEventMouseButton
 
 		if mouse_button.button_index == MOUSE_BUTTON_LEFT:
-			is_slicing = mouse_button.pressed
-			last_mouse_position = mouse_button.position
+			if mouse_button.pressed:
+				_begin_slice_gesture(mouse_button.position)
+			else:
+				_finish_slice_gesture(mouse_button.position)
 
 	if event is InputEventMouseMotion:
 		var motion: InputEventMouseMotion = event as InputEventMouseMotion
 
 		if is_slicing:
 			var current_position: Vector2 = motion.position
-			_slice_between(last_mouse_position, current_position)
+			_update_slice_gesture(current_position)
 			_spawn_slash_fx(last_mouse_position, current_position)
 			last_mouse_position = current_position
 
@@ -1190,6 +1247,68 @@ func _get_effective_slice_damage() -> float:
 	return slice_damage * slice_multiplier
 
 
+func _get_total_global_attack_speed_multiplier() -> float:
+	var multiplier: float = global_attack_speed_multiplier
+
+	if void_burst_attack_speed_timer > 0.0:
+		multiplier *= 1.0 + void_burst_attack_speed_bonus
+
+	return maxf(multiplier, 0.05)
+
+
+func _update_slice_systems(delta: float) -> void:
+	if slice_combo_manager != null:
+		slice_combo_manager.call("update_combo", delta)
+
+	void_burst_attack_speed_timer = maxf(
+		void_burst_attack_speed_timer - delta,
+		0.0
+	)
+
+	for dot in dots:
+		if dot == null:
+			continue
+
+		if not is_instance_valid(dot):
+			continue
+
+		dot.update_slice_status(delta)
+
+	if current_boss != null and is_instance_valid(current_boss):
+		current_boss.update_slice_status(delta)
+
+	_sync_weapon_upgrade_manager_modifiers()
+
+
+func _create_damage_context(
+	base_amount: float,
+	source_type: StringName,
+	source_id: StringName,
+	damage_type: StringName,
+	hit_position: Vector2
+) -> Variant:
+	var context: Variant = DamageContextScript.new()
+	context.base_amount = maxf(base_amount, 0.0)
+	context.final_amount = context.base_amount
+	context.source_type = source_type
+	context.source_id = source_id
+	context.damage_type = damage_type
+	context.hit_position = hit_position
+	context.metadata = {}
+	return context
+
+
+func _add_weapon_critical_metadata(context: Variant) -> void:
+	if context == null:
+		return
+
+	context.metadata["critical_chance"] = maxf(critical_chance, 0.05)
+	context.metadata["critical_damage_multiplier"] = maxf(
+		critical_damage_multiplier,
+		2.0
+	)
+
+
 func _start_normal_round() -> void:
 	starting_spawn_generation += 1
 
@@ -1655,7 +1774,8 @@ func _devour_dot(dot: DotEnemy, black_hole: CombatBlackHole) -> void:
 
 	dots.erase(dot)
 
-	var cash_reward: float = dot.reward * black_hole.reward_multiplier
+	var marked_cash_multiplier: float = dot.get_mark_cash_multiplier()
+	var cash_reward: float = dot.reward * black_hole.reward_multiplier * marked_cash_multiplier
 	var progress_reward: float = dot.progress_reward * black_hole.progress_multiplier
 	var xp_reward: float = 0.0
 	var material_reward: float = 0.0
@@ -1724,14 +1844,19 @@ func _update_turrets(delta: float) -> void:
 		if turret == null or not is_instance_valid(turret):
 			continue
 
-		var weapon_id: String = _normalize_weapon_id(turret.kind)
-		var attack_speed_multiplier: float = _get_weapon_attack_speed_multiplier(
-			weapon_id
-		)
+		_apply_weapon_runtime_stats_to_turret(turret)
 
-		var cooldown_delta: float = delta * global_attack_speed_multiplier
-		cooldown_delta *= attack_speed_multiplier
-		cooldown_delta *= _get_run_attack_speed_multiplier()
+		var weapon_id: String = _normalize_weapon_id(turret.kind)
+		var cooldown_delta: float = delta
+
+		if weapon_upgrade_manager == null:
+			var attack_speed_multiplier: float = _get_weapon_attack_speed_multiplier(
+				weapon_id
+			)
+
+			cooldown_delta *= _get_total_global_attack_speed_multiplier()
+			cooldown_delta *= attack_speed_multiplier
+			cooldown_delta *= _get_run_attack_speed_multiplier()
 
 		if frenzy_timer > 0.0:
 			cooldown_delta *= frenzy_turret_speed_multiplier
@@ -1746,6 +1871,12 @@ func _update_turrets(delta: float) -> void:
 				if not current_boss.is_dying:
 					_fire_turret_at_boss(turret)
 					turret.mark_fired()
+					_record_weapon_attack(turret)
+					_handle_turret_attack_milestones(
+						turret,
+						current_boss.position,
+						true
+					)
 					continue
 
 		var effective_range: float = turret.range * _get_weapon_range_multiplier(
@@ -1760,12 +1891,24 @@ func _update_turrets(delta: float) -> void:
 		if target_dot != null:
 			_fire_turret_at_dot(turret, target_dot)
 			turret.mark_fired()
+			_record_weapon_attack(turret)
+			_handle_turret_attack_milestones(
+				turret,
+				target_dot.position,
+				false
+			)
 			continue
 
 		if is_boss_phase and current_boss != null and is_instance_valid(current_boss):
 			if not current_boss.is_dying:
 				_fire_turret_at_boss(turret)
 				turret.mark_fired()
+				_record_weapon_attack(turret)
+				_handle_turret_attack_milestones(
+					turret,
+					current_boss.position,
+					true
+				)
 
 
 func _update_projectiles(delta: float) -> void:
@@ -1782,13 +1925,11 @@ func _update_projectiles(delta: float) -> void:
 		var damage_target_is_boss: bool = false
 		var boss_damage_amount: float = 0.0
 		var dot_target: DotEnemy = null
-		var dot_damage_amount: float = 0.0
 
 		dot_target = _find_projectile_hit(projectile)
 
 		if dot_target != null:
 			should_remove = true
-			dot_damage_amount = projectile.damage
 		elif is_boss_phase and current_boss != null and is_instance_valid(current_boss):
 			if projectile.position.distance_to(current_boss.position) <= current_boss.radius + projectile.glow_radius:
 				should_remove = true
@@ -1799,6 +1940,15 @@ func _update_projectiles(delta: float) -> void:
 			should_remove = true
 
 		if should_remove:
+			var projectile_position: Vector2 = projectile.position
+			var projectile_velocity: Vector2 = projectile.velocity
+			var projectile_damage: float = projectile.damage
+			var projectile_weapon_id: StringName = projectile.weapon_id
+			var projectile_ricochet_count: int = projectile.ricochet_count
+			var projectile_ricochet_multiplier: float = projectile.ricochet_damage_multiplier
+			var projectile_is_chain_damage: bool = projectile.is_chain_damage
+			var projectile_color: Color = projectile.projectile_color
+
 			if projectiles.has(projectile):
 				projectiles.erase(projectile)
 
@@ -1809,11 +1959,38 @@ func _update_projectiles(delta: float) -> void:
 				if current_boss != null and is_instance_valid(current_boss):
 					_spawn_impact_fx(current_boss.position, orange_color)
 
-				_damage_boss(boss_damage_amount)
+				var boss_context: Variant = _create_damage_context(
+					boss_damage_amount,
+					&"projectile",
+					projectile_weapon_id,
+					&"physical",
+					current_boss.position if current_boss != null else projectile_position
+				)
+				boss_context.is_chain_damage = projectile_is_chain_damage
+				_add_weapon_critical_metadata(boss_context)
+				_damage_boss_with_context(boss_context)
 			elif dot_target != null:
-				var projectile_angle: float = projectile.velocity.angle()
+				var projectile_angle: float = projectile_velocity.angle()
 				_spawn_impact_fx(dot_target.position, orange_color)
-				_damage_dot(dot_target, dot_damage_amount, projectile_angle)
+				var dot_context: Variant = _create_damage_context(
+					projectile_damage,
+					&"projectile",
+					projectile_weapon_id,
+					&"physical",
+					dot_target.position
+				)
+				dot_context.is_chain_damage = projectile_is_chain_damage
+				_add_weapon_critical_metadata(dot_context)
+				_damage_dot_with_context(dot_target, dot_context, projectile_angle)
+				_spawn_ricochet_projectile(
+					projectile_position,
+					dot_target,
+					projectile_damage,
+					projectile_color,
+					projectile_weapon_id,
+					projectile_ricochet_count,
+					projectile_ricochet_multiplier
+				)
 
 
 func _update_dps(delta: float) -> void:
@@ -2012,7 +2189,11 @@ func _spawn_projectile(
 	start_position: Vector2,
 	direction: Vector2,
 	damage: float,
-	projectile_color: Color
+	projectile_color: Color,
+	weapon_id: StringName = &"",
+	ricochet_count: int = 0,
+	ricochet_damage_multiplier: float = 0.6,
+	is_chain_damage: bool = false
 ) -> void:
 	if projectile_scene == null:
 		return
@@ -2027,10 +2208,119 @@ func _spawn_projectile(
 		return
 
 	projectile_layer.add_child(projectile)
-	projectile.setup_projectile(start_position, direction, damage, projectile_color)
+	projectile.setup_projectile(
+		start_position,
+		direction,
+		damage,
+		projectile_color,
+		weapon_id,
+		ricochet_count,
+		ricochet_damage_multiplier,
+		is_chain_damage
+	)
 	projectile.expired.connect(_on_projectile_expired)
 
 	projectiles.append(projectile)
+
+
+func _spawn_turret_projectiles(
+	turret: CombatTurret,
+	start_position: Vector2,
+	direction: Vector2,
+	damage: float,
+	projectile_color: Color
+) -> void:
+	var projectile_count: int = maxi(turret.projectiles_per_attack, 1)
+
+	for index: int in range(projectile_count):
+		var shot_direction: Vector2 = direction
+
+		if projectile_count > 1:
+			var spread_offset: float = float(index) - float(projectile_count - 1) * 0.5
+			shot_direction = direction.rotated(spread_offset * 0.08)
+
+		_spawn_projectile(
+			start_position,
+			shot_direction,
+			damage,
+			projectile_color,
+			turret.weapon_id,
+			turret.ricochet_count,
+			turret.ricochet_damage_multiplier,
+			false
+		)
+
+
+func _spawn_ricochet_projectile(
+	source_position: Vector2,
+	source_dot: DotEnemy,
+	source_damage: float,
+	projectile_color: Color,
+	weapon_id: StringName,
+	remaining_ricochets: int,
+	ricochet_damage_multiplier: float
+) -> void:
+	if remaining_ricochets <= 0:
+		return
+
+	if source_dot == null or not is_instance_valid(source_dot):
+		return
+
+	var target: DotEnemy = _find_projectile_ricochet_target(
+		source_position,
+		source_dot,
+		360.0
+	)
+
+	if target == null:
+		return
+
+	var damage: float = source_damage * ricochet_damage_multiplier
+	var direction: Vector2 = target.position - source_position
+
+	_spawn_projectile(
+		source_position,
+		direction,
+		damage,
+		projectile_color,
+		weapon_id,
+		remaining_ricochets - 1,
+		ricochet_damage_multiplier,
+		true
+	)
+
+
+func _find_projectile_ricochet_target(
+	origin: Vector2,
+	excluded_dot: DotEnemy,
+	max_range: float
+) -> DotEnemy:
+	var nearest_dot: DotEnemy = null
+	var nearest_distance: float = max_range
+
+	for dot in dots:
+		if dot == null:
+			continue
+
+		if not is_instance_valid(dot):
+			continue
+
+		if dot == excluded_dot:
+			continue
+
+		if dot.is_dying:
+			continue
+
+		if dot.is_merging:
+			continue
+
+		var distance: float = origin.distance_to(dot.position)
+
+		if distance < nearest_distance:
+			nearest_distance = distance
+			nearest_dot = dot
+
+	return nearest_dot
 
 
 func _on_projectile_expired(projectile: CombatProjectile) -> void:
@@ -2159,6 +2449,85 @@ func _clear_boss() -> void:
 
 
 func _slice_between(from: Vector2, to: Vector2) -> void:
+	_begin_slice_gesture(from)
+	_update_slice_gesture(to)
+	_finish_slice_gesture(to)
+
+
+func _begin_slice_gesture(start_position: Vector2) -> void:
+	is_slicing = true
+	last_mouse_position = start_position
+	slice_gesture_id_counter += 1
+	active_slice_gesture_id = slice_gesture_id_counter
+	slice_gesture_active = true
+	slice_gesture_start_time = Time.get_ticks_msec() / 1000.0
+	slice_gesture_start_position = start_position
+	slice_gesture_end_position = start_position
+	slice_gesture_path_points.clear()
+	slice_gesture_hit_dots.clear()
+	slice_gesture_hit_boss = false
+	slice_gesture_path_length = 0.0
+	slice_gesture_path_points.append(start_position)
+
+
+func _update_slice_gesture(current_position: Vector2) -> void:
+	if not slice_gesture_active:
+		_begin_slice_gesture(current_position)
+		return
+
+	var previous_position: Vector2 = last_mouse_position
+
+	if previous_position.distance_to(current_position) < 2.0:
+		return
+
+	slice_gesture_path_length += previous_position.distance_to(current_position)
+	slice_gesture_end_position = current_position
+
+	if slice_gesture_path_points.size() < 48:
+		slice_gesture_path_points.append(current_position)
+	else:
+		slice_gesture_path_points[slice_gesture_path_points.size() - 1] = current_position
+
+	_slice_segment_between(previous_position, current_position)
+	last_mouse_position = current_position
+
+
+func _finish_slice_gesture(end_position: Vector2) -> void:
+	if not slice_gesture_active:
+		is_slicing = false
+		return
+
+	if last_mouse_position.distance_to(end_position) >= 2.0:
+		_update_slice_gesture(end_position)
+
+	is_slicing = false
+	slice_gesture_active = false
+	slice_gesture_end_position = end_position
+
+	var unique_hit_count: int = slice_gesture_hit_dots.size()
+
+	if slice_gesture_hit_boss:
+		unique_hit_count += 1
+
+	var combo_multiplier: float = 1.0
+	var current_combo: int = 0
+
+	if slice_combo_manager != null:
+		combo_multiplier = float(
+			slice_combo_manager.call(
+				"complete_slice",
+				unique_hit_count
+			)
+		)
+		current_combo = int(slice_combo_manager.get("current_combo"))
+
+	_apply_slice_completion_effects(
+		combo_multiplier,
+		current_combo
+	)
+
+
+func _slice_segment_between(from: Vector2, to: Vector2) -> void:
 	if from.distance_to(to) < 2.0:
 		return
 
@@ -2169,8 +2538,20 @@ func _slice_between(from: Vector2, to: Vector2) -> void:
 			var boss_distance: float = _distance_to_segment(current_boss.position, from, to)
 
 			if boss_distance <= current_boss.radius + slice_width:
+				if not slice_gesture_hit_boss:
+					slice_gesture_hit_boss = true
+
 				_spawn_impact_fx(current_boss.position, orange_color)
-				_damage_boss(_get_effective_slice_damage())
+				var boss_context: Variant = _create_damage_context(
+					_get_effective_slice_damage(),
+					&"slice",
+					&"manual_slice",
+					&"slice",
+					current_boss.position
+				)
+				boss_context.is_slice_damage = true
+				boss_context.can_trigger_on_hit_effects = false
+				_damage_boss_with_context(boss_context)
 
 	var hit_dots: Array[DotEnemy] = []
 
@@ -2196,11 +2577,140 @@ func _slice_between(from: Vector2, to: Vector2) -> void:
 		if not dots.has(dot):
 			continue
 
+		if slice_gesture_hit_dots.has(dot):
+			continue
+
+		slice_gesture_hit_dots.append(dot)
+
 		_spawn_impact_fx(dot.position, orange_color)
-		_damage_dot(dot, _get_effective_slice_damage(), slash_angle)
+		var dot_context: Variant = _create_damage_context(
+			_get_effective_slice_damage(),
+			&"slice",
+			&"manual_slice",
+			&"slice",
+			dot.position
+		)
+		dot_context.is_slice_damage = true
+		dot_context.can_trigger_on_hit_effects = false
+		_damage_dot_with_context(dot, dot_context, slash_angle)
+
+
+func _apply_slice_completion_effects(
+	combo_multiplier: float,
+	current_combo: int
+) -> void:
+	var unique_hit_count: int = slice_gesture_hit_dots.size()
+
+	if slice_gesture_hit_boss:
+		unique_hit_count += 1
+
+	if unique_hit_count <= 0:
+		return
+
+	var mark_damage_multiplier: float = 1.0 + mark_damage_bonus
+	var mark_cash_multiplier: float = 1.0 + mark_cash_bonus
+	var mark_duration_value: float = mark_duration
+
+	if combo_multiplier > 1.0:
+		mark_duration_value *= combo_multiplier
+
+	for dot in slice_gesture_hit_dots:
+		if dot == null:
+			continue
+
+		if not is_instance_valid(dot):
+			continue
+
+		if dot.is_dying:
+			continue
+
+		dot.apply_slice_mark(
+			mark_duration_value,
+			mark_damage_multiplier,
+			mark_cash_multiplier,
+			current_combo,
+			active_slice_gesture_id
+		)
+
+	if slice_gesture_hit_boss and current_boss != null and is_instance_valid(current_boss):
+		if not current_boss.is_dying:
+			current_boss.apply_slice_mark(
+				mark_duration_value,
+				1.0 + mark_damage_bonus * boss_mark_effectiveness,
+				1.0,
+				current_combo,
+				active_slice_gesture_id
+			)
+
+	if slice_gesture_hit_dots.size() >= weak_point_multi_hit_threshold:
+		for dot in slice_gesture_hit_dots:
+			if dot == null or not is_instance_valid(dot):
+				continue
+
+			if dot.is_dying:
+				continue
+
+			dot.expose_weak_point(
+				weak_point_duration,
+				weak_point_critical_chance_bonus,
+				weak_point_critical_damage_bonus
+			)
+
+	if slice_gesture_hit_boss and current_boss != null and is_instance_valid(current_boss):
+		var duration: float = maxf(
+			Time.get_ticks_msec() / 1000.0 - slice_gesture_start_time,
+			0.01
+		)
+		var speed: float = slice_gesture_path_length / duration
+
+		if slice_gesture_path_length >= boss_weak_point_min_slice_length or speed >= boss_weak_point_min_slice_speed:
+			current_boss.expose_weak_point(
+				weak_point_duration,
+				weak_point_critical_chance_bonus,
+				weak_point_critical_damage_bonus
+			)
+
+	var energy_gain: float = float(slice_gesture_hit_dots.size()) * normal_enemy_slice_energy
+
+	if slice_gesture_hit_boss:
+		energy_gain += boss_slice_energy
+
+	energy_gain *= combo_multiplier
+
+	if slice_combo_manager != null:
+		slice_combo_manager.call("add_slice_energy", energy_gain)
+
+	var cooldown_reduction: float = float(slice_gesture_hit_dots.size()) * cooldown_reduction_per_enemy_sliced
+
+	if slice_gesture_hit_boss:
+		cooldown_reduction += cooldown_reduction_per_boss_sliced
+
+	cooldown_reduction = minf(
+		cooldown_reduction,
+		maximum_cooldown_reduction_per_slice
+	)
+
+	if cooldown_reduction > 0.0:
+		ability_cooldown_reduction_requested.emit(cooldown_reduction)
 
 
 func _damage_dot(dot: DotEnemy, amount: float, attack_angle: float = 0.0) -> void:
+	var context: Variant = _create_damage_context(
+		amount,
+		&"environmental",
+		&"legacy",
+		&"normal",
+		dot.position if dot != null else Vector2.ZERO
+	)
+	context.can_trigger_on_hit_effects = false
+	_damage_dot_with_context(dot, context, attack_angle)
+
+
+func _damage_dot_with_context(
+	dot: DotEnemy,
+	context: Variant,
+	attack_angle: float = 0.0
+) -> void:
 	if dot == null:
 		return
 
@@ -2216,8 +2726,11 @@ func _damage_dot(dot: DotEnemy, amount: float, attack_angle: float = 0.0) -> voi
 	if dot.is_merging:
 		return
 
-	_record_damage(amount)
-	dot.take_damage(amount, attack_angle)
+	if context == null:
+		return
+
+	dot.apply_damage_context(context, attack_angle)
+	_record_damage(float(context.final_amount))
 
 
 func _on_dot_died(dot: DotEnemy) -> void:
@@ -2227,7 +2740,8 @@ func _on_dot_died(dot: DotEnemy) -> void:
 	if dots.has(dot):
 		dots.erase(dot)
 
-	var cash_reward: float = dot.reward
+	var marked_cash_multiplier: float = dot.get_mark_cash_multiplier()
+	var cash_reward: float = dot.reward * marked_cash_multiplier
 	var xp_reward: float = 0.0
 	var material_reward: float = 0.0
 	var core_reward: float = dot.progress_reward
@@ -2262,6 +2776,18 @@ func _on_dot_died(dot: DotEnemy) -> void:
 
 
 func _damage_boss(amount: float) -> void:
+	var context: Variant = _create_damage_context(
+		amount,
+		&"environmental",
+		&"legacy",
+		&"normal",
+		current_boss.position if current_boss != null else Vector2.ZERO
+	)
+	context.can_trigger_on_hit_effects = false
+	_damage_boss_with_context(context)
+
+
+func _damage_boss_with_context(context: Variant) -> void:
 	if current_boss == null:
 		return
 
@@ -2272,8 +2798,11 @@ func _damage_boss(amount: float) -> void:
 	if current_boss.is_dying:
 		return
 
-	_record_damage(amount)
-	current_boss.take_damage(amount)
+	if context == null:
+		return
+
+	current_boss.apply_damage_context(context)
+	_record_damage(float(context.final_amount))
 	_check_boss_spit()
 
 
@@ -2409,29 +2938,44 @@ func _fire_turret_at_dot(turret: CombatTurret, target: DotEnemy) -> void:
 	var direction: Vector2 = target.position - start_position
 	var projectile_color: Color = purple_color
 	var attack_angle: float = direction.angle()
-	var weapon_id: String = _normalize_weapon_id(turret.kind)
-	var damage_amount: float = _calculate_reward_damage(
-		turret.damage,
-		weapon_id,
+	var damage_amount: float = _get_weapon_attack_damage(
+		turret,
 		false
 	)
 
 	if turret.kind == "tesla":
 		_spawn_beam_fx(start_position, target.position, blue_color)
 		_spawn_impact_fx(target.position, blue_color)
-		_damage_dot(target, damage_amount, attack_angle)
+		var tesla_context: Variant = _create_damage_context(
+			damage_amount,
+			&"weapon",
+			StringName(turret.weapon_id),
+			&"energy",
+			target.position
+		)
+		_add_weapon_critical_metadata(tesla_context)
+		_damage_dot_with_context(target, tesla_context, attack_angle)
 		return
 
 	if turret.kind == "laser":
 		_spawn_beam_fx(start_position, target.position, purple_color)
 		_spawn_impact_fx(target.position, purple_color)
-		_damage_dot(target, damage_amount, attack_angle)
+		var laser_context: Variant = _create_damage_context(
+			damage_amount,
+			&"weapon",
+			StringName(turret.weapon_id),
+			&"energy",
+			target.position
+		)
+		_add_weapon_critical_metadata(laser_context)
+		_damage_dot_with_context(target, laser_context, attack_angle)
 		return
 
 	if turret.kind == "cannon":
 		projectile_color = orange_color
 
-	_spawn_projectile(
+	_spawn_turret_projectiles(
+		turret,
 		start_position,
 		direction,
 		damage_amount,
@@ -2455,29 +2999,44 @@ func _fire_turret_at_boss(turret: CombatTurret) -> void:
 	var start_position: Vector2 = turret.get_muzzle_position()
 	var direction: Vector2 = current_boss.position - start_position
 	var projectile_color: Color = purple_color
-	var weapon_id: String = _normalize_weapon_id(turret.kind)
-	var damage_amount: float = _calculate_reward_damage(
-		turret.damage,
-		weapon_id,
+	var damage_amount: float = _get_weapon_attack_damage(
+		turret,
 		true
 	)
 
 	if turret.kind == "tesla":
 		_spawn_beam_fx(start_position, current_boss.position, blue_color)
 		_spawn_impact_fx(current_boss.position, blue_color)
-		_damage_boss(damage_amount)
+		var tesla_context: Variant = _create_damage_context(
+			damage_amount,
+			&"weapon",
+			StringName(turret.weapon_id),
+			&"energy",
+			current_boss.position
+		)
+		_add_weapon_critical_metadata(tesla_context)
+		_damage_boss_with_context(tesla_context)
 		return
 
 	if turret.kind == "laser":
 		_spawn_beam_fx(start_position, current_boss.position, purple_color)
 		_spawn_impact_fx(current_boss.position, purple_color)
-		_damage_boss(damage_amount)
+		var laser_context: Variant = _create_damage_context(
+			damage_amount,
+			&"weapon",
+			StringName(turret.weapon_id),
+			&"energy",
+			current_boss.position
+		)
+		_add_weapon_critical_metadata(laser_context)
+		_damage_boss_with_context(laser_context)
 		return
 
 	if turret.kind == "cannon":
 		projectile_color = orange_color
 
-	_spawn_projectile(
+	_spawn_turret_projectiles(
+		turret,
 		start_position,
 		direction,
 		damage_amount,
@@ -2567,7 +3126,7 @@ func _rebuild_turrets() -> void:
 		if turret_position == Vector2.ZERO:
 			continue
 
-		_spawn_turret(turret_position, weapon_kind)
+		_spawn_turret(turret_position, weapon_kind, slot_id)
 
 
 func _get_turret_position_for_slot(slot_id: String) -> Vector2:
@@ -2592,7 +3151,11 @@ func _get_turret_position_for_slot(slot_id: String) -> Vector2:
 	return Vector2.ZERO
 
 
-func _spawn_turret(turret_position: Vector2, turret_kind: String) -> void:
+func _spawn_turret(
+	turret_position: Vector2,
+	turret_kind: String,
+	slot_id: String = ""
+) -> void:
 	if turret_scene == null:
 		return
 
@@ -2607,6 +3170,9 @@ func _spawn_turret(turret_position: Vector2, turret_kind: String) -> void:
 
 	turret_layer.add_child(turret)
 	turret.setup_turret(turret_position, turret_kind)
+	turret.slot_id = slot_id
+	_register_weapon_runtime_state_for_turret(turret, slot_id)
+	_apply_weapon_runtime_stats_to_turret(turret)
 
 	if turret_position.x < size.x * 0.25:
 		turret.aim_direction = Vector2.RIGHT
@@ -2616,6 +3182,148 @@ func _spawn_turret(turret_position: Vector2, turret_kind: String) -> void:
 		turret.aim_direction = Vector2.UP
 
 	turrets.append(turret)
+
+
+func _register_weapon_runtime_state_for_turret(
+	turret: CombatTurret,
+	slot_id: String
+) -> void:
+	if weapon_upgrade_manager == null:
+		return
+
+	var weapon_id: String = _normalize_weapon_id(turret.kind)
+	var tier: int = _get_weapon_tier(weapon_id)
+	weapon_upgrade_manager.call(
+		"register_weapon",
+		weapon_id,
+		slot_id,
+		tier
+	)
+
+
+func _apply_weapon_runtime_stats_to_turret(turret: CombatTurret) -> void:
+	if weapon_upgrade_manager == null:
+		return
+
+	if turret == null or not is_instance_valid(turret):
+		return
+
+	var weapon_id: String = _normalize_weapon_id(turret.kind)
+	var state: Variant = weapon_upgrade_manager.call(
+		"get_state",
+		StringName(weapon_id)
+	)
+
+	if state == null:
+		state = weapon_upgrade_manager.call(
+			"register_weapon",
+			weapon_id,
+			turret.slot_id,
+			_get_weapon_tier(weapon_id)
+		)
+
+	if state == null:
+		return
+
+	turret.apply_weapon_runtime_state(state)
+
+
+func _record_weapon_attack(turret: CombatTurret) -> void:
+	if weapon_upgrade_manager == null:
+		return
+
+	weapon_upgrade_manager.call(
+		"record_attack",
+		String(turret.weapon_id)
+	)
+
+
+func _handle_turret_attack_milestones(
+	turret: CombatTurret,
+	target_position: Vector2,
+	target_is_boss: bool
+) -> void:
+	if turret == null:
+		return
+
+	if turret.explosion_every_n_attacks <= 0:
+		return
+
+	if turret.attack_counter % turret.explosion_every_n_attacks != 0:
+		return
+
+	var explosion_damage: float = _get_weapon_attack_damage(
+		turret,
+		target_is_boss
+	)
+	explosion_damage *= turret.explosion_damage_multiplier
+	_apply_weapon_explosion_damage(
+		target_position,
+		explosion_damage,
+		95.0,
+		turret.weapon_id
+	)
+
+
+func _apply_weapon_explosion_damage(
+	explosion_position: Vector2,
+	damage: float,
+	radius: float,
+	weapon_id: StringName = &""
+) -> void:
+	if damage <= 0.0:
+		return
+
+	_spawn_impact_fx(explosion_position, orange_color)
+
+	var hit_dots: Array[DotEnemy] = []
+
+	for dot in dots:
+		if dot == null:
+			continue
+
+		if not is_instance_valid(dot):
+			continue
+
+		if dot.is_dying:
+			continue
+
+		if dot.is_merging:
+			continue
+
+		if dot.position.distance_to(explosion_position) <= dot.radius + radius:
+			hit_dots.append(dot)
+
+	for dot in hit_dots:
+		if not dots.has(dot):
+			continue
+
+		var dot_context: Variant = _create_damage_context(
+			damage,
+			&"explosion",
+			weapon_id,
+			&"physical",
+			dot.position
+		)
+		dot_context.is_area_damage = true
+		dot_context.can_trigger_on_hit_effects = true
+		_add_weapon_critical_metadata(dot_context)
+		_damage_dot_with_context(dot, dot_context, 0.0)
+
+	if is_boss_phase and current_boss != null and is_instance_valid(current_boss):
+		if not current_boss.is_dying:
+			if current_boss.position.distance_to(explosion_position) <= current_boss.radius + radius:
+				var boss_context: Variant = _create_damage_context(
+					damage,
+					&"explosion",
+					weapon_id,
+					&"physical",
+					current_boss.position
+				)
+				boss_context.is_area_damage = true
+				boss_context.can_trigger_on_hit_effects = true
+				_add_weapon_critical_metadata(boss_context)
+				_damage_boss_with_context(boss_context)
 
 
 # ===================================================================
@@ -2639,6 +3347,113 @@ func advance_to_next_stage() -> void:
 
 	if arena_initialized and not combat_is_over:
 		_start_normal_round()
+
+
+func activate_void_burst() -> bool:
+	if combat_paused:
+		return false
+
+	if combat_is_over:
+		return false
+
+	if slice_combo_manager == null:
+		return false
+
+	if not bool(slice_combo_manager.call("consume_void_burst")):
+		return false
+
+	var burst_center: Vector2 = _get_play_area_rect().get_center()
+	_spawn_slash_fx(
+		Vector2(0.0, burst_center.y),
+		Vector2(size.x, burst_center.y)
+	)
+	_spawn_slash_fx(
+		Vector2(burst_center.x, 0.0),
+		Vector2(burst_center.x, size.y)
+	)
+	_spawn_impact_fx(burst_center, purple_color)
+
+	var slice_power_damage: float = _get_effective_slice_damage()
+	var dot_damage: float = slice_power_damage * void_burst_enemy_damage_multiplier
+	var boss_damage: float = slice_power_damage * void_burst_boss_damage_multiplier
+	var surviving_dots: Array[DotEnemy] = []
+
+	for dot in dots:
+		if dot == null:
+			continue
+
+		if not is_instance_valid(dot):
+			continue
+
+		if dot.is_dying:
+			continue
+
+		if dot.is_merging:
+			continue
+
+		var context: Variant = _create_damage_context(
+			dot_damage,
+			&"ability",
+			&"void_burst",
+			&"slice",
+			dot.position
+		)
+		context.is_area_damage = true
+		context.is_slice_damage = true
+		context.can_trigger_on_hit_effects = false
+		_damage_dot_with_context(dot, context, 0.0)
+
+		if is_instance_valid(dot) and not dot.is_dying:
+			surviving_dots.append(dot)
+
+	for dot in surviving_dots:
+		if dot == null or not is_instance_valid(dot):
+			continue
+
+		dot.apply_slice_mark(
+			mark_duration,
+			1.0 + mark_damage_bonus,
+			1.0 + mark_cash_bonus,
+			0,
+			slice_gesture_id_counter
+		)
+		dot.expose_weak_point(
+			weak_point_duration,
+			weak_point_critical_chance_bonus,
+			weak_point_critical_damage_bonus
+		)
+
+	if is_boss_phase and current_boss != null and is_instance_valid(current_boss):
+		if not current_boss.is_dying:
+			var boss_context: Variant = _create_damage_context(
+				boss_damage,
+				&"ability",
+				&"void_burst",
+				&"slice",
+				current_boss.position
+			)
+			boss_context.is_area_damage = true
+			boss_context.is_slice_damage = true
+			boss_context.can_trigger_on_hit_effects = false
+			_damage_boss_with_context(boss_context)
+
+			if current_boss != null and is_instance_valid(current_boss) and not current_boss.is_dying:
+				current_boss.apply_slice_mark(
+					mark_duration,
+					1.0 + mark_damage_bonus * boss_mark_effectiveness,
+					1.0,
+					0,
+					slice_gesture_id_counter
+				)
+				current_boss.expose_weak_point(
+					weak_point_duration,
+					weak_point_critical_chance_bonus,
+					weak_point_critical_damage_bonus
+				)
+
+	void_burst_attack_speed_timer = void_burst_attack_speed_duration
+	_sync_weapon_upgrade_manager_modifiers()
+	return true
 
 
 func set_combat_paused(paused: bool) -> void:
@@ -2666,6 +3481,7 @@ func update_reward_modifiers(
 	global_attack_speed_multiplier = maxf(attack_speed_multiplier, 0.05)
 	critical_chance = clampf(new_critical_chance, 0.0, 1.0)
 	critical_damage_multiplier = maxf(new_critical_damage_multiplier, 1.0)
+	_sync_weapon_upgrade_manager_modifiers()
 
 
 func update_weapon_reward_modifiers(
@@ -2678,6 +3494,7 @@ func update_weapon_reward_modifiers(
 	weapon_attack_speed_multipliers = attack_speed_modifiers.duplicate(true)
 	weapon_range_multipliers = range_modifiers.duplicate(true)
 	weapon_tiers = tier_values.duplicate(true)
+	_sync_weapon_upgrade_manager_modifiers()
 
 	if arena_initialized:
 		_rebuild_turrets()
@@ -2691,6 +3508,14 @@ func unlock_combat_weapon(weapon_id: String) -> void:
 
 	if not unlocked_combat_weapons.has(normalized_id):
 		unlocked_combat_weapons.append(normalized_id)
+
+	if weapon_upgrade_manager != null:
+		weapon_upgrade_manager.call(
+			"register_weapon",
+			normalized_id,
+			"",
+			_get_weapon_tier(normalized_id)
+		)
 
 	var turret_kind: String = _weapon_id_to_turret_kind(normalized_id)
 	var empty_slot_id: String = _find_first_empty_slot_for_weapon(turret_kind)
@@ -2712,6 +3537,13 @@ func set_weapon_tier(weapon_id: String, new_tier: int) -> void:
 		return
 
 	weapon_tiers[normalized_id] = maxi(new_tier, 1)
+
+	if weapon_upgrade_manager != null:
+		weapon_upgrade_manager.call(
+			"set_weapon_tier",
+			normalized_id,
+			maxi(new_tier, 1)
+		)
 
 	if arena_initialized:
 		_rebuild_turrets()
@@ -2737,6 +3569,48 @@ func _calculate_reward_damage(
 	return maxf(damage, 0.0)
 
 
+func _get_weapon_attack_damage(
+	turret: CombatTurret,
+	target_is_boss: bool
+) -> float:
+	if turret == null:
+		return 0.0
+
+	var normalized_id: String = _normalize_weapon_id(turret.kind)
+
+	if weapon_upgrade_manager != null:
+		var managed_damage: float = float(
+			weapon_upgrade_manager.call(
+				"get_weapon_damage",
+				normalized_id,
+				target_is_boss
+			)
+		)
+		return maxf(managed_damage, 0.0)
+
+	return _calculate_reward_damage(
+		turret.damage,
+		normalized_id,
+		target_is_boss
+	)
+
+
+func _sync_weapon_upgrade_manager_modifiers() -> void:
+	if weapon_upgrade_manager == null:
+		return
+
+	weapon_upgrade_manager.call(
+		"set_temporary_modifiers",
+		global_damage_multiplier,
+		boss_damage_multiplier,
+		_get_total_global_attack_speed_multiplier(),
+		weapon_damage_multipliers,
+		weapon_attack_speed_multipliers,
+		weapon_range_multipliers,
+		weapon_tiers
+	)
+
+
 func _get_weapon_damage_multiplier(weapon_id: String) -> float:
 	var normalized_id: String = _normalize_weapon_id(weapon_id)
 	var stored_multiplier: float = float(
@@ -2757,6 +3631,15 @@ func _get_weapon_attack_speed_multiplier(weapon_id: String) -> float:
 
 func _get_weapon_range_multiplier(weapon_id: String) -> float:
 	var normalized_id: String = _normalize_weapon_id(weapon_id)
+
+	if weapon_upgrade_manager != null:
+		return float(
+			weapon_upgrade_manager.call(
+				"get_range_multiplier",
+				normalized_id
+			)
+		)
+
 	var stored_multiplier: float = float(
 		weapon_range_multipliers.get(normalized_id, 1.0)
 	)
@@ -2850,6 +3733,14 @@ func end_combat() -> void:
 
 	frenzy_timer = 0.0
 	focus_fire_timer = 0.0
+	void_burst_attack_speed_timer = 0.0
+	_clear_slice_gesture_tracking()
+
+	if weapon_upgrade_manager != null:
+		weapon_upgrade_manager.call("reset_attack_counters")
+
+	if slice_combo_manager != null:
+		slice_combo_manager.call("reset_run")
 
 	_clear_boss()
 	_clear_dots()
@@ -2863,3 +3754,16 @@ func end_combat() -> void:
 
 	combat_finished.emit()
 	queue_redraw()
+
+
+func _clear_slice_gesture_tracking() -> void:
+	is_slicing = false
+	slice_gesture_active = false
+	active_slice_gesture_id = 0
+	slice_gesture_start_time = 0.0
+	slice_gesture_start_position = Vector2.ZERO
+	slice_gesture_end_position = Vector2.ZERO
+	slice_gesture_path_points.clear()
+	slice_gesture_hit_dots.clear()
+	slice_gesture_hit_boss = false
+	slice_gesture_path_length = 0.0

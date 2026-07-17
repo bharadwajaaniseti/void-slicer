@@ -12,6 +12,10 @@ const RunBalanceScript: Script = preload("res://scripts/run/run_balance.gd")
 const RunStateScript: Script = preload("res://scripts/run/run_state.gd")
 const RunUpgradeManagerScript: Script = preload("res://scripts/run/run_upgrade_manager.gd")
 const RunUpgradeDebugPanelScript: Script = preload("res://scripts/ui/run_upgrade_debug_panel.gd")
+const WeaponUpgradeManagerScript: Script = preload("res://scripts/weapons/weapon_upgrade_manager.gd")
+const WeaponUpgradeDebugPanelScript: Script = preload("res://scripts/ui/weapon_upgrade_debug_panel.gd")
+const SliceComboManagerScript: Script = preload("res://scripts/slice/slice_combo_manager.gd")
+const SliceComboDebugPanelScript: Script = preload("res://scripts/ui/slice_combo_debug_panel.gd")
 
 
 @export_group("Core Node Paths")
@@ -134,6 +138,10 @@ var run_balance: RunBalance
 var run_state: RunState
 var run_upgrade_manager: RunUpgradeManager
 var run_upgrade_debug_panel: RunUpgradeDebugPanel
+var weapon_upgrade_manager: Node
+var weapon_upgrade_debug_panel: Control
+var slice_combo_manager: Node
+var slice_combo_debug_panel: Control
 
 
 # -------------------------------------------------------------------
@@ -300,6 +308,14 @@ func _reset_run_stats() -> void:
 	if run_upgrade_manager != null:
 		run_upgrade_manager.reset_upgrades()
 
+	if weapon_upgrade_manager != null:
+		if weapon_upgrade_manager.has_method("reset_run_weapon_levels"):
+			weapon_upgrade_manager.call("reset_run_weapon_levels")
+
+	if slice_combo_manager != null:
+		if slice_combo_manager.has_method("reset_run"):
+			slice_combo_manager.call("reset_run")
+
 	get_tree().paused = false
 
 
@@ -307,6 +323,8 @@ func _setup_run_systems() -> void:
 	run_balance = RunBalanceScript.new() as RunBalance
 	run_state = RunStateScript.new() as RunState
 	run_upgrade_manager = RunUpgradeManagerScript.new() as RunUpgradeManager
+	weapon_upgrade_manager = WeaponUpgradeManagerScript.new() as Node
+	slice_combo_manager = SliceComboManagerScript.new() as Node
 
 	if run_state != null:
 		run_state.name = "RunState"
@@ -316,6 +334,19 @@ func _setup_run_systems() -> void:
 		run_upgrade_manager.name = "RunUpgradeManager"
 		add_child(run_upgrade_manager)
 		run_upgrade_manager.configure(run_state)
+
+	if weapon_upgrade_manager != null:
+		weapon_upgrade_manager.name = "WeaponUpgradeManager"
+		add_child(weapon_upgrade_manager)
+		weapon_upgrade_manager.call(
+			"configure",
+			run_state,
+			run_upgrade_manager
+		)
+
+	if slice_combo_manager != null:
+		slice_combo_manager.name = "SliceComboManager"
+		add_child(slice_combo_manager)
 
 	_connect_run_state_signals()
 	_connect_run_upgrade_signals()
@@ -329,7 +360,21 @@ func _setup_run_systems() -> void:
 				run_upgrade_manager
 			)
 
+		if arena.has_method("configure_weapon_upgrade_manager"):
+			arena.call(
+				"configure_weapon_upgrade_manager",
+				weapon_upgrade_manager
+			)
+
+		if arena.has_method("configure_slice_combo_manager"):
+			arena.call(
+				"configure_slice_combo_manager",
+				slice_combo_manager
+			)
+
 	_setup_run_upgrade_debug_panel()
+	_setup_weapon_upgrade_debug_panel()
+	_setup_slice_combo_debug_panel()
 
 
 func _connect_run_state_signals() -> void:
@@ -386,6 +431,69 @@ func _setup_run_upgrade_debug_panel() -> void:
 
 	if not run_upgrade_debug_panel.advance_requested.is_connected(_on_advance_requested):
 		run_upgrade_debug_panel.advance_requested.connect(_on_advance_requested)
+
+
+func _setup_weapon_upgrade_debug_panel() -> void:
+	if run_state == null:
+		return
+
+	if weapon_upgrade_manager == null:
+		return
+
+	weapon_upgrade_debug_panel = WeaponUpgradeDebugPanelScript.new() as Control
+
+	if weapon_upgrade_debug_panel == null:
+		return
+
+	weapon_upgrade_debug_panel.name = "WeaponUpgradeDebugPanel"
+	add_child(weapon_upgrade_debug_panel)
+	weapon_upgrade_debug_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	weapon_upgrade_debug_panel.offset_left = -380.0
+	weapon_upgrade_debug_panel.offset_top = 450.0
+	weapon_upgrade_debug_panel.offset_right = -16.0
+	weapon_upgrade_debug_panel.offset_bottom = 0.0
+	weapon_upgrade_debug_panel.call(
+		"configure",
+		run_state,
+		weapon_upgrade_manager
+	)
+
+
+func _setup_slice_combo_debug_panel() -> void:
+	if slice_combo_manager == null:
+		return
+
+	slice_combo_debug_panel = SliceComboDebugPanelScript.new() as Control
+
+	if slice_combo_debug_panel == null:
+		return
+
+	slice_combo_debug_panel.name = "SliceComboDebugPanel"
+	add_child(slice_combo_debug_panel)
+	slice_combo_debug_panel.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	slice_combo_debug_panel.offset_left = -330.0
+	slice_combo_debug_panel.offset_top = -190.0
+	slice_combo_debug_panel.offset_right = -16.0
+	slice_combo_debug_panel.offset_bottom = -16.0
+	slice_combo_debug_panel.call(
+		"configure",
+		slice_combo_manager
+	)
+
+	if slice_combo_debug_panel.has_signal("void_burst_requested"):
+		var callable: Callable = Callable(
+			self,
+			"_on_void_burst_requested"
+		)
+
+		if not slice_combo_debug_panel.is_connected(
+			"void_burst_requested",
+			callable
+		):
+			slice_combo_debug_panel.connect(
+				"void_burst_requested",
+				callable
+			)
 
 
 func _cache_nodes() -> void:
@@ -573,6 +681,11 @@ func _connect_arena_signals() -> void:
 	_connect_arena_signal(
 		"stage_completed",
 		"_on_stage_completed"
+	)
+
+	_connect_arena_signal(
+		"ability_cooldown_reduction_requested",
+		"_on_ability_cooldown_reduction_requested"
 	)
 
 func _on_boss_destroyed() -> void:
@@ -1582,6 +1695,35 @@ func _on_advance_requested() -> void:
 
 	if arena.has_method("advance_to_next_stage"):
 		arena.call("advance_to_next_stage")
+
+
+func _on_void_burst_requested() -> void:
+	if arena == null:
+		return
+
+	if arena.has_method("activate_void_burst"):
+		arena.call("activate_void_burst")
+
+
+func _on_ability_cooldown_reduction_requested(amount: float) -> void:
+	var safe_amount: float = maxf(amount, 0.0)
+
+	if safe_amount <= 0.0:
+		return
+
+	var cards: Array[CombatAbilityCard] = [
+		frenzy_card,
+		dot_rain_card,
+		black_hole_card,
+		focus_fire_card,
+		drone_swarm_card
+	]
+
+	for card: CombatAbilityCard in cards:
+		if card == null:
+			continue
+
+		card.reduce_cooldown(safe_amount)
 
 
 # ===================================================================

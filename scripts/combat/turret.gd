@@ -21,12 +21,29 @@ extends Node2D
 
 var cooldown: float = 0.0
 var aim_direction: Vector2 = Vector2.UP
+var weapon_id: StringName = &"turret"
+var slot_id: String = ""
+var display_name: String = "Basic Turret"
+var projectiles_per_attack: int = 1
+var ricochet_count: int = 0
+var ricochet_damage_multiplier: float = 0.6
+var explosion_every_n_attacks: int = 0
+var explosion_damage_multiplier: float = 0.0
+var attack_counter: int = 0
 
 
 func setup_turret(turret_position: Vector2, turret_kind: String) -> void:
 	position = turret_position
 	kind = turret_kind
 	cooldown = 0.0
+	attack_counter = 0
+	weapon_id = StringName(_normalize_weapon_id(turret_kind))
+	display_name = _get_default_display_name(turret_kind)
+	projectiles_per_attack = 1
+	ricochet_count = 0
+	ricochet_damage_multiplier = 0.6
+	explosion_every_n_attacks = 0
+	explosion_damage_multiplier = 0.0
 
 	match kind:
 		"tesla":
@@ -49,6 +66,22 @@ func setup_turret(turret_position: Vector2, turret_kind: String) -> void:
 	queue_redraw()
 
 
+func apply_weapon_runtime_state(state: Variant) -> void:
+	if state == null:
+		return
+
+	weapon_id = state.weapon_id
+	display_name = state.display_name
+	damage = state.calculated_damage
+	fire_rate = state.calculated_attack_interval
+	projectiles_per_attack = maxi(state.projectiles_per_attack, 1)
+	ricochet_count = maxi(state.ricochet_count, 0)
+	ricochet_damage_multiplier = maxf(state.ricochet_damage_multiplier, 0.0)
+	explosion_every_n_attacks = maxi(state.explosion_every_n_attacks, 0)
+	explosion_damage_multiplier = maxf(state.explosion_damage_multiplier, 0.0)
+	queue_redraw()
+
+
 func update_cooldown(delta: float) -> void:
 	cooldown -= delta
 
@@ -59,6 +92,7 @@ func can_fire() -> bool:
 
 func mark_fired() -> void:
 	cooldown = fire_rate
+	attack_counter += 1
 	play_fire_pulse()
 
 
@@ -86,6 +120,36 @@ func get_weapon_color() -> Color:
 			return cannon_color
 		_:
 			return turret_color
+
+
+func _normalize_weapon_id(raw_weapon_id: String) -> String:
+	var normalized_id: String = raw_weapon_id.strip_edges().to_lower()
+
+	match normalized_id:
+		"tesla":
+			return "tesla_coil"
+		"pulse":
+			return "pulse_cannon"
+		"cannon":
+			return "pulse_cannon"
+		"motor":
+			return "mortar"
+		_:
+			return normalized_id
+
+
+func _get_default_display_name(turret_kind: String) -> String:
+	match turret_kind:
+		"tesla":
+			return "Tesla Coil"
+		"laser":
+			return "Laser"
+		"cannon":
+			return "Pulse Cannon"
+		"motor":
+			return "Mortar"
+		_:
+			return "Basic Turret"
 
 
 func play_fire_pulse() -> void:

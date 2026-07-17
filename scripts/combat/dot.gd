@@ -31,6 +31,10 @@ signal merge_finished(dot: DotEnemy)
 @export var slash_width: float = 3.0
 @export var slash_length_multiplier: float = 2.4
 
+@export_group("Slice Status")
+@export var marked_ring_color: Color = Color("#21B77A")
+@export var weak_point_ring_color: Color = Color("#FF9700")
+
 var hp: float = 50.0
 var is_dying: bool = false
 var is_merging: bool = false
@@ -40,6 +44,16 @@ var slash_alpha: float = 0.0
 var hit_flash: float = 0.0
 var slash_angle: float = 0.0
 var show_slash: bool = false
+var is_marked: bool = false
+var mark_duration_remaining: float = 0.0
+var mark_damage_multiplier: float = 1.25
+var mark_cash_multiplier: float = 1.20
+var mark_source_combo: int = 0
+var marked_by_slice_id: int = 0
+var weak_point_exposed: bool = false
+var weak_point_duration_remaining: float = 0.0
+var weak_point_critical_chance_bonus: float = 0.15
+var weak_point_critical_damage_bonus: float = 0.50
 
 
 func _ready() -> void:
@@ -73,6 +87,7 @@ func setup_dot(
 	slash_alpha = 0.0
 	hit_flash = 0.0
 	show_slash = false
+	clear_slice_status()
 
 	_update_collision()
 	queue_redraw()
@@ -126,6 +141,151 @@ func update_motion(delta: float, arena_size: Vector2) -> void:
 
 	position.x = clampf(position.x, min_x, max_x)
 	position.y = clampf(position.y, min_y, max_y)
+
+
+func update_slice_status(delta: float) -> void:
+	var changed: bool = false
+
+	if is_marked:
+		mark_duration_remaining = maxf(
+			mark_duration_remaining - delta,
+			0.0
+		)
+		changed = true
+
+		if mark_duration_remaining <= 0.0:
+			is_marked = false
+			mark_damage_multiplier = 1.0
+			mark_cash_multiplier = 1.0
+			mark_source_combo = 0
+			marked_by_slice_id = 0
+
+	if weak_point_exposed:
+		weak_point_duration_remaining = maxf(
+			weak_point_duration_remaining - delta,
+			0.0
+		)
+		changed = true
+
+		if weak_point_duration_remaining <= 0.0:
+			weak_point_exposed = false
+
+	if changed:
+		queue_redraw()
+
+
+func clear_slice_status() -> void:
+	is_marked = false
+	mark_duration_remaining = 0.0
+	mark_damage_multiplier = 1.0
+	mark_cash_multiplier = 1.0
+	mark_source_combo = 0
+	marked_by_slice_id = 0
+	weak_point_exposed = false
+	weak_point_duration_remaining = 0.0
+
+
+func apply_slice_mark(
+	duration: float,
+	damage_multiplier: float,
+	cash_multiplier: float,
+	source_combo: int,
+	slice_id: int
+) -> void:
+	is_marked = true
+	mark_duration_remaining = maxf(duration, mark_duration_remaining)
+	mark_damage_multiplier = maxf(mark_damage_multiplier, damage_multiplier)
+	mark_cash_multiplier = maxf(mark_cash_multiplier, cash_multiplier)
+	mark_source_combo = maxi(mark_source_combo, source_combo)
+	marked_by_slice_id = slice_id
+	queue_redraw()
+
+
+func expose_weak_point(
+	duration: float,
+	critical_chance_bonus: float,
+	critical_damage_bonus: float
+) -> void:
+	weak_point_exposed = true
+	weak_point_duration_remaining = maxf(
+		duration,
+		weak_point_duration_remaining
+	)
+	weak_point_critical_chance_bonus = maxf(
+		weak_point_critical_chance_bonus,
+		critical_chance_bonus
+	)
+	weak_point_critical_damage_bonus = maxf(
+		weak_point_critical_damage_bonus,
+		critical_damage_bonus
+	)
+	queue_redraw()
+
+
+func get_mark_cash_multiplier() -> float:
+	if not is_marked:
+		return 1.0
+
+	return maxf(mark_cash_multiplier, 1.0)
+
+
+func apply_damage_context(context: Variant, attack_angle: float = 0.0) -> void:
+	if context == null:
+		return
+
+	var amount: float = float(context.final_amount)
+
+	if _should_mark_amplify_damage(context):
+		amount *= maxf(mark_damage_multiplier, 1.0)
+
+	if _should_critical_affect_damage(context):
+		var base_critical_chance: float = float(
+			context.metadata.get("critical_chance", 0.0)
+		)
+		var base_critical_multiplier: float = float(
+			context.metadata.get("critical_damage_multiplier", 1.0)
+		)
+		var chance_bonus: float = 0.0
+		var multiplier_bonus: float = 0.0
+
+		if weak_point_exposed:
+			chance_bonus = weak_point_critical_chance_bonus
+			multiplier_bonus = weak_point_critical_damage_bonus
+
+		var critical_chance: float = clampf(base_critical_chance + chance_bonus, 0.0, 1.0)
+		var critical_multiplier: float = maxf(base_critical_multiplier + multiplier_bonus, 1.0)
+
+		if randf() <= critical_chance:
+			context.is_critical = true
+			amount *= critical_multiplier
+
+	context.final_amount = maxf(amount, 0.0)
+	take_damage(context.final_amount, attack_angle)
+
+
+func _should_mark_amplify_damage(context: Variant) -> bool:
+	if not is_marked:
+		return false
+
+	if not bool(context.can_trigger_on_hit_effects):
+		return false
+
+	if bool(context.is_slice_damage):
+		return false
+
+	var source_type: StringName = StringName(context.source_type)
+	return source_type == &"weapon" or source_type == &"projectile" or source_type == &"explosion" or source_type == &"damage_over_time"
+
+
+func _should_critical_affect_damage(context: Variant) -> bool:
+	if not bool(context.can_trigger_on_hit_effects):
+		return false
+
+	if bool(context.is_slice_damage):
+		return false
+
+	var source_type: StringName = StringName(context.source_type)
+	return source_type == &"weapon" or source_type == &"projectile" or source_type == &"explosion"
 
 
 func take_damage(amount: float, attack_angle: float = 0.0) -> void:
@@ -336,6 +496,25 @@ func _draw() -> void:
 
 	if show_slash and slash_alpha > 0.01:
 		_draw_slash()
+
+	if is_marked:
+		var mark_color: Color = marked_ring_color
+		mark_color.a = 0.85 * body_alpha
+		draw_arc(
+			Vector2.ZERO,
+			radius + 5.0,
+			0.0,
+			TAU,
+			48,
+			mark_color,
+			2.0,
+			true
+		)
+
+	if weak_point_exposed:
+		var weak_color: Color = weak_point_ring_color
+		weak_color.a = 0.9 * body_alpha
+		draw_circle(Vector2(0.0, -radius * 0.45), 3.5, weak_color)
 
 
 func _draw_health_bar(hp_ratio: float) -> void:

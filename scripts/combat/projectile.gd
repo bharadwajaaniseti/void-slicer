@@ -16,6 +16,10 @@ var velocity: Vector2 = Vector2.ZERO
 var damage: float = 1.0
 var life_left: float = 1.6
 var is_expiring: bool = false
+var weapon_id: StringName = &""
+var ricochet_count: int = 0
+var ricochet_damage_multiplier: float = 0.6
+var is_chain_damage: bool = false
 
 
 func _ready() -> void:
@@ -30,11 +34,19 @@ func setup_projectile(
 	start_position: Vector2,
 	direction: Vector2,
 	projectile_damage: float,
-	new_color: Color
+	new_color: Color,
+	projectile_weapon_id: StringName = &"",
+	projectile_ricochet_count: int = 0,
+	projectile_ricochet_damage_multiplier: float = 0.6,
+	projectile_is_chain_damage: bool = false
 ) -> void:
 	position = start_position
 	damage = projectile_damage
 	projectile_color = new_color
+	weapon_id = projectile_weapon_id
+	ricochet_count = maxi(projectile_ricochet_count, 0)
+	ricochet_damage_multiplier = maxf(projectile_ricochet_damage_multiplier, 0.0)
+	is_chain_damage = projectile_is_chain_damage
 	life_left = lifetime
 
 	if direction.length_squared() <= 0.001:

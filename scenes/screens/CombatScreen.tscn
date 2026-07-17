@@ -1484,6 +1484,8 @@ drone_scene = ExtResource("12_oukn8")
 drone_layer_path = NodePath("DroneLayer")
 play_area_frame_path = NodePath("ArenaFrame")
 starting_dot_count = 120
+slice_damage = 10.0
+drone_count = 0
 
 [node name="ArenaBackground" type="ColorRect" parent="MainVBox/CombatArena" unique_id=448349880]
 layout_mode = 1
