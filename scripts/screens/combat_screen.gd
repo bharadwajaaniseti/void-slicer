@@ -2,11 +2,16 @@ extends Control
 
 
 @export_group("Scene Navigation")
-@export var home_scene_path: String = "res://scenes/HomeScreen.tscn"
+@export var home_scene_path: String = "res://scenes/screens/HomeScreenRoot.tscn"
 
 const RoundEndModalScene: PackedScene = preload(
 	"res://scenes/screens/RoundEndModal.tscn"
 )
+
+const RunBalanceScript: Script = preload("res://scripts/run/run_balance.gd")
+const RunStateScript: Script = preload("res://scripts/run/run_state.gd")
+const RunUpgradeManagerScript: Script = preload("res://scripts/run/run_upgrade_manager.gd")
+const RunUpgradeDebugPanelScript: Script = preload("res://scripts/ui/run_upgrade_debug_panel.gd")
 
 
 @export_group("Core Node Paths")
@@ -89,6 +94,7 @@ var xp_requirement_growth: float = 1.35
 
 @export_group("Timer")
 @export var run_duration_seconds: float = 60.0
+@export var endless_combat_enabled: bool = true
 
 
 @export_group("Round Reward Calculation")
@@ -117,6 +123,17 @@ var boss_progress_fill_color: Color = Color("#FF2A2A")
 var xp_progress_fill_color: Color = Color("#21B77A")
 
 var time_remaining: float = 60.0
+var elapsed_run_time: float = 0.0
+
+
+# -------------------------------------------------------------------
+# Incremental run systems
+# -------------------------------------------------------------------
+
+var run_balance: RunBalance
+var run_state: RunState
+var run_upgrade_manager: RunUpgradeManager
+var run_upgrade_debug_panel: RunUpgradeDebugPanel
 
 
 # -------------------------------------------------------------------
@@ -179,6 +196,7 @@ func _ready() -> void:
 	)
 
 	_cache_nodes()
+	_setup_run_systems()
 	_connect_arena_signals()
 	_connect_buttons()
 	_connect_reward_system()
@@ -195,6 +213,16 @@ func _process(delta: float) -> void:
 		return
 
 	if reward_modal_active:
+		return
+
+	if endless_combat_enabled:
+		elapsed_run_time += delta
+
+		if time_label != null:
+			time_label.text = "ENDLESS " + _format_time(
+				elapsed_run_time
+			)
+
 		return
 
 	if time_remaining <= 0.0:
@@ -215,9 +243,14 @@ func _process(delta: float) -> void:
 		return
 
 	if time_label != null:
-		time_label.text = _format_time(
-			time_remaining
-		)
+		if endless_combat_enabled:
+			time_label.text = "ENDLESS " + _format_time(
+				elapsed_run_time
+			)
+		else:
+			time_label.text = _format_time(
+				time_remaining
+			)
 
 
 # ===================================================================
@@ -226,6 +259,7 @@ func _process(delta: float) -> void:
 
 func _reset_run_stats() -> void:
 	time_remaining = run_duration_seconds
+	elapsed_run_time = 0.0
 	timer_finished = false
 	round_end_modal_open = false
 
@@ -260,7 +294,98 @@ func _reset_run_stats() -> void:
 	if reward_manager != null:
 		reward_manager.reset_run_modifiers()
 
+	if run_state != null:
+		run_state.reset_run()
+
+	if run_upgrade_manager != null:
+		run_upgrade_manager.reset_upgrades()
+
 	get_tree().paused = false
+
+
+func _setup_run_systems() -> void:
+	run_balance = RunBalanceScript.new() as RunBalance
+	run_state = RunStateScript.new() as RunState
+	run_upgrade_manager = RunUpgradeManagerScript.new() as RunUpgradeManager
+
+	if run_state != null:
+		run_state.name = "RunState"
+		add_child(run_state)
+
+	if run_upgrade_manager != null:
+		run_upgrade_manager.name = "RunUpgradeManager"
+		add_child(run_upgrade_manager)
+		run_upgrade_manager.configure(run_state)
+
+	_connect_run_state_signals()
+	_connect_run_upgrade_signals()
+
+	if arena != null:
+		if arena.has_method("configure_incremental_systems"):
+			arena.call(
+				"configure_incremental_systems",
+				run_state,
+				run_balance,
+				run_upgrade_manager
+			)
+
+	_setup_run_upgrade_debug_panel()
+
+
+func _connect_run_state_signals() -> void:
+	if run_state == null:
+		return
+
+	if not run_state.cash_changed.is_connected(_on_run_cash_changed):
+		run_state.cash_changed.connect(_on_run_cash_changed)
+
+	if not run_state.xp_changed.is_connected(_on_run_xp_changed):
+		run_state.xp_changed.connect(_on_run_xp_changed)
+
+	if not run_state.core_energy_changed.is_connected(_on_run_core_energy_changed):
+		run_state.core_energy_changed.connect(_on_run_core_energy_changed)
+
+	if not run_state.sector_stage_changed.is_connected(_on_run_sector_stage_changed):
+		run_state.sector_stage_changed.connect(_on_run_sector_stage_changed)
+
+	if not run_state.kills_changed.is_connected(_on_run_kills_changed):
+		run_state.kills_changed.connect(_on_run_kills_changed)
+
+
+func _connect_run_upgrade_signals() -> void:
+	if run_upgrade_manager == null:
+		return
+
+	if not run_upgrade_manager.upgrades_changed.is_connected(_on_run_upgrades_changed):
+		run_upgrade_manager.upgrades_changed.connect(_on_run_upgrades_changed)
+
+
+func _setup_run_upgrade_debug_panel() -> void:
+	if run_state == null:
+		return
+
+	if run_upgrade_manager == null:
+		return
+
+	run_upgrade_debug_panel = RunUpgradeDebugPanelScript.new() as RunUpgradeDebugPanel
+
+	if run_upgrade_debug_panel == null:
+		return
+
+	run_upgrade_debug_panel.name = "RunUpgradeDebugPanel"
+	add_child(run_upgrade_debug_panel)
+	run_upgrade_debug_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	run_upgrade_debug_panel.offset_left = -330.0
+	run_upgrade_debug_panel.offset_top = 120.0
+	run_upgrade_debug_panel.offset_right = -16.0
+	run_upgrade_debug_panel.offset_bottom = 0.0
+	run_upgrade_debug_panel.configure(run_state, run_upgrade_manager)
+
+	if not run_upgrade_debug_panel.farm_requested.is_connected(_on_farm_requested):
+		run_upgrade_debug_panel.farm_requested.connect(_on_farm_requested)
+
+	if not run_upgrade_debug_panel.advance_requested.is_connected(_on_advance_requested):
+		run_upgrade_debug_panel.advance_requested.connect(_on_advance_requested)
 
 
 func _cache_nodes() -> void:
@@ -406,8 +531,18 @@ func _connect_arena_signals() -> void:
 	)
 
 	_connect_arena_signal(
+		"enemy_xp_gained",
+		"_on_enemy_xp_gained"
+	)
+
+	_connect_arena_signal(
 		"boss_destroyed",
 		"_on_boss_destroyed"
+	)
+
+	_connect_arena_signal(
+		"boss_xp_gained",
+		"_on_boss_xp_gained"
 	)
 
 	_connect_arena_signal(
@@ -435,17 +570,23 @@ func _connect_arena_signals() -> void:
 		"_on_combat_finished_from_arena"
 	)
 
+	_connect_arena_signal(
+		"stage_completed",
+		"_on_stage_completed"
+	)
+
 func _on_boss_destroyed() -> void:
 	if round_end_modal_open:
 		return
 
-	bosses_destroyed += 1
+	if run_state == null:
+		bosses_destroyed += 1
 
-	# Add boss XP first.
-	# When this completes the XP bar, the level-up reward is queued first.
-	add_combat_xp(
-		_get_boss_xp_reward()
-	)
+		# Add boss XP first.
+		# When this completes the XP bar, the level-up reward is queued first.
+		add_combat_xp(
+			_get_boss_xp_reward()
+		)
 
 	# Queue the guaranteed boss reward after the level-up reward.
 	request_boss_reward()
@@ -1232,8 +1373,51 @@ func _on_enemy_destroyed() -> void:
 	if round_end_modal_open:
 		return
 
-	enemies_destroyed += 1
-	add_combat_xp(_get_dot_xp_reward())
+	if run_state == null:
+		enemies_destroyed += 1
+		add_combat_xp(_get_dot_xp_reward())
+
+
+func _on_enemy_xp_gained(
+	amount: float
+) -> void:
+	if reward_modal_active:
+		return
+
+	if round_end_modal_open:
+		return
+
+	var multiplier: float = 1.0
+
+	if reward_manager != null:
+		multiplier = reward_manager.dot_xp_multiplier
+
+	add_combat_xp(
+		maxi(roundi(amount * multiplier), 1)
+	)
+
+
+func _on_boss_xp_gained(
+	amount: float
+) -> void:
+	if round_end_modal_open:
+		return
+
+	var multiplier: float = 1.0
+
+	if reward_manager != null:
+		multiplier = reward_manager.boss_xp_multiplier
+
+	add_combat_xp(
+		maxi(roundi(amount * multiplier), 1)
+	)
+
+
+func _on_stage_completed(
+	_sector: int,
+	_stage: int
+) -> void:
+	_update_all_ui()
 
 
 func _on_currency_gained(
@@ -1245,8 +1429,12 @@ func _on_currency_gained(
 	if round_end_modal_open:
 		return
 
-	run_cash_earned += amount
-	earned_currency = run_cash_earned
+	if run_state != null:
+		run_cash_earned = run_state.run_cash
+		earned_currency = run_state.run_cash
+	else:
+		run_cash_earned += amount
+		earned_currency = run_cash_earned
 
 	if currency_label != null:
 		currency_label.text = (
@@ -1331,6 +1519,69 @@ func _on_boss_progress_changed(
 
 func _on_combat_finished_from_arena() -> void:
 	pass
+
+
+func _on_run_cash_changed(value: float) -> void:
+	run_cash_earned = value
+	earned_currency = value
+
+	if currency_label != null:
+		currency_label.text = "$" + _format_number(value)
+
+
+func _on_run_xp_changed(_value: float) -> void:
+	pass
+
+
+func _on_run_core_energy_changed(
+	current_value: float,
+	required_value: float
+) -> void:
+	boss_progress_current = current_value
+	boss_progress_max = maxf(required_value, 1.0)
+	_update_boss_progress_ui()
+
+
+func _on_run_sector_stage_changed(
+	sector: int,
+	stage: int
+) -> void:
+	current_wave = stage
+	highest_wave_reached = maxi(highest_wave_reached, stage)
+	boss_name = "Sector %d Stage %d" % [sector, stage]
+
+	if wave_value_label != null:
+		wave_value_label.text = str(stage)
+
+	_update_boss_progress_ui()
+
+
+func _on_run_kills_changed(
+	enemies: int,
+	bosses: int
+) -> void:
+	enemies_destroyed = enemies
+	bosses_destroyed = bosses
+
+
+func _on_run_upgrades_changed() -> void:
+	pass
+
+
+func _on_farm_requested() -> void:
+	if arena == null:
+		return
+
+	if arena.has_method("farm_completed_stage"):
+		arena.call("farm_completed_stage")
+
+
+func _on_advance_requested() -> void:
+	if arena == null:
+		return
+
+	if arena.has_method("advance_to_next_stage"):
+		arena.call("advance_to_next_stage")
 
 
 # ===================================================================
@@ -1442,11 +1693,14 @@ func _show_round_end_modal() -> void:
 
 	add_child(modal)
 
-	var time_survived: float = clampf(
-		run_duration_seconds - time_remaining,
-		0.0,
-		run_duration_seconds
-	)
+	var time_survived: float = elapsed_run_time
+
+	if not endless_combat_enabled:
+		time_survived = clampf(
+			run_duration_seconds - time_remaining,
+			0.0,
+			run_duration_seconds
+		)
 
 	var total_rewards_value: float = (
 		run_cash_earned
@@ -1497,6 +1751,13 @@ func _show_round_end_modal() -> void:
 
 
 func _calculate_run_rewards() -> void:
+	if run_state != null:
+		run_cash_earned = run_state.run_cash
+		earned_currency = run_state.run_cash
+		enemies_destroyed = run_state.enemies_killed
+		bosses_destroyed = run_state.bosses_killed
+		highest_wave_reached = run_state.highest_stage_this_run
+
 	run_cash_bonus = (
 		run_cash_earned * cash_bonus_percent
 	)

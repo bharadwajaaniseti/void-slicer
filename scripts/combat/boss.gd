@@ -70,6 +70,17 @@ func setup_boss(
 	hp_changed.emit(hp, max_hp)
 
 
+func apply_scaled_stats(
+	scaled_health: float,
+	scaled_reward: float
+) -> void:
+	max_hp = maxf(scaled_health, 1.0)
+	hp = max_hp
+	reward = maxf(scaled_reward, 0.0)
+	hp_changed.emit(hp, max_hp)
+	queue_redraw()
+
+
 func update_boss(delta: float, arena_size: Vector2, rng: RandomNumberGenerator) -> void:
 	if is_dying:
 		return

@@ -7,6 +7,9 @@ signal boss_progress_changed(current_value: float, max_value: float, label_text:
 signal combat_finished
 signal enemy_destroyed
 signal boss_destroyed
+signal enemy_xp_gained(amount: float)
+signal boss_xp_gained(amount: float)
+signal stage_completed(sector: int, stage: int)
 
 
 class DamageEvent:
@@ -220,10 +223,32 @@ var weapon_tiers: Dictionary = {}
 
 var unlocked_combat_weapons: Array[String] = []
 
+var run_state: RunState
+var run_balance: RunBalance
+var run_upgrade_manager: RunUpgradeManager
+
+
+func configure_incremental_systems(
+	new_run_state: RunState,
+	new_run_balance: RunBalance,
+	new_run_upgrade_manager: RunUpgradeManager
+) -> void:
+	run_state = new_run_state
+	run_balance = new_run_balance
+	run_upgrade_manager = new_run_upgrade_manager
+
+	if run_balance == null:
+		run_balance = RunBalance.new()
+
+	_apply_current_stage_to_legacy_values()
+
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	rng.randomize()
+
+	if run_balance == null:
+		run_balance = RunBalance.new()
 
 	wave = starting_wave
 	progress_max = starting_progress_max
@@ -1097,6 +1122,74 @@ func _clear_drones() -> void:
 			child.queue_free()
 
 
+func _get_current_sector() -> int:
+	if run_state != null:
+		return maxi(run_state.current_sector, 1)
+
+	return 1
+
+
+func _get_current_stage() -> int:
+	if run_state != null:
+		return maxi(run_state.current_stage, 1)
+
+	return maxi(round_number, 1)
+
+
+func _apply_current_stage_to_legacy_values() -> void:
+	var current_stage: int = _get_current_stage()
+	wave = current_stage
+	round_number = current_stage
+	boss_level = current_stage
+
+
+func _get_current_core_requirement() -> float:
+	if run_balance == null:
+		return starting_progress_max + float(round_number - 1) * progress_growth_per_round
+
+	return run_balance.get_core_energy_requirement(
+		_get_current_sector(),
+		_get_current_stage()
+	)
+
+
+func _get_run_cash_multiplier() -> float:
+	if run_upgrade_manager == null:
+		return 1.0
+
+	return run_upgrade_manager.get_cash_multiplier()
+
+
+func _get_run_spawn_rate_multiplier() -> float:
+	if run_upgrade_manager == null:
+		return 1.0
+
+	return run_upgrade_manager.get_spawn_rate_multiplier()
+
+
+func _get_run_damage_multiplier() -> float:
+	if run_upgrade_manager == null:
+		return 1.0
+
+	return run_upgrade_manager.get_global_damage_multiplier()
+
+
+func _get_run_attack_speed_multiplier() -> float:
+	if run_upgrade_manager == null:
+		return 1.0
+
+	return run_upgrade_manager.get_attack_speed_multiplier()
+
+
+func _get_effective_slice_damage() -> float:
+	var slice_multiplier: float = 1.0
+
+	if run_upgrade_manager != null:
+		slice_multiplier = run_upgrade_manager.get_slice_power_multiplier()
+
+	return slice_damage * slice_multiplier
+
+
 func _start_normal_round() -> void:
 	starting_spawn_generation += 1
 
@@ -1109,8 +1202,13 @@ func _start_normal_round() -> void:
 	_clear_projectiles()
 	_clear_black_holes()
 
+	_apply_current_stage_to_legacy_values()
+
 	progress_current = 0.0
-	progress_max = starting_progress_max + float(round_number - 1) * progress_growth_per_round
+	progress_max = _get_current_core_requirement()
+
+	if run_state != null:
+		run_state.set_core_energy_requirement(progress_max)
 
 	_spawn_starting_dots()
 	_refresh_drone_swarm()
@@ -1164,6 +1262,9 @@ func _start_boss_formation() -> void:
 	is_forming_boss = true
 	is_slicing = false
 	boss_form_center = _get_play_area_rect().get_center()
+
+	if run_state != null:
+		run_state.start_boss()
 
 	_clear_projectiles()
 	_clear_black_holes()
@@ -1251,11 +1352,32 @@ func _spawn_boss_from_center(center_position: Vector2) -> void:
 
 	boss_layer.add_child(boss)
 	boss.setup_boss(center_position, center_position, boss_level, true)
+	_apply_scaled_boss_stats(boss)
 	boss.died.connect(_on_boss_died)
 	boss.hp_changed.connect(_on_boss_hp_changed)
 
 	current_boss = boss
 	boss_next_spit_hp = current_boss.max_hp * (1.0 - boss_spit_damage_step_ratio)
+
+
+func _apply_scaled_boss_stats(boss: CombatBoss) -> void:
+	if boss == null:
+		return
+
+	if run_balance == null:
+		return
+
+	var sector: int = _get_current_sector()
+	var stage: int = _get_current_stage()
+	var boss_health: float = run_balance.get_boss_health(sector, stage)
+	var boss_cash: float = run_balance.get_boss_cash_reward(sector, stage)
+
+	boss_cash *= _get_run_cash_multiplier()
+
+	boss.apply_scaled_stats(
+		boss_health,
+		boss_cash
+	)
 
 
 func _on_boss_died(boss: CombatBoss) -> void:
@@ -1267,15 +1389,39 @@ func _on_boss_died(boss: CombatBoss) -> void:
 
 	var boss_reward_value: float = boss.reward
 
+	var boss_xp_reward: float = 0.0
+	var boss_material_reward: float = 0.0
+
+	if run_balance != null:
+		var sector: int = _get_current_sector()
+		var stage: int = _get_current_stage()
+		boss_xp_reward = run_balance.get_boss_xp_reward(sector, stage)
+		boss_material_reward = run_balance.get_boss_material_reward(sector, stage)
+
+	if run_state != null:
+		run_state.add_boss_rewards(
+			boss_reward_value,
+			boss_xp_reward,
+			boss_material_reward
+		)
+		run_state.complete_boss()
+		run_state.complete_stage()
+
 	currency_gained.emit(boss_reward_value)
+
+	if run_state != null:
+		boss_xp_gained.emit(boss_xp_reward)
 
 	current_boss = null
 	is_boss_phase = false
 	is_forming_boss = false
 
-	round_number += 1
-	boss_level += 1
-	wave += 1
+	if run_state == null:
+		round_number += 1
+		boss_level += 1
+		wave += 1
+	else:
+		_apply_current_stage_to_legacy_values()
 
 	wave_changed.emit(wave)
 
@@ -1283,14 +1429,34 @@ func _on_boss_died(boss: CombatBoss) -> void:
 	# Do not emit enemy_destroyed here.
 	boss_destroyed.emit()
 
+	if run_state != null:
+		stage_completed.emit(
+			run_state.current_sector,
+			run_state.current_stage
+		)
+
 	_start_normal_round()
 
 
 func _on_boss_hp_changed(current_hp: float, max_hp: float) -> void:
+	if run_state != null:
+		boss_progress_changed.emit(
+			current_hp,
+			max_hp,
+			"Boss Fight S%d-%d" % [
+				run_state.current_sector,
+				run_state.current_stage
+			]
+		)
+		return
+
 	boss_progress_changed.emit(current_hp, max_hp, "Boss Fight " + str(boss_level))
 
 
 func _update_wave(delta: float) -> void:
+	if run_state != null:
+		return
+
 	if is_boss_phase:
 		return
 
@@ -1321,7 +1487,11 @@ func _update_spawning(delta: float) -> void:
 		_spawn_dot()
 
 		var wave_bonus: float = maxf(0.0, float(wave - starting_wave) * 0.006)
-		spawn_timer = maxf(spawn_delay_min, spawn_delay_base - wave_bonus)
+		var spawn_multiplier: float = maxf(_get_run_spawn_rate_multiplier(), 0.05)
+		spawn_timer = maxf(
+			spawn_delay_min,
+			(spawn_delay_base - wave_bonus) / spawn_multiplier
+		)
 
 
 func _update_boss(delta: float) -> void:
@@ -1487,11 +1657,32 @@ func _devour_dot(dot: DotEnemy, black_hole: CombatBlackHole) -> void:
 
 	var cash_reward: float = dot.reward * black_hole.reward_multiplier
 	var progress_reward: float = dot.progress_reward * black_hole.progress_multiplier
+	var xp_reward: float = 0.0
+	var material_reward: float = 0.0
+
+	if run_balance != null:
+		var sector: int = _get_current_sector()
+		var stage: int = _get_current_stage()
+		xp_reward = run_balance.get_enemy_xp_reward(sector, stage)
+		material_reward = run_balance.get_enemy_material_reward(sector, stage)
+
+	if run_state != null:
+		run_state.add_enemy_rewards(
+			cash_reward,
+			xp_reward,
+			material_reward,
+			progress_reward
+		)
+		progress_current = run_state.core_energy
+		progress_max = run_state.core_energy_required
 
 	currency_gained.emit(cash_reward)
 
 	if not is_boss_phase and not is_forming_boss:
 		_add_progress(progress_reward)
+
+	if run_state != null:
+		enemy_xp_gained.emit(xp_reward)
 
 	enemy_destroyed.emit()
 
@@ -1540,6 +1731,7 @@ func _update_turrets(delta: float) -> void:
 
 		var cooldown_delta: float = delta * global_attack_speed_multiplier
 		cooldown_delta *= attack_speed_multiplier
+		cooldown_delta *= _get_run_attack_speed_multiplier()
 
 		if frenzy_timer > 0.0:
 			cooldown_delta *= frenzy_turret_speed_multiplier
@@ -1785,12 +1977,35 @@ func _spawn_dot_at_position(spawn_position: Vector2) -> DotEnemy:
 
 	dot_layer.add_child(dot)
 	dot.setup_dot(spawn_position, wave, rng)
+	_apply_scaled_dot_stats(dot)
 	dot.position = spawn_position
 
 	dot.died.connect(_on_dot_died)
 	dots.append(dot)
 
 	return dot
+
+
+func _apply_scaled_dot_stats(dot: DotEnemy) -> void:
+	if dot == null:
+		return
+
+	if run_balance == null:
+		return
+
+	var sector: int = _get_current_sector()
+	var stage: int = _get_current_stage()
+	var enemy_health: float = run_balance.get_enemy_health(sector, stage)
+	var enemy_cash: float = run_balance.get_enemy_cash_reward(sector, stage)
+	var enemy_core: float = run_balance.get_enemy_core_energy(sector, stage)
+
+	enemy_cash *= _get_run_cash_multiplier()
+
+	dot.apply_scaled_stats(
+		enemy_health,
+		enemy_cash,
+		enemy_core
+	)
 
 
 func _spawn_projectile(
@@ -1955,7 +2170,7 @@ func _slice_between(from: Vector2, to: Vector2) -> void:
 
 			if boss_distance <= current_boss.radius + slice_width:
 				_spawn_impact_fx(current_boss.position, orange_color)
-				_damage_boss(slice_damage)
+				_damage_boss(_get_effective_slice_damage())
 
 	var hit_dots: Array[DotEnemy] = []
 
@@ -1982,7 +2197,7 @@ func _slice_between(from: Vector2, to: Vector2) -> void:
 			continue
 
 		_spawn_impact_fx(dot.position, orange_color)
-		_damage_dot(dot, slice_damage, slash_angle)
+		_damage_dot(dot, _get_effective_slice_damage(), slash_angle)
 
 
 func _damage_dot(dot: DotEnemy, amount: float, attack_angle: float = 0.0) -> void:
@@ -2012,10 +2227,36 @@ func _on_dot_died(dot: DotEnemy) -> void:
 	if dots.has(dot):
 		dots.erase(dot)
 
-	currency_gained.emit(dot.reward)
+	var cash_reward: float = dot.reward
+	var xp_reward: float = 0.0
+	var material_reward: float = 0.0
+	var core_reward: float = dot.progress_reward
+
+	if run_balance != null:
+		var sector: int = _get_current_sector()
+		var stage: int = _get_current_stage()
+		xp_reward = run_balance.get_enemy_xp_reward(sector, stage)
+		material_reward = run_balance.get_enemy_material_reward(sector, stage)
+
+	if run_state != null:
+		run_state.add_enemy_rewards(
+			cash_reward,
+			xp_reward,
+			material_reward,
+			core_reward
+		)
+
+		progress_current = run_state.core_energy
+		progress_max = run_state.core_energy_required
+	else:
+		currency_gained.emit(cash_reward)
 
 	if not is_boss_phase and not is_forming_boss:
-		_add_progress(dot.progress_reward)
+		_add_progress(core_reward)
+
+	if run_state != null:
+		currency_gained.emit(cash_reward)
+		enemy_xp_gained.emit(xp_reward)
 
 	enemy_destroyed.emit()
 
@@ -2103,7 +2344,11 @@ func _add_progress(amount: float) -> void:
 	if is_forming_boss:
 		return
 
-	progress_current += amount
+	if run_state != null:
+		progress_current = run_state.core_energy
+		progress_max = run_state.core_energy_required
+	else:
+		progress_current += amount
 
 	if progress_current >= progress_max:
 		progress_current = progress_max
@@ -2115,6 +2360,17 @@ func _add_progress(amount: float) -> void:
 
 
 func _emit_progress_normal() -> void:
+	if run_state != null:
+		boss_progress_changed.emit(
+			progress_current,
+			progress_max,
+			"Sector %d Stage %d" % [
+				run_state.current_sector,
+				run_state.current_stage
+			]
+		)
+		return
+
 	boss_progress_changed.emit(progress_current, progress_max, "Boss " + str(boss_level))
 
 
@@ -2135,6 +2391,9 @@ func _emit_progress_boss() -> void:
 func _record_damage(amount: float) -> void:
 	var now: float = Time.get_ticks_msec() / 1000.0
 	damage_events.append(DamageEvent.new(now, amount))
+
+	if run_state != null:
+		run_state.add_damage(amount)
 
 
 func _fire_turret_at_dot(turret: CombatTurret, target: DotEnemy) -> void:
@@ -2363,6 +2622,25 @@ func _spawn_turret(turret_position: Vector2, turret_kind: String) -> void:
 # REWARD SYSTEM API
 # ===================================================================
 
+func farm_completed_stage() -> void:
+	if run_state == null:
+		return
+
+	run_state.farm_stage()
+
+
+func advance_to_next_stage() -> void:
+	if run_state == null:
+		return
+
+	run_state.advance_stage(run_balance)
+	_apply_current_stage_to_legacy_values()
+	wave_changed.emit(wave)
+
+	if arena_initialized and not combat_is_over:
+		_start_normal_round()
+
+
 func set_combat_paused(paused: bool) -> void:
 	combat_paused = paused
 	is_slicing = false
@@ -2447,6 +2725,7 @@ func _calculate_reward_damage(
 	var normalized_id: String = _normalize_weapon_id(weapon_id)
 	var damage: float = base_damage
 	damage *= global_damage_multiplier
+	damage *= _get_run_damage_multiplier()
 	damage *= _get_weapon_damage_multiplier(normalized_id)
 
 	if target_is_boss:

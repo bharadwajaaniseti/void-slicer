@@ -78,6 +78,19 @@ func setup_dot(
 	queue_redraw()
 
 
+func apply_scaled_stats(
+	scaled_health: float,
+	scaled_reward: float,
+	scaled_progress_reward: float
+) -> void:
+	max_hp = maxf(scaled_health, 1.0)
+	hp = max_hp
+	reward = maxf(scaled_reward, 0.0)
+	progress_reward = maxf(scaled_progress_reward, 0.0)
+	_update_collision()
+	queue_redraw()
+
+
 func _update_collision() -> void:
 	var collision := get_node_or_null("CollisionShape2D") as CollisionShape2D
 
