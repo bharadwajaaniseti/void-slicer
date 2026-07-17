@@ -1227,6 +1227,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_egb78")
+starting_xp_requirement = 20000
+xp_requirement_growth = 5.0
 boss_kill_xp = 30
 
 [node name="MainVBox" type="VBoxContainer" parent="." unique_id=83873281]
