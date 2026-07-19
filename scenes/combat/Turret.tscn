@@ -1,6 +1,20 @@
-[gd_scene format=3 uid="uid://bwx7obpymlela"]
+[gd_scene load_steps=7 format=3 uid="uid://bwx7obpymlela"]
 
 [ext_resource type="Script" uid="uid://dd1l075jqt67h" path="res://scripts/combat/turret.gd" id="1_l7psk"]
+[ext_resource type="Texture2D" path="res://assets/weapons/turret/top_view_tier_1.png" id="2_tier1"]
+[ext_resource type="Texture2D" path="res://assets/weapons/turret/top_view_tier_2.png" id="3_tier2"]
+[ext_resource type="Texture2D" path="res://assets/weapons/turret/top_view_tier_3.png" id="4_tier3"]
+[ext_resource type="Texture2D" path="res://assets/weapons/turret/top_view_tier_4.png" id="5_tier4"]
+[ext_resource type="Texture2D" path="res://assets/weapons/turret/top_view_tier_5.png" id="6_tier5"]
 
 [node name="Turret" type="Node2D" unique_id=691422277]
 script = ExtResource("1_l7psk")
+barrel_length = 78.0
+tier_textures = Array[Texture2D]([ExtResource("2_tier1"), ExtResource("3_tier2"), ExtResource("4_tier3"), ExtResource("5_tier4"), ExtResource("6_tier5")])
+
+[node name="AimPivot" type="Node2D" parent="."]
+
+[node name="WeaponSprite" type="Sprite2D" parent="AimPivot"]
+texture = ExtResource("2_tier1")
+position = Vector2(0, -16.3)
+scale = Vector2(0.28, 0.28)

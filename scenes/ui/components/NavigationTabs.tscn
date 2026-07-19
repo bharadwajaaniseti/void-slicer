@@ -1,0 +1,52 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Theme" path="res://themes/void_slicer_theme.tres" id="1_theme"]
+[ext_resource type="Script" path="res://scripts/ui/components/navigation_tabs.gd" id="2_script"]
+
+[node name="NavigationTabs" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 64)
+theme = ExtResource("1_theme")
+theme_type_variation = &"CardPanel"
+script = ExtResource("2_script")
+
+[node name="TabRow" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="HomeButton" type="Button" parent="TabRow"]
+layout_mode = 2
+toggle_mode = true
+theme_type_variation = &"TabButton"
+text = "HOME"
+
+[node name="SkillsButton" type="Button" parent="TabRow"]
+layout_mode = 2
+toggle_mode = true
+theme_type_variation = &"TabButton"
+text = "SKILLS"
+
+[node name="UpgradesButton" type="Button" parent="TabRow"]
+layout_mode = 2
+toggle_mode = true
+theme_type_variation = &"TabButton"
+text = "UPGRADES"
+
+[node name="ResearchButton" type="Button" parent="TabRow"]
+layout_mode = 2
+toggle_mode = true
+theme_type_variation = &"TabButton"
+text = "RESEARCH"
+
+[node name="ShopButton" type="Button" parent="TabRow"]
+layout_mode = 2
+toggle_mode = true
+theme_type_variation = &"TabButton"
+text = "SHOP"
+
+[node name="PrestigeButton" type="Button" parent="TabRow"]
+layout_mode = 2
+toggle_mode = true
+theme_type_variation = &"TabButton"
+text = "PRESTIGE"

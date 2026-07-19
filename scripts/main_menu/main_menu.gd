@@ -1,5 +1,7 @@
 extends Control
 
+const VoidSlicerTheme: Theme = preload("res://themes/void_slicer_theme.tres")
+
 @onready var safe_area: Control = get_node_or_null("SafeArea")
 @onready var logo_container: Control = get_node_or_null("SafeArea/LogoContainer")
 @onready var tagline_label: RichTextLabel = get_node_or_null("SafeArea/TaglineLabel")
@@ -12,6 +14,7 @@ extends Control
 
 
 func _ready() -> void:
+	theme = VoidSlicerTheme
 	_check_required_nodes()
 
 	get_viewport().size_changed.connect(_on_viewport_size_changed)
@@ -92,13 +95,23 @@ func _apply_responsive_layout() -> void:
 
 
 func _on_start_pressed() -> void:
-	print("Start pressed")
-	get_tree().change_scene_to_file("res://scenes/screens/HomeScreenRoot.tscn")
+	Navigator.go_to_home()
 
 
 func _on_about_pressed() -> void:
-	print("About pressed")
+	_show_information("ABOUT VOID SLICER", "Void Slicer is an endless incremental combat game about slicing dots, defeating bosses, and pushing deeper into the void.")
 
 
 func _on_credits_pressed() -> void:
-	print("Credits pressed")
+	_show_information("CREDITS", "Void Slicer\nCreated with Godot 4.")
+
+
+func _show_information(title: String, message: String) -> void:
+	var dialog: AcceptDialog = AcceptDialog.new()
+	dialog.title = title
+	dialog.dialog_text = message
+	dialog.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(dialog)
+	dialog.close_requested.connect(dialog.queue_free)
+	dialog.confirmed.connect(dialog.queue_free)
+	dialog.popup_centered(Vector2i(560, 260))

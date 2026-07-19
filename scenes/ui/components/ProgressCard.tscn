@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Theme" path="res://themes/void_slicer_theme.tres" id="1_theme"]
+[ext_resource type="Script" path="res://scripts/ui/components/progress_card.gd" id="2_script"]
+
+[node name="ProgressCard" type="PanelContainer"]
+custom_minimum_size = Vector2(320, 118)
+theme = ExtResource("1_theme")
+theme_type_variation = &"CardPanel"
+script = ExtResource("2_script")
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Header" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Content/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SubheadingLabel"
+text = "PROGRESS"
+
+[node name="ValueLabel" type="Label" parent="Content/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "0 / 100"
+
+[node name="ProgressBar" type="ProgressBar" parent="Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+show_percentage = false
+

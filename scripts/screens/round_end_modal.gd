@@ -3,6 +3,7 @@ extends CanvasLayer
 signal restart_requested
 signal claim_rewards_requested
 signal return_requested
+signal prestige_requested
 
 @export_group("Main Labels")
 @export var cash_value_path: NodePath
@@ -57,6 +58,7 @@ var pending_time_survived: float = 0.0
 var pending_highest_wave: int = 0
 var pending_enemies_destroyed: int = 0
 var pending_peak_dps: float = 0.0
+var pending_bosses_defeated: int = 0
 var pending_total_rewards_value: float = 0.0
 
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
@@ -64,9 +66,11 @@ var result_label_sequence: Array[Dictionary] = []
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	rng.randomize()
 
 	_cache_nodes()
+	_apply_phase_one_copy()
 	_connect_buttons()
 	_prepare_result_nodes_for_intro()
 
@@ -78,6 +82,40 @@ func _ready() -> void:
 			_reveal_action_buttons()
 
 	call_deferred("_animate_in")
+
+
+func _apply_phase_one_copy() -> void:
+	var title_label: Label = find_child("TitleLabel", true, false) as Label
+	if title_label != null:
+		title_label.text = "PHASE 1 EXTRACTED"
+	var subtitle_label: Label = find_child("SubtitleLabel", true, false) as Label
+	if subtitle_label != null:
+		subtitle_label.text = "RUN COMPLETE"
+	var wave_title: Label = find_child("WaveTitle", true, false) as Label
+	if wave_title != null:
+		wave_title.text = "HIGHEST DEPTH"
+	var rewards_grid: Control = find_child("RewardsGrid", true, false) as Control
+	if rewards_grid != null:
+		rewards_grid.visible = false
+	var bonus_header: Control = find_child("BonusHeaderHBox", true, false) as Control
+	if bonus_header != null:
+		bonus_header.visible = false
+	var bonus_labels: Array[Label] = [cash_bonus_label, shards_bonus_label, time_bonus_label, wave_bonus_label, enemies_bonus_label, dps_bonus_label]
+	for bonus_label: Label in bonus_labels:
+		if bonus_label != null:
+			bonus_label.visible = false
+	var total_title: Label = find_child("TotalTitleLabel", true, false) as Label
+	if total_title != null:
+		total_title.text = "BOSSES DEFEATED"
+	if restart_button != null:
+		restart_button.text = "RESTART PHASE 1"
+	if claim_button != null:
+		claim_button.text = "RETURN HOME"
+	if return_button != null:
+		return_button.text = "VIEW PRESTIGE"
+	var footer: Label = find_child("FooterLabel", true, false) as Label
+	if footer != null:
+		footer.text = "Push deeper next time for greater rewards."
 
 
 func _cache_nodes() -> void:
@@ -92,7 +130,7 @@ func _cache_nodes() -> void:
 	enemies_value_label = _get_node_by_path_or_name(enemies_value_path, "EnemiesValue") as Label
 	dps_value_label = _get_node_by_path_or_name(dps_value_path, "DpsValue") as Label
 
-	total_value_label = _get_node_by_path_or_name(total_value_path, "TotalValue") as Label
+	total_value_label = _get_node_by_path_or_name(total_value_path, "TotalValueLabel") as Label
 
 	time_bonus_label = find_child("TimeBonus", true, false) as Label
 	wave_bonus_label = find_child("WaveBonus", true, false) as Label
@@ -151,7 +189,8 @@ func setup_results(
 	highest_wave: int,
 	enemies_destroyed: int,
 	peak_dps: float,
-	total_rewards_value: float
+	total_rewards_value: float,
+	bosses_defeated: int
 ) -> void:
 	pending_cash_earned = cash_earned
 	pending_cash_bonus = cash_bonus
@@ -162,6 +201,7 @@ func setup_results(
 	pending_enemies_destroyed = enemies_destroyed
 	pending_peak_dps = peak_dps
 	pending_total_rewards_value = total_rewards_value
+	pending_bosses_defeated = bosses_defeated
 	has_pending_results = true
 
 	if is_inside_tree():
@@ -211,7 +251,7 @@ func _apply_pending_results() -> void:
 		dps_value_label.modulate.a = 1.0
 
 	if total_value_label != null:
-		total_value_label.text = "$" + _format_number(pending_total_rewards_value)
+		total_value_label.text = str(pending_bosses_defeated)
 		total_value_label.modulate.a = 1.0
 
 	if time_bonus_label != null:
@@ -338,9 +378,9 @@ func _play_result_sequence() -> void:
 	result_label_sequence.append({
 		"value": total_value_label,
 		"bonus": null,
-		"value_text": "$" + _format_number(pending_total_rewards_value),
+		"value_text": str(pending_bosses_defeated),
 		"bonus_text": "",
-		"kind": "money"
+		"kind": "integer"
 	})
 
 	await _play_result_items()
@@ -500,7 +540,7 @@ func _reveal_action_buttons() -> void:
 
 func _animate_in() -> void:
 	var overlay: Control = get_node_or_null("OverlayRoot") as Control
-	var modal_panel: Control = get_node_or_null("OverlayRoot/ModalCenter/ModalPanel") as Control
+	var modal_panel: Control = get_node_or_null("OverlayRoot/DimBackground/ModalCenter/ModalPanel") as Control
 
 	if overlay != null:
 		overlay.modulate.a = 0.0
@@ -528,7 +568,7 @@ func _on_claim_pressed() -> void:
 
 
 func _on_return_pressed() -> void:
-	return_requested.emit()
+	prestige_requested.emit()
 
 
 func _format_number(value: float) -> String:

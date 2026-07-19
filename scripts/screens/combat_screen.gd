@@ -7,6 +7,8 @@ extends Control
 const RoundEndModalScene: PackedScene = preload(
 	"res://scenes/screens/RoundEndModal.tscn"
 )
+const PostBossDecisionScene: PackedScene = preload("res://scenes/ui/PostBossDecisionModal.tscn")
+const VoidSlicerTheme: Theme = preload("res://themes/void_slicer_theme.tres")
 
 const RunBalanceScript: Script = preload("res://scripts/run/run_balance.gd")
 const RunStateScript: Script = preload("res://scripts/run/run_state.gd")
@@ -120,6 +122,8 @@ var peak_dps: float = 0.0
 var highest_wave_reached: int = 1
 
 var round_end_modal_open: bool = false
+var post_boss_modal_open: bool = false
+var rewards_secured: bool = false
 var timer_finished: bool = false
 
 var normal_progress_fill_color: Color = Color("#7437FF")
@@ -181,6 +185,7 @@ var cps_label: Label
 var wave_value_label: Label
 var dps_value_label: Label
 var time_label: Label
+var run_shards_label: Label
 
 var boss_label: Label
 var boss_progress_value_label: Label
@@ -199,6 +204,7 @@ var drone_swarm_card: CombatAbilityCard
 
 
 func _ready() -> void:
+	theme = VoidSlicerTheme
 	set_anchors_and_offsets_preset(
 		Control.PRESET_FULL_RECT
 	)
@@ -214,6 +220,35 @@ func _ready() -> void:
 	_reset_run_stats()
 	_sync_reward_modifiers_to_arena()
 	_update_all_ui()
+	_apply_phase_one_ui()
+
+
+func _apply_phase_one_ui() -> void:
+	var wave_title: Label = find_child("WaveTitle", true, false) as Label
+	if wave_title != null:
+		wave_title.text = "DEPTH"
+	if time_label != null and time_label.get_parent() is CanvasItem:
+		(time_label.get_parent() as CanvasItem).visible = false
+	if cps_label != null:
+		cps_label.visible = false
+	var ability_cards: Array[CombatAbilityCard] = [frenzy_card, dot_rain_card, black_hole_card, focus_fire_card, drone_swarm_card]
+	for card: CombatAbilityCard in ability_cards:
+		if card != null:
+			card.visible = false
+	for rail_name: String in ["LeftSlotRail", "RightSlotRail", "BottomMountRail"]:
+		var rail: CanvasItem = find_child(rail_name, true, false) as CanvasItem
+		if rail != null:
+			rail.visible = false
+	var settings_panel: CanvasItem = find_child("SettingsPanel", true, false) as CanvasItem
+	if settings_panel != null:
+		settings_panel.visible = false
+	var debug_panels: Array[Control] = [run_upgrade_debug_panel, weapon_upgrade_debug_panel, slice_combo_debug_panel]
+	for debug_panel: Control in debug_panels:
+		if debug_panel != null:
+			debug_panel.visible = false
+	if end_combat_button != null:
+		end_combat_button.text = "END RUN"
+		end_combat_button.theme_type_variation = &"DestructiveButton"
 
 
 func _process(delta: float) -> void:
@@ -536,6 +571,7 @@ func _cache_nodes() -> void:
 		time_label_path,
 		"TimeLabel"
 	) as Label
+	run_shards_label = find_child("RunShardsLabel", true, false) as Label
 
 	boss_label = _get_node_by_path_or_name(
 		boss_label_path,
@@ -701,8 +737,43 @@ func _on_boss_destroyed() -> void:
 			_get_boss_xp_reward()
 		)
 
-	# Queue the guaranteed boss reward after the level-up reward.
+	_show_post_boss_decision()
+
+
+func _show_post_boss_decision() -> void:
+	if post_boss_modal_open or round_end_modal_open:
+		return
+	post_boss_modal_open = true
+	_calculate_run_rewards()
+	if arena != null and arena.has_method("set_combat_paused"):
+		arena.call("set_combat_paused", true)
+	get_tree().paused = true
+	var modal: CanvasLayer = PostBossDecisionScene.instantiate() as CanvasLayer
+	add_child(modal)
+	var depth: int = run_state.current_stage if run_state != null else highest_wave_reached
+	if modal.has_method("setup"):
+		modal.call("setup", depth, run_cash_earned, run_shards_earned, bosses_destroyed, run_balance.enemy_health_growth_per_stage, run_balance.enemy_health_growth_per_stage, run_balance.enemy_reward_growth_per_stage)
+	modal.connect("push_deeper_requested", _on_push_deeper_requested.bind(modal))
+	modal.connect("extract_requested", _on_extract_after_boss_requested.bind(modal))
+
+
+func _on_push_deeper_requested(modal: CanvasLayer) -> void:
+	post_boss_modal_open = false
+	if is_instance_valid(modal):
+		modal.queue_free()
+	get_tree().paused = false
+	if arena != null and arena.has_method("continue_to_next_depth"):
+		arena.call("continue_to_next_depth")
 	request_boss_reward()
+	_update_all_ui()
+
+
+func _on_extract_after_boss_requested(modal: CanvasLayer) -> void:
+	post_boss_modal_open = false
+	if is_instance_valid(modal):
+		modal.queue_free()
+	get_tree().paused = false
+	_show_round_end_modal()
 	
 func _connect_arena_signal(
 	signal_name: StringName,
@@ -1802,7 +1873,34 @@ func _on_timer_finished() -> void:
 
 
 func _on_end_combat_pressed() -> void:
+	if round_end_modal_open or post_boss_modal_open:
+		return
+	if arena != null and arena.has_method("set_combat_paused"):
+		arena.call("set_combat_paused", true)
+	var confirmation: ConfirmationDialog = ConfirmationDialog.new()
+	confirmation.title = "END CURRENT RUN?"
+	confirmation.dialog_text = "You will extract with your current secured rewards."
+	confirmation.ok_button_text = "EXTRACT"
+	confirmation.cancel_button_text = "CANCEL"
+	confirmation.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(confirmation)
+	confirmation.confirmed.connect(_on_end_run_confirmed.bind(confirmation))
+	confirmation.canceled.connect(_on_end_run_canceled.bind(confirmation))
+	confirmation.close_requested.connect(_on_end_run_canceled.bind(confirmation))
+	confirmation.popup_centered(Vector2i(520, 230))
+
+
+func _on_end_run_confirmed(confirmation: ConfirmationDialog) -> void:
+	if is_instance_valid(confirmation):
+		confirmation.queue_free()
 	_show_round_end_modal()
+
+
+func _on_end_run_canceled(confirmation: ConfirmationDialog) -> void:
+	if is_instance_valid(confirmation):
+		confirmation.queue_free()
+	if arena != null and arena.has_method("set_combat_paused"):
+		arena.call("set_combat_paused", false)
 
 
 func _show_round_end_modal() -> void:
@@ -1827,6 +1925,7 @@ func _show_round_end_modal() -> void:
 			arena.call("end_combat")
 
 	_calculate_run_rewards()
+	_secure_run_rewards()
 
 	var modal: CanvasLayer = (
 		RoundEndModalScene.instantiate()
@@ -1861,7 +1960,8 @@ func _show_round_end_modal() -> void:
 			highest_wave_reached,
 			enemies_destroyed,
 			peak_dps,
-			total_rewards_value
+			total_rewards_value,
+			bosses_destroyed
 		)
 
 	if modal.has_signal("restart_requested"):
@@ -1891,6 +1991,9 @@ func _show_round_end_modal() -> void:
 			)
 		)
 
+	if modal.has_signal("prestige_requested"):
+		modal.connect("prestige_requested", Callable(self, "_on_prestige_requested"))
+
 
 func _calculate_run_rewards() -> void:
 	if run_state != null:
@@ -1900,14 +2003,7 @@ func _calculate_run_rewards() -> void:
 		bosses_destroyed = run_state.bosses_killed
 		highest_wave_reached = run_state.highest_stage_this_run
 
-	run_cash_bonus = (
-		run_cash_earned * cash_bonus_percent
-	)
-
-	var enemy_shards: int = floori(
-		float(enemies_destroyed)
-		* shards_per_enemy
-	)
+	run_cash_bonus = 0.0
 
 	var boss_shards: int = (
 		bosses_destroyed
@@ -1916,22 +2012,19 @@ func _calculate_run_rewards() -> void:
 
 	run_shards_earned = maxi(
 		0,
-		enemy_shards + boss_shards
+		boss_shards
 	)
 
-	if run_shards_earned <= 0:
-		if run_cash_earned > 0.0:
-			run_shards_earned = maxi(
-				1,
-				floori(
-					run_cash_earned / 500.0
-				)
-			)
+	run_shards_bonus = 0
+	if run_shards_label != null:
+		run_shards_label.text = str(run_shards_earned + run_shards_bonus)
 
-	run_shards_bonus = floori(
-		float(run_shards_earned)
-		* shard_bonus_percent
-	)
+
+func _secure_run_rewards() -> void:
+	if rewards_secured:
+		return
+	rewards_secured = true
+	GameState.secure_run(run_cash_earned + run_cash_bonus, run_shards_earned + run_shards_bonus, highest_wave_reached)
 
 
 func _on_restart_run_requested() -> void:
@@ -1945,16 +2038,12 @@ func _on_claim_rewards_requested() -> void:
 
 func _on_return_requested() -> void:
 	get_tree().paused = false
+	Navigator.go_to_home()
 
-	if ResourceLoader.exists(home_scene_path):
-		get_tree().change_scene_to_file(
-			home_scene_path
-		)
-	else:
-		push_warning(
-			"Home scene path not found: "
-			+ home_scene_path
-		)
+
+func _on_prestige_requested() -> void:
+	get_tree().paused = false
+	Navigator.go_to_home(&"prestige")
 
 
 # ===================================================================

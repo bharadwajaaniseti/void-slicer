@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Theme" path="res://themes/void_slicer_theme.tres" id="1_theme"]
+[ext_resource type="Script" path="res://scripts/ui/components/stat_card.gd" id="2_script"]
+
+[node name="StatCard" type="PanelContainer"]
+custom_minimum_size = Vector2(210, 130)
+theme = ExtResource("1_theme")
+theme_type_variation = &"CardPanel"
+script = ExtResource("2_script")
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TitleLabel" type="Label" parent="Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "STAT"
+
+[node name="ValueLabel" type="Label" parent="Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+text = "0"
+
+[node name="DetailLabel" type="Label" parent="Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Detail"
+autowrap_mode = 2
+

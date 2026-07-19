@@ -25,8 +25,6 @@ signal pressed
 	set(value):
 		button_size = value
 		custom_minimum_size = value
-		size = value
-		pivot_offset = value / 2.0
 		_update_visuals_deferred()
 
 @export_group("Colors")
@@ -70,8 +68,6 @@ var is_hovered: bool = false
 
 func _ready() -> void:
 	custom_minimum_size = button_size
-	size = button_size
-	pivot_offset = button_size / 2.0
 
 	_setup_node_layouts()
 	_connect_signals()
@@ -177,8 +173,6 @@ func _update_visuals() -> void:
 		return
 
 	custom_minimum_size = button_size
-	size = button_size
-	pivot_offset = button_size / 2.0
 
 	if icon:
 		icon.texture = icon_texture

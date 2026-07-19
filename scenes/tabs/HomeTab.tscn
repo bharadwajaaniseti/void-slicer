@@ -1,615 +1,318 @@
-[gd_scene format=3 uid="uid://cde0t00butoj7"]
+[gd_scene load_steps=5 format=3]
 
-[ext_resource type="Texture2D" uid="uid://uoeulw1ypnx4" path="res://assets/background/void image.png" id="1_owjj2"]
+[ext_resource type="Script" path="res://scripts/screens/home_tab.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/background/Main Background.png" id="2_hero"]
+[ext_resource type="Theme" path="res://themes/void_slicer_theme.tres" id="3_theme"]
+[ext_resource type="Texture2D" path="res://assets/ui/turret_phase1.png" id="4_turret"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dix64"]
-bg_color = Color(1, 1, 1, 0.92156863)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
-shadow_color = Color(0.5411765, 0.3019608, 1, 0.08627451)
-shadow_size = 12
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_33nde"]
-bg_color = Color(0.45490196, 0.16862746, 1, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.7411765, 0.54901963, 1, 1)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
-shadow_color = Color(0.4509804, 0.16078432, 1, 0.4392157)
-shadow_size = 18
-shadow_offset = Vector2(0, 5)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0o1h4"]
-bg_color = Color(0.33333334, 0.1254902, 0.78431374, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.7411765, 0.54901963, 1, 1)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5qbj1"]
-bg_color = Color(0.54509807, 0.23529412, 1, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.8156863, 0.6392157, 1, 1)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
-shadow_color = Color(0.4509804, 0.16078432, 1, 0.5647059)
-shadow_size = 22
-shadow_offset = Vector2(0, 6)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tkke6"]
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_34m53"]
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
-shadow_color = Color(0.5411765, 0.3019608, 1, 0.0627451)
-shadow_size = 8
-shadow_offset = Vector2(0, 3)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xqr4a"]
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.9019608, 0.8901961, 0.9607843, 1)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
-shadow_color = Color(0.5411765, 0.3019608, 1, 0.07058824)
-shadow_size = 8
-shadow_offset = Vector2(0, 3)
-
-[node name="HomeTabRoot" type="Control" unique_id=1309892568]
+[node name="HomeTabRoot" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("3_theme")
+script = ExtResource("1_script")
 
-[node name="MainArea" type="HBoxContainer" parent="." unique_id=683739657]
+[node name="Scroll" type="ScrollContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 14
-
-[node name="LeftScroll" type="ScrollContainer" parent="MainArea" unique_id=1303945987]
-layout_mode = 2
-size_flags_horizontal = 3
 horizontal_scroll_mode = 0
 
-[node name="LeftContent" type="VBoxContainer" parent="MainArea/LeftScroll" unique_id=1325255372]
+[node name="Content" type="VBoxContainer" parent="Scroll"]
+custom_minimum_size = Vector2(1280, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 14
+theme_override_constants/separation = 12
 
-[node name="HeroPanel" type="PanelContainer" parent="MainArea/LeftScroll/LeftContent" unique_id=1778131205]
-custom_minimum_size = Vector2(0, 390)
+[node name="HeroRow" type="HBoxContainer" parent="Scroll/Content"]
+custom_minimum_size = Vector2(0, 330)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Hero" type="PanelContainer" parent="Scroll/Content/HeroRow"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_dix64")
-
-[node name="HeroContent" type="MarginContainer" parent="MainArea/LeftScroll/LeftContent/HeroPanel" unique_id=2008016388]
+theme_type_variation = &"CardPanel"
+[node name="Art" type="TextureRect" parent="Scroll/Content/HeroRow/Hero"]
 layout_mode = 2
-theme_override_constants/margin_left = 34
-theme_override_constants/margin_top = 34
-theme_override_constants/margin_right = 34
-theme_override_constants/margin_bottom = 24
-
-[node name="HeroHBox" type="HBoxContainer" parent="MainArea/LeftScroll/LeftContent/HeroPanel/HeroContent" unique_id=1415350067]
-layout_mode = 2
-theme_override_constants/separation = 20
-
-[node name="HeroText" type="VBoxContainer" parent="MainArea/LeftScroll/LeftContent/HeroPanel/HeroContent/HeroHBox" unique_id=144819122]
-custom_minimum_size = Vector2(470, 0)
-layout_mode = 2
-theme_override_constants/separation = 7
-
-[node name="HeroTitleTop" type="Label" parent="MainArea/LeftScroll/LeftContent/HeroPanel/HeroContent/HeroHBox/HeroText" unique_id=77924728]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.019607844, 0.019607844, 0.043137256, 1)
-theme_override_font_sizes/font_size = 42
-text = "BEGIN YOUR"
-
-[node name="HeroTitleBottom" type="Label" parent="MainArea/LeftScroll/LeftContent/HeroPanel/HeroContent/HeroHBox/HeroText" unique_id=551002476]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.4509804, 0.16078432, 1, 1)
-theme_override_font_sizes/font_size = 64
-text = "ASCENSION"
-
-[node name="HeroSubtitle" type="Label" parent="MainArea/LeftScroll/LeftContent/HeroPanel/HeroContent/HeroHBox/HeroText" unique_id=68204394]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.30980393, 0.3254902, 0.40784314, 1)
-theme_override_font_sizes/font_size = 21
-text = " Upgrade. Evolve. Collapse the void."
-
-[node name="StartCombatButton" type="Button" parent="MainArea/LeftScroll/LeftContent/HeroPanel/HeroContent/HeroHBox/HeroText" unique_id=1757822962]
-custom_minimum_size = Vector2(420, 88)
-layout_mode = 2
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("StyleBoxFlat_33nde")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_0o1h4")
-theme_override_styles/hover = SubResource("StyleBoxFlat_5qbj1")
-text = "◎ START COMBAT"
-
-[node name="QuickButtons" type="HBoxContainer" parent="MainArea/LeftScroll/LeftContent/HeroPanel/HeroContent/HeroHBox/HeroText" unique_id=433368971]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="LoadoutQuick" type="Button" parent="MainArea/LeftScroll/LeftContent/HeroPanel/HeroContent/HeroHBox/HeroText/QuickButtons" unique_id=950292054]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.5285684, 0.4022186, 0.20742327, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_tkke6")
-text = "⚔ LOADOUT"
-
-[node name="SkillsQuick" type="Button" parent="MainArea/LeftScroll/LeftContent/HeroPanel/HeroContent/HeroHBox/HeroText/QuickButtons" unique_id=157290011]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.5294118, 0.40392157, 0.20784314, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_tkke6")
-text = "⚡ SKILLS"
-
-[node name="UpgradeQuick" type="Button" parent="MainArea/LeftScroll/LeftContent/HeroPanel/HeroContent/HeroHBox/HeroText/QuickButtons" unique_id=1215828759]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.5294118, 0.40392157, 0.20784314, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_tkke6")
-text = "⚗ UPGRADES"
-
-[node name="HeroVoidImage" type="TextureRect" parent="MainArea/LeftScroll/LeftContent/HeroPanel/HeroContent/HeroHBox" unique_id=1421672015]
-custom_minimum_size = Vector2(650, 330)
-layout_mode = 2
-texture = ExtResource("1_owjj2")
+texture = ExtResource("2_hero")
 expand_mode = 1
+stretch_mode = 6
+[node name="Overlay" type="MarginContainer" parent="Scroll/Content/HeroRow/Hero"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 44
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 36
+theme_override_constants/margin_bottom = 24
+[node name="Text" type="VBoxContainer" parent="Scroll/Content/HeroRow/Hero/Overlay"]
+layout_mode = 2
+size_flags_horizontal = 0
+alignment = 1
+[node name="Begin" type="Label" parent="Scroll/Content/HeroRow/Hero/Overlay/Text"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 44
+text = "B E G I N"
+[node name="Phase" type="Label" parent="Scroll/Content/HeroRow/Hero/Overlay/Text"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.321569, 0.054902, 0.929412, 1)
+theme_override_font_sizes/font_size = 55
+text = "P H A S E  1"
+[node name="Subtitle" type="Label" parent="Scroll/Content/HeroRow/Hero/Overlay/Text"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.227451, 0.282353, 0.403922, 1)
+theme_override_font_sizes/font_size = 17
+text = "Slice dots. Defeat bosses. Push deeper or extract."
+[node name="StartPhaseButton" type="Button" parent="Scroll/Content/HeroRow/Hero/Overlay/Text"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(410, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_type_variation = &"PrimaryButton"
+theme_override_font_sizes/font_size = 24
+text = "◎   START PHASE 1"
+[node name="Quick" type="HBoxContainer" parent="Scroll/Content/HeroRow/Hero/Overlay/Text"]
+layout_mode = 2
+theme_override_constants/separation = 8
+[node name="LoadoutButton" type="Button" parent="Scroll/Content/HeroRow/Hero/Overlay/Text/Quick"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SecondaryButton"
+text = "⚔  LOADOUT"
+[node name="SkillsButton" type="Button" parent="Scroll/Content/HeroRow/Hero/Overlay/Text/Quick"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SecondaryButton"
+text = "ϟ  SKILLS"
+[node name="UpgradesButton" type="Button" parent="Scroll/Content/HeroRow/Hero/Overlay/Text/Quick"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SecondaryButton"
+text = "△  UPGRADES"
+
+[node name="Objectives" type="PanelContainer" parent="Scroll/Content/HeroRow"]
+custom_minimum_size = Vector2(430, 0)
+layout_mode = 2
+theme_type_variation = &"CardPanel"
+[node name="Box" type="VBoxContainer" parent="Scroll/Content/HeroRow/Objectives"]
+layout_mode = 2
+theme_override_constants/separation = 9
+[node name="Title" type="Label" parent="Scroll/Content/HeroRow/Objectives/Box"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "◎   PHASE OBJECTIVES"
+[node name="Rule1" type="Label" parent="Scroll/Content/HeroRow/Objectives/Box"]
+layout_mode = 2
+text = "SLICE DOTS TO EARN RUN CASH"
+[node name="Progress1" type="ProgressBar" parent="Scroll/Content/HeroRow/Objectives/Box"]
+custom_minimum_size = Vector2(0, 9)
+layout_mode = 2
+value = 20.0
+show_percentage = false
+[node name="Rule2" type="Label" parent="Scroll/Content/HeroRow/Objectives/Box"]
+layout_mode = 2
+text = "FILL THE BOSS METER"
+[node name="Progress2" type="ProgressBar" parent="Scroll/Content/HeroRow/Objectives/Box"]
+custom_minimum_size = Vector2(0, 9)
+layout_mode = 2
+value = 45.0
+show_percentage = false
+[node name="Rule3" type="Label" parent="Scroll/Content/HeroRow/Objectives/Box"]
+layout_mode = 2
+text = "DEFEAT THE BOSS"
+[node name="Progress3" type="ProgressBar" parent="Scroll/Content/HeroRow/Objectives/Box"]
+custom_minimum_size = Vector2(0, 9)
+layout_mode = 2
+value = 0.0
+show_percentage = false
+[node name="Lock" type="Label" parent="Scroll/Content/HeroRow/Objectives/Box"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "▣  Unlock more weapons in Prestige"
+
+[node name="Stats" type="GridContainer" parent="Scroll/Content"]
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+columns = 6
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+
+[node name="WeaponCard" type="PanelContainer" parent="Scroll/Content/Stats"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CardPanel"
+[node name="Box" type="VBoxContainer" parent="Scroll/Content/Stats/WeaponCard"]
+layout_mode = 2
+[node name="Title" type="Label" parent="Scroll/Content/Stats/WeaponCard/Box"]
+layout_mode = 2
+text = "◎  EQUIPPED WEAPON"
+[node name="Name" type="Label" parent="Scroll/Content/Stats/WeaponCard/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.321569, 0.054902, 0.929412, 1)
+theme_override_font_sizes/font_size = 18
+text = "TURRET"
+[node name="Art" type="TextureRect" parent="Scroll/Content/Stats/WeaponCard/Box"]
+custom_minimum_size = Vector2(0, 105)
+layout_mode = 2
+texture = ExtResource("4_turret")
+expand_mode = 3
 stretch_mode = 5
-
-[node name="StatusGrid" type="GridContainer" parent="MainArea/LeftScroll/LeftContent" unique_id=222310254]
+[node name="Desc" type="Label" parent="Scroll/Content/Stats/WeaponCard/Box"]
 layout_mode = 2
-theme_override_constants/h_separation = 14
-theme_override_constants/v_separation = 14
-columns = 5
+theme_type_variation = &"SmallLabel"
+text = "Auto-fires at nearby dots."
 
-[node name="GalaxyCard" type="PanelContainer" parent="MainArea/LeftScroll/LeftContent/StatusGrid" unique_id=1431165716]
-custom_minimum_size = Vector2(280, 220)
+[node name="UnlockedCard" type="PanelContainer" parent="Scroll/Content/Stats"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_34m53")
-
-[node name="MarginContainer" type="MarginContainer" parent="MainArea/LeftScroll/LeftContent/StatusGrid/GalaxyCard" unique_id=784069862]
+theme_type_variation = &"CardPanel"
+[node name="Box" type="VBoxContainer" parent="Scroll/Content/Stats/UnlockedCard"]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MainArea/LeftScroll/LeftContent/StatusGrid/GalaxyCard/MarginContainer" unique_id=142360813]
+[node name="Title" type="Label" parent="Scroll/Content/Stats/UnlockedCard/Box"]
 layout_mode = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/GalaxyCard/MarginContainer/VBoxContainer" unique_id=133488563]
+text = "⚔  UNLOCKED WEAPONS"
+[node name="Value" type="Label" parent="Scroll/Content/Stats/UnlockedCard/Box"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "CURRENT GALAXY"
-
-[node name="Label2" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/GalaxyCard/MarginContainer/VBoxContainer" unique_id=1774963580]
+theme_override_colors/font_color = Color(0.321569, 0.054902, 0.929412, 1)
+theme_override_font_sizes/font_size = 30
+text = "1 / 6"
+horizontal_alignment = 1
+[node name="Slots" type="Label" parent="Scroll/Content/Stats/UnlockedCard/Box"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "GALAXY 2: CRIMSON"
-
-[node name="Label3" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/GalaxyCard/MarginContainer/VBoxContainer" unique_id=870054936]
+theme_override_font_sizes/font_size = 22
+text = "▣  ▧  ▧  ▧  ▧  ▧"
+horizontal_alignment = 1
+[node name="Desc" type="Label" parent="Scroll/Content/Stats/UnlockedCard/Box"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Chaos Level ● ● ● ● ● ○ ○ ○"
+theme_type_variation = &"SmallLabel"
+text = "More weapons unlock in Prestige."
+horizontal_alignment = 1
 
-[node name="Label4" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/GalaxyCard/MarginContainer/VBoxContainer" unique_id=1326371198]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "CHANGE GALAXY"
-
-[node name="HighestWaveCard" type="PanelContainer" parent="MainArea/LeftScroll/LeftContent/StatusGrid" unique_id=990526391]
-custom_minimum_size = Vector2(280, 220)
+[node name="DepthCard" type="PanelContainer" parent="Scroll/Content/Stats"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_34m53")
-
-[node name="MarginContainer" type="MarginContainer" parent="MainArea/LeftScroll/LeftContent/StatusGrid/HighestWaveCard" unique_id=332165660]
+theme_type_variation = &"CardPanel"
+[node name="Box" type="VBoxContainer" parent="Scroll/Content/Stats/DepthCard"]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MainArea/LeftScroll/LeftContent/StatusGrid/HighestWaveCard/MarginContainer" unique_id=32824463]
+[node name="Title" type="Label" parent="Scroll/Content/Stats/DepthCard/Box"]
 layout_mode = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/HighestWaveCard/MarginContainer/VBoxContainer" unique_id=990911323]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "HIGHEST WAVE"
-
-[node name="Label2" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/HighestWaveCard/MarginContainer/VBoxContainer" unique_id=507519970]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "248"
-
-[node name="Label3" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/HighestWaveCard/MarginContainer/VBoxContainer" unique_id=1386164273]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "All Time Best: 248"
-
-[node name="Label4" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/HighestWaveCard/MarginContainer/VBoxContainer" unique_id=1046222122]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "This Run: 248"
-
-[node name="CurrentLoadoutCard" type="PanelContainer" parent="MainArea/LeftScroll/LeftContent/StatusGrid" unique_id=482699822]
-custom_minimum_size = Vector2(280, 220)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_34m53")
-
-[node name="MarginContainer" type="MarginContainer" parent="MainArea/LeftScroll/LeftContent/StatusGrid/CurrentLoadoutCard" unique_id=798224162]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MainArea/LeftScroll/LeftContent/StatusGrid/CurrentLoadoutCard/MarginContainer" unique_id=2025328836]
-layout_mode = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/CurrentLoadoutCard/MarginContainer/VBoxContainer" unique_id=791459771]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "CURRENT LOADOUT"
-
-[node name="Label2" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/CurrentLoadoutCard/MarginContainer/VBoxContainer" unique_id=233116537]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Void Breaker Mk. III"
-
-[node name="Label3" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/CurrentLoadoutCard/MarginContainer/VBoxContainer" unique_id=1221732085]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Chaos Level ● ● ● ● ● ○ ○ ○"
-
-[node name="Label4" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/CurrentLoadoutCard/MarginContainer/VBoxContainer" unique_id=429173150]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "VIEW LOADOUT"
-
-[node name="ActiveCoreCard" type="PanelContainer" parent="MainArea/LeftScroll/LeftContent/StatusGrid" unique_id=1160241719]
-custom_minimum_size = Vector2(280, 220)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_34m53")
-
-[node name="MarginContainer" type="MarginContainer" parent="MainArea/LeftScroll/LeftContent/StatusGrid/ActiveCoreCard" unique_id=947991078]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MainArea/LeftScroll/LeftContent/StatusGrid/ActiveCoreCard/MarginContainer" unique_id=1477993511]
-layout_mode = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/ActiveCoreCard/MarginContainer/VBoxContainer" unique_id=1666057293]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "ACTIVE CORE"
-
-[node name="Label2" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/ActiveCoreCard/MarginContainer/VBoxContainer" unique_id=194626780]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Black Hole Core"
-
-[node name="Label3" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/ActiveCoreCard/MarginContainer/VBoxContainer" unique_id=1025418534]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Level 18"
-
-[node name="Label4" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/ActiveCoreCard/MarginContainer/VBoxContainer" unique_id=1957698127]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "CHANGE CORE"
-
-[node name="IdleGainsCard" type="PanelContainer" parent="MainArea/LeftScroll/LeftContent/StatusGrid" unique_id=744932415]
-custom_minimum_size = Vector2(280, 220)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_34m53")
-
-[node name="MarginContainer" type="MarginContainer" parent="MainArea/LeftScroll/LeftContent/StatusGrid/IdleGainsCard" unique_id=383325159]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MainArea/LeftScroll/LeftContent/StatusGrid/IdleGainsCard/MarginContainer" unique_id=302465612]
-layout_mode = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/IdleGainsCard/MarginContainer/VBoxContainer" unique_id=141826604]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "IDLE GAINS"
-
-[node name="Label2" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/IdleGainsCard/MarginContainer/VBoxContainer" unique_id=967521824]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Accrued While Away"
-
-[node name="Label3" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/IdleGainsCard/MarginContainer/VBoxContainer" unique_id=578413637]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "1.00M"
-
-[node name="Label4" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/IdleGainsCard/MarginContainer/VBoxContainer" unique_id=1939352466]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "+24.8k / sec"
-
-[node name="Label5" type="Label" parent="MainArea/LeftScroll/LeftContent/StatusGrid/IdleGainsCard/MarginContainer/VBoxContainer" unique_id=905879236]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "CLAIM GAINS"
-
-[node name="BottomGrid" type="GridContainer" parent="MainArea/LeftScroll/LeftContent" unique_id=788934162]
-layout_mode = 2
-theme_override_constants/h_separation = 14
-theme_override_constants/v_separation = 14
-columns = 4
-
-[node name="FeaturedWeaponCard" type="PanelContainer" parent="MainArea/LeftScroll/LeftContent/BottomGrid" unique_id=861909871]
-custom_minimum_size = Vector2(360, 220)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_34m53")
-
-[node name="MarginContainer" type="MarginContainer" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard" unique_id=594210381]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard/MarginContainer" unique_id=1909404516]
-layout_mode = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard/MarginContainer/VBoxContainer" unique_id=1805382305]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "FEATURED WEAPON"
-
-[node name="Label2" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard/MarginContainer/VBoxContainer" unique_id=158821503]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Void Breaker Mk. III"
-
-[node name="Label3" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard/MarginContainer/VBoxContainer" unique_id=513286961]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Damage: 12.5M / shot"
-
-[node name="Label4" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard/MarginContainer/VBoxContainer" unique_id=1313864316]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Fire Rate: 3.2 / sec"
-
-[node name="Label5" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard/MarginContainer/VBoxContainer" unique_id=75606235]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Crit Chance: 28%"
-
-[node name="Label6" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard/MarginContainer/VBoxContainer" unique_id=703548057]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "VIEW STATS"
-
-[node name="FeaturedWeaponCard2" type="PanelContainer" parent="MainArea/LeftScroll/LeftContent/BottomGrid" unique_id=655846955]
-custom_minimum_size = Vector2(360, 220)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_34m53")
-
-[node name="MarginContainer" type="MarginContainer" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard2" unique_id=1140668028]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard2/MarginContainer" unique_id=101799908]
-layout_mode = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard2/MarginContainer/VBoxContainer" unique_id=399623141]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "DRONE SWARM"
-
-[node name="Label2" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard2/MarginContainer/VBoxContainer" unique_id=1247640627]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Level 31"
-
-[node name="Label3" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard2/MarginContainer/VBoxContainer" unique_id=63804760]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "12 Drones Active"
-
-[node name="Label4" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard2/MarginContainer/VBoxContainer" unique_id=1512160636]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-
-[node name="Label5" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard2/MarginContainer/VBoxContainer" unique_id=175819775]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-
-[node name="Label6" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard2/MarginContainer/VBoxContainer" unique_id=1303181474]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "MANAGE DRONES"
-
-[node name="FeaturedWeaponCard3" type="PanelContainer" parent="MainArea/LeftScroll/LeftContent/BottomGrid" unique_id=2552406]
-custom_minimum_size = Vector2(360, 220)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_34m53")
-
-[node name="MarginContainer" type="MarginContainer" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard3" unique_id=750410298]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard3/MarginContainer" unique_id=419105815]
-layout_mode = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard3/MarginContainer/VBoxContainer" unique_id=1660119289]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "RESEARCH QUEUE"
-
-[node name="Label2" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard3/MarginContainer/VBoxContainer" unique_id=793389618]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Currently Researching"
-
-[node name="Label3" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard3/MarginContainer/VBoxContainer" unique_id=104831648]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Chain Storm"
-
-[node name="Label4" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard3/MarginContainer/VBoxContainer" unique_id=26656450]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "18m 45s"
-
-[node name="Label5" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard3/MarginContainer/VBoxContainer" unique_id=1047225336]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-
-[node name="Label6" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard3/MarginContainer/VBoxContainer" unique_id=1767793750]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "VIEW RESEARCH"
-
-[node name="FeaturedWeaponCard4" type="PanelContainer" parent="MainArea/LeftScroll/LeftContent/BottomGrid" unique_id=571756381]
-custom_minimum_size = Vector2(360, 220)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_34m53")
-
-[node name="MarginContainer" type="MarginContainer" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard4" unique_id=1336319798]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard4/MarginContainer" unique_id=932950553]
-layout_mode = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard4/MarginContainer/VBoxContainer" unique_id=334834152]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "RECENT REWARDS"
-
-[node name="Label2" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard4/MarginContainer/VBoxContainer" unique_id=589324105]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Daily Reward +300 Shards"
-
-[node name="Label3" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard4/MarginContainer/VBoxContainer" unique_id=971755928]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Mission Complete +250 Shards"
-
-[node name="Label4" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard4/MarginContainer/VBoxContainer" unique_id=1106891121]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Idle Gains Claimed +850K"
-
-[node name="Label5" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard4/MarginContainer/VBoxContainer" unique_id=231208787]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-
-[node name="Label6" type="Label" parent="MainArea/LeftScroll/LeftContent/BottomGrid/FeaturedWeaponCard4/MarginContainer/VBoxContainer" unique_id=854860052]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "VIEW HISTORY"
-
-[node name="RightColumn" type="VBoxContainer" parent="MainArea" unique_id=1892898596]
-custom_minimum_size = Vector2(400, 0)
-layout_mode = 2
-size_flags_horizontal = 8
-theme_override_constants/separation = 14
-
-[node name="DailyMissionsCard" type="PanelContainer" parent="MainArea/RightColumn" unique_id=1777545835]
+text = "△  BEST DEPTH"
+[node name="DepthValue" type="Label" parent="Scroll/Content/Stats/DepthCard/Box"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_xqr4a")
+theme_override_colors/font_color = Color(0.321569, 0.054902, 0.929412, 1)
+theme_override_font_sizes/font_size = 42
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+[node name="Desc" type="Label" parent="Scroll/Content/Stats/DepthCard/Box"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Deeper runs earn more rewards."
+horizontal_alignment = 1
 
-[node name="DailyRewardCard" type="PanelContainer" parent="MainArea/RightColumn" unique_id=56324561]
+[node name="ShardCard" type="PanelContainer" parent="Scroll/Content/Stats"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CardPanel"
+[node name="Box" type="VBoxContainer" parent="Scroll/Content/Stats/ShardCard"]
+layout_mode = 2
+[node name="Title" type="Label" parent="Scroll/Content/Stats/ShardCard/Box"]
+layout_mode = 2
+text = "◆  CORE SHARDS"
+[node name="ShardValue" type="Label" parent="Scroll/Content/Stats/ShardCard/Box"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_xqr4a")
+theme_override_font_sizes/font_size = 32
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+[node name="Desc" type="Label" parent="Scroll/Content/Stats/ShardCard/Box"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Permanent prestige currency."
+horizontal_alignment = 1
 
-[node name="PrestigeCard" type="PanelContainer" parent="MainArea/RightColumn" unique_id=19036544]
+[node name="CashCard" type="PanelContainer" parent="Scroll/Content/Stats"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CardPanel"
+[node name="Box" type="VBoxContainer" parent="Scroll/Content/Stats/CashCard"]
+layout_mode = 2
+[node name="Title" type="Label" parent="Scroll/Content/Stats/CashCard/Box"]
+layout_mode = 2
+text = "◉  SECURED CASH"
+[node name="CashValue" type="Label" parent="Scroll/Content/Stats/CashCard/Box"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_xqr4a")
+theme_override_colors/font_color = Color(0.321569, 0.054902, 0.929412, 1)
+theme_override_font_sizes/font_size = 32
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+[node name="Desc" type="Label" parent="Scroll/Content/Stats/CashCard/Box"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Extracted from completed runs."
+horizontal_alignment = 1
+
+[node name="PrestigeCard" type="PanelContainer" parent="Scroll/Content/Stats"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CardPanel"
+[node name="Box" type="VBoxContainer" parent="Scroll/Content/Stats/PrestigeCard"]
+layout_mode = 2
+[node name="Title" type="Label" parent="Scroll/Content/Stats/PrestigeCard/Box"]
+layout_mode = 2
+text = "◇  PRESTIGE PROGRESS"
+[node name="Status" type="Label" parent="Scroll/Content/Stats/PrestigeCard/Box"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.321569, 0.054902, 0.929412, 1)
+theme_override_font_sizes/font_size = 20
+text = "TURRET PATH"
+vertical_alignment = 1
+[node name="PrestigeButton" type="Button" parent="Scroll/Content/Stats/PrestigeCard/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SecondaryButton"
+text = "VIEW PRESTIGE"
+
+[node name="Bottom" type="GridContainer" parent="Scroll/Content"]
+custom_minimum_size = Vector2(0, 170)
+layout_mode = 2
+columns = 3
+theme_override_constants/h_separation = 12
+[node name="Tips" type="PanelContainer" parent="Scroll/Content/Bottom"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CardPanel"
+[node name="Text" type="Label" parent="Scroll/Content/Bottom/Tips"]
+layout_mode = 2
+text = "♧  RUN TIPS\n\nOnly one weapon type can be equipped per run.\nChoose your weapon for deeper runs and tougher bosses."
+autowrap_mode = 2
+[node name="Loop" type="PanelContainer" parent="Scroll/Content/Bottom"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CardPanel"
+[node name="Text" type="Label" parent="Scroll/Content/Bottom/Loop"]
+layout_mode = 2
+text = "◎  PHASE LOOP\n\nSlice dots → Fill the boss meter → Defeat the boss → Push deeper or extract."
+autowrap_mode = 2
+[node name="Research" type="PanelContainer" parent="Scroll/Content/Bottom"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CardPanel"
+[node name="Text" type="Label" parent="Scroll/Content/Bottom/Research"]
+layout_mode = 2
+text = "♙  RESEARCH QUEUE\n\nResearch unlocks through permanent progression."
+autowrap_mode = 2

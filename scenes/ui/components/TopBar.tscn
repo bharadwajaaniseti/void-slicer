@@ -1,0 +1,84 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Theme" path="res://themes/void_slicer_theme.tres" id="1_theme"]
+[ext_resource type="Script" path="res://scripts/ui/components/top_bar.gd" id="2_script"]
+
+[node name="TopBar" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 82)
+theme = ExtResource("1_theme")
+theme_type_variation = &"CardPanel"
+script = ExtResource("2_script")
+
+[node name="Row" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 22
+alignment = 1
+
+[node name="LogoLabel" type="Label" parent="Row"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SubheadingLabel"
+text = "VOID SLICER"
+
+[node name="ZoneLabel" type="Label" parent="Row"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "PHASE 1"
+
+[node name="PrimaryBox" type="VBoxContainer" parent="Row"]
+layout_mode = 2
+
+[node name="PrimaryCaption" type="Label" parent="Row/PrimaryBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "CASH"
+horizontal_alignment = 2
+
+[node name="PrimaryValue" type="Label" parent="Row/PrimaryBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+horizontal_alignment = 2
+
+[node name="DepthBox" type="VBoxContainer" parent="Row"]
+layout_mode = 2
+
+[node name="DepthCaption" type="Label" parent="Row/DepthBox"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "DEPTH"
+horizontal_alignment = 2
+
+[node name="DepthValue" type="Label" parent="Row/DepthBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "1"
+horizontal_alignment = 2
+
+[node name="ShardsBox" type="VBoxContainer" parent="Row"]
+layout_mode = 2
+
+[node name="ShardsCaption" type="Label" parent="Row/ShardsBox"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "BOSS SHARDS"
+horizontal_alignment = 2
+
+[node name="ShardsValue" type="Label" parent="Row/ShardsBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+horizontal_alignment = 2
+
+[node name="SettingsButton" type="Button" parent="Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_type_variation = &"QuietButton"
+mouse_default_cursor_shape = 2
+text = "⚙"
+tooltip_text = "Settings"
+

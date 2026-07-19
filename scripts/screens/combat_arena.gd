@@ -531,6 +531,12 @@ func _setup_manual_weapon_slots() -> void:
 	_register_slot_buttons_from_rail(right_slot_rail, "right")
 	_register_slot_buttons_from_rail(bottom_mount_rail, "bottom")
 
+	# Phase 1 always starts with the saved single weapon mounted at the
+	# manually placed bottom-center slot. Previously this relied on a visible
+	# slot button click, so hiding the old multi-slot UI left the loadout empty.
+	if equipped_weapons.is_empty() and weapon_slots.has("bottom_4"):
+		equipped_weapons["bottom_4"] = "turret"
+
 	_refresh_slot_visuals()
 
 
@@ -1570,6 +1576,18 @@ func _on_boss_died(boss: CombatBoss) -> void:
 			run_state.current_stage
 		)
 
+	# CombatScreen owns the post-boss decision. The next round starts only
+	# after the player explicitly chooses Push Deeper.
+	set_combat_paused(true)
+
+
+func continue_to_next_depth() -> void:
+	if run_state != null:
+		run_state.advance_stage(run_balance)
+	else:
+		round_number += 1
+		wave = round_number
+	set_combat_paused(false)
 	_start_normal_round()
 
 
@@ -3290,11 +3308,11 @@ func _spawn_turret(
 	_apply_weapon_runtime_stats_to_turret(turret)
 
 	if turret_position.x < size.x * 0.25:
-		turret.aim_direction = Vector2.RIGHT
+		turret.aim_at(turret.position + Vector2.RIGHT)
 	elif turret_position.x > size.x * 0.75:
-		turret.aim_direction = Vector2.LEFT
+		turret.aim_at(turret.position + Vector2.LEFT)
 	else:
-		turret.aim_direction = Vector2.UP
+		turret.aim_at(turret.position + Vector2.UP)
 
 	turrets.append(turret)
 

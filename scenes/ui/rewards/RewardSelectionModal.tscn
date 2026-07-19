@@ -156,6 +156,36 @@ theme_override_constants/margin_bottom = 22
 layout_mode = 2
 theme_override_constants/separation = 16
 
+[node name="StageRail" type="HBoxContainer" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+alignment = 1
+[node name="Setup" type="Label" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StageRail"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.47, 0.49, 0.58, 1)
+text = "✓  RUN SETUP"
+horizontal_alignment = 1
+[node name="Combat" type="Label" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StageRail"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.47, 0.49, 0.58, 1)
+text = "✓  COMBAT"
+horizontal_alignment = 1
+[node name="Rewards" type="Label" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StageRail"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.321569, 0.054902, 0.929412, 1)
+theme_override_font_sizes/font_size = 17
+text = "◆  REWARDS"
+horizontal_alignment = 1
+[node name="Summary" type="Label" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox/StageRail"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.47, 0.49, 0.58, 1)
+text = "▤  SUMMARY"
+horizontal_alignment = 1
+
 [node name="HeaderVBox" type="VBoxContainer" parent="ModalRoot/ModalCenter/ModalPanel/ModalMargin/ModalVBox" unique_id=317920531]
 layout_mode = 2
 theme_override_constants/separation = 6

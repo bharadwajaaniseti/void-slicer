@@ -1,0 +1,104 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/post_boss_decision_modal.gd" id="1_script"]
+[ext_resource type="Theme" path="res://themes/void_slicer_theme.tres" id="2_theme"]
+
+[node name="PostBossDecisionModal" type="CanvasLayer"]
+layer = 110
+script = ExtResource("1_script")
+[node name="Overlay" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+[node name="Dim" type="ColorRect" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.027451, 0.0235294, 0.0705882, 0.58)
+[node name="Center" type="CenterContainer" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+[node name="Panel" type="PanelContainer" parent="Overlay/Center"]
+custom_minimum_size = Vector2(780, 570)
+layout_mode = 2
+theme_type_variation = &"ModalPanel"
+[node name="Content" type="VBoxContainer" parent="Overlay/Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 16
+[node name="Stage" type="Label" parent="Overlay/Center/Panel/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.321569, 0.054902, 0.929412, 1)
+text = "✓ RUN SETUP     ✓ COMBAT     ◆ REWARDS     ▤ SUMMARY"
+horizontal_alignment = 1
+[node name="Title" type="Label" parent="Overlay/Center/Panel/Content"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "BOSS DEFEATED"
+horizontal_alignment = 1
+[node name="Subtitle" type="Label" parent="Overlay/Center/Panel/Content"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "CORE BREACH SECURED — CHOOSE YOUR NEXT MOVE"
+horizontal_alignment = 1
+[node name="Stats" type="GridContainer" parent="Overlay/Center/Panel/Content"]
+layout_mode = 2
+columns = 4
+theme_override_constants/h_separation = 18
+theme_override_constants/v_separation = 12
+[node name="Depth" type="Label" parent="Overlay/Center/Panel/Content/Stats"]
+layout_mode = 2
+text = "DEPTH"
+[node name="DepthValue" type="Label" parent="Overlay/Center/Panel/Content/Stats"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "1"
+[node name="Cash" type="Label" parent="Overlay/Center/Panel/Content/Stats"]
+layout_mode = 2
+text = "RUN CASH"
+[node name="CashValue" type="Label" parent="Overlay/Center/Panel/Content/Stats"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+[node name="Shards" type="Label" parent="Overlay/Center/Panel/Content/Stats"]
+layout_mode = 2
+text = "BOSS SHARDS"
+[node name="ShardsValue" type="Label" parent="Overlay/Center/Panel/Content/Stats"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+[node name="Bosses" type="Label" parent="Overlay/Center/Panel/Content/Stats"]
+layout_mode = 2
+text = "BOSSES"
+[node name="BossesValue" type="Label" parent="Overlay/Center/Panel/Content/Stats"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+[node name="ScalingValue" type="Label" parent="Overlay/Center/Panel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "NEXT DEPTH"
+horizontal_alignment = 1
+[node name="PushButton" type="Button" parent="Overlay/Center/Panel/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 82)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+text = "PUSH DEEPER\nIncrease enemy strength and earn greater rewards."
+[node name="ExtractButton" type="Button" parent="Overlay/Center/Panel/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+theme_type_variation = &"SecondaryButton"
+text = "EXTRACT\nEnd the run and secure your current resources."

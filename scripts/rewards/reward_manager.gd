@@ -23,7 +23,7 @@ signal weapon_slots_changed(new_slot_count: int)
 	"turret"
 ]
 
-@export var starting_weapon_slots: int = 6
+@export var starting_weapon_slots: int = 1
 
 
 # -------------------------------------------------------------------
@@ -213,14 +213,11 @@ func _is_reward_valid(reward: RewardData) -> bool:
 
 	match reward.reward_type:
 		RewardData.RewardType.NEW_WEAPON:
-			if reward.weapon_id.is_empty():
-				return false
-
-			if unlocked_weapons.has(reward.weapon_id):
-				return false
-
-			if equipped_weapons.size() >= maximum_weapon_slots:
-				return false
+			# Phase 1 weapon types are unlocked through Prestige, not run rewards.
+			return false
+		RewardData.RewardType.WEAPON_SLOT:
+			# Phase 1 supports exactly one active weapon type.
+			return false
 
 		RewardData.RewardType.WEAPON_UPGRADE:
 			if reward.weapon_id.is_empty():

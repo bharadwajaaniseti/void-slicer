@@ -1264,6 +1264,13 @@ alignment = 1
 layout_mode = 2
 size_flags_horizontal = 2
 
+[node name="BrandLogo" type="TextureRect" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("2_b32md")
+expand_mode = 3
+stretch_mode = 5
+
 [node name="GalaxySelector" type="PanelContainer" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster" unique_id=1590742082]
 custom_minimum_size = Vector2(300, 70)
 layout_mode = 2
@@ -1297,7 +1304,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="CenterCluster" type="VBoxContainer" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster" unique_id=1866735578]
-custom_minimum_size = Vector2(844, 0)
+custom_minimum_size = Vector2(480, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -1317,7 +1324,7 @@ size_flags_vertical = 4
 alignment = 1
 
 [node name="CurrencyLabel" type="Label" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster/CenterCluster/CurrencyCard/CurrencyBox" unique_id=2128615447]
-custom_minimum_size = Vector2(280, 0)
+custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.019607844, 0.03137255, 0.08627451, 1)
 theme_override_font_sizes/font_size = 48
@@ -1325,7 +1332,7 @@ text = "$832k"
 horizontal_alignment = 2
 
 [node name="CpsLabel" type="Label" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/LeftCluster/CenterCluster/CurrencyCard/CurrencyBox" unique_id=937897081]
-custom_minimum_size = Vector2(280, 0)
+custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.72156864, 0.30980393, 0.99215686)
 theme_override_font_sizes/font_size = 16
@@ -1423,6 +1430,24 @@ theme_override_font_sizes/font_size = 25
 text = "0"
 horizontal_alignment = 1
 
+[node name="RunShardsVBox" type="VBoxContainer" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/RightCluster"]
+custom_minimum_size = Vector2(100, 64)
+layout_mode = 2
+alignment = 1
+
+[node name="RunShardsTitle" type="Label" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/RightCluster/RunShardsVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "RUN SHARDS"
+horizontal_alignment = 1
+
+[node name="RunShardsLabel" type="Label" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/RightCluster/RunShardsVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4509804, 0.16078432, 1, 1)
+theme_override_font_sizes/font_size = 25
+text = "0"
+horizontal_alignment = 1
+
 [node name="TimeCard" type="PanelContainer" parent="MainVBox/TopBar/TopBarMargin/TopBarHBox/RightCluster" unique_id=143578092]
 custom_minimum_size = Vector2(110, 64)
 layout_mode = 2
@@ -1462,6 +1487,39 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_b01tc")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_4ega6")
 theme_override_styles/hover = SubResource("StyleBoxFlat_1plxt")
 text = "Settings"
+
+[node name="StageRail" type="PanelContainer" parent="MainVBox"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_egb78")
+[node name="Stages" type="HBoxContainer" parent="MainVBox/StageRail"]
+layout_mode = 2
+alignment = 1
+[node name="Setup" type="Label" parent="MainVBox/StageRail/Stages"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.42, 0.45, 0.55, 1)
+text = "✓  RUN SETUP"
+horizontal_alignment = 1
+[node name="Combat" type="Label" parent="MainVBox/StageRail/Stages"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.321569, 0.054902, 0.929412, 1)
+theme_override_font_sizes/font_size = 18
+text = "◎  COMBAT"
+horizontal_alignment = 1
+[node name="Rewards" type="Label" parent="MainVBox/StageRail/Stages"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.42, 0.45, 0.55, 1)
+text = "□  REWARDS"
+horizontal_alignment = 1
+[node name="Summary" type="Label" parent="MainVBox/StageRail/Stages"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.42, 0.45, 0.55, 1)
+text = "▤  SUMMARY"
+horizontal_alignment = 1
 
 [node name="CombatArena" type="Control" parent="MainVBox" unique_id=1233011658]
 process_mode = 1

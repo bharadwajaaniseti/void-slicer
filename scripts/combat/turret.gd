@@ -13,6 +13,7 @@ extends Node2D
 @export var barrel_length: float = 30.0
 @export var barrel_width: float = 7.0
 @export var muzzle_radius: float = 5.5
+@export var tier_textures: Array[Texture2D] = []
 
 @export var turret_color: Color = Color("#111827")
 @export var tesla_color: Color = Color("#0077FF")
@@ -30,6 +31,9 @@ var ricochet_damage_multiplier: float = 0.6
 var explosion_every_n_attacks: int = 0
 var explosion_damage_multiplier: float = 0.0
 var attack_counter: int = 0
+
+@onready var aim_pivot: Node2D = $AimPivot
+@onready var weapon_sprite: Sprite2D = $AimPivot/WeaponSprite
 
 
 func setup_turret(turret_position: Vector2, turret_kind: String) -> void:
@@ -63,6 +67,8 @@ func setup_turret(turret_position: Vector2, turret_kind: String) -> void:
 			fire_rate = 0.52
 			range = 430.0
 
+	_update_weapon_texture(1)
+	aim_pivot.rotation = 0.0
 	queue_redraw()
 
 
@@ -79,6 +85,7 @@ func apply_weapon_runtime_state(state: Variant) -> void:
 	ricochet_damage_multiplier = maxf(state.ricochet_damage_multiplier, 0.0)
 	explosion_every_n_attacks = maxi(state.explosion_every_n_attacks, 0)
 	explosion_damage_multiplier = maxf(state.explosion_damage_multiplier, 0.0)
+	_update_weapon_texture(clampi(state.tier, 1, 5))
 	queue_redraw()
 
 
@@ -103,7 +110,22 @@ func aim_at(target_position: Vector2) -> void:
 		return
 
 	aim_direction = direction.normalized()
+	aim_pivot.rotation = aim_direction.angle() + PI * 0.5
 	queue_redraw()
+
+
+func _update_weapon_texture(tier: int) -> void:
+	if not is_instance_valid(weapon_sprite):
+		return
+
+	if tier_textures.is_empty():
+		weapon_sprite.visible = false
+		return
+
+	var texture_index: int = clampi(tier - 1, 0, tier_textures.size() - 1)
+	var selected_texture: Texture2D = tier_textures[texture_index]
+	weapon_sprite.texture = selected_texture
+	weapon_sprite.visible = selected_texture != null
 
 
 func get_muzzle_position() -> Vector2:
@@ -164,17 +186,6 @@ func play_fire_pulse() -> void:
 
 
 func _draw() -> void:
-	var slot_color := get_weapon_color()
-
-	draw_circle(Vector2.ZERO, slot_radius, Color(1.0, 1.0, 1.0, 0.95))
-	draw_circle(Vector2.ZERO, slot_radius - 2.0, Color(0.0, 0.0, 0.0, 0.18))
-	draw_circle(Vector2.ZERO, body_radius, slot_color)
-
-	var barrel_end := aim_direction.normalized() * barrel_length
-
-	draw_line(Vector2.ZERO, barrel_end, slot_color, barrel_width, true)
-	draw_circle(barrel_end, muzzle_radius, Color.WHITE)
-
 	if cooldown > 0.0:
 		var ratio: float = clampf(cooldown / fire_rate, 0.0, 1.0)
 		var arc_color := Color.WHITE

@@ -1,0 +1,83 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Theme" path="res://themes/void_slicer_theme.tres" id="1_theme"]
+[ext_resource type="Script" path="res://scripts/ui/components/modal_base.gd" id="2_script"]
+
+[node name="ModalBase" type="CanvasLayer"]
+layer = 100
+script = ExtResource("2_script")
+
+[node name="Overlay" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_theme")
+
+[node name="DimBackground" type="ColorRect" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.027451, 0.0235294, 0.0705882, 0.48)
+
+[node name="BackdropButton" type="Button" parent="Overlay"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Center" type="CenterContainer" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ModalPanel" type="PanelContainer" parent="Overlay/Center"]
+custom_minimum_size = Vector2(640, 300)
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"ModalPanel"
+
+[node name="Content" type="VBoxContainer" parent="Overlay/Center/ModalPanel"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TitleLabel" type="Label" parent="Overlay/Center/ModalPanel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+text = "MODAL TITLE"
+horizontal_alignment = 1
+
+[node name="DescriptionLabel" type="Label" parent="Overlay/Center/ModalPanel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "Description"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Body" type="VBoxContainer" parent="Overlay/Center/ModalPanel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Actions" type="HBoxContainer" parent="Overlay/Center/ModalPanel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 2
+

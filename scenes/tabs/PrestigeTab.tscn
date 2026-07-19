@@ -1,22 +1,72 @@
-[gd_scene format=3 uid="uid://bgo5y64228y0f"]
+[gd_scene load_steps=2 format=3]
 
-[node name="PrestigeTabRoot" type="Control" unique_id=662632003]
+[ext_resource type="Theme" path="res://themes/void_slicer_theme.tres" id="1_theme"]
+
+[node name="PrestigeTabRoot" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="Label" type="Label" parent="." unique_id=1692316885]
+theme = ExtResource("1_theme")
+[node name="Scroll" type="ScrollContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0.4509804, 0.16078432, 1, 1)
-theme_override_font_sizes/font_size = 64
-text = "Prestige Screen"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="Page" type="VBoxContainer" parent="Scroll"]
+custom_minimum_size = Vector2(1200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+[node name="Title" type="Label" parent="Scroll/Page"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "PRESTIGE TREE"
+[node name="Subtitle" type="Label" parent="Scroll/Page"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "Permanent weapon paths. Future weapons remain unavailable until their gameplay is implemented."
+[node name="Tree" type="GridContainer" parent="Scroll/Page"]
+layout_mode = 2
+columns = 3
+theme_override_constants/h_separation = 18
+theme_override_constants/v_separation = 18
+[node name="Turret" type="PanelContainer" parent="Scroll/Page/Tree"]
+layout_mode = 2
+theme_type_variation = &"CardPanel"
+[node name="Text" type="Label" parent="Scroll/Page/Tree/Turret"]
+layout_mode = 2
+text = "TURRET\nUNLOCKED\nBalanced automatic support"
+[node name="Mortar" type="PanelContainer" parent="Scroll/Page/Tree"]
+layout_mode = 2
+theme_type_variation = &"CardPanel"
+[node name="Text" type="Label" parent="Scroll/Page/Tree/Mortar"]
+layout_mode = 2
+text = "🔒 MORTAR\nCOMING SOON\nArea damage"
+[node name="Tesla" type="PanelContainer" parent="Scroll/Page/Tree"]
+layout_mode = 2
+theme_type_variation = &"CardPanel"
+[node name="Text" type="Label" parent="Scroll/Page/Tree/Tesla"]
+layout_mode = 2
+text = "🔒 TESLA COIL\nCOMING SOON\nChain damage"
+[node name="Rocket" type="PanelContainer" parent="Scroll/Page/Tree"]
+layout_mode = 2
+theme_type_variation = &"CardPanel"
+[node name="Text" type="Label" parent="Scroll/Page/Tree/Rocket"]
+layout_mode = 2
+text = "🔒 ROCKET LAUNCHER\nCOMING SOON\nBoss damage"
+[node name="Laser" type="PanelContainer" parent="Scroll/Page/Tree"]
+layout_mode = 2
+theme_type_variation = &"CardPanel"
+[node name="Text" type="Label" parent="Scroll/Page/Tree/Laser"]
+layout_mode = 2
+text = "🔒 LASER\nCOMING SOON\nSustained damage"
+[node name="Railgun" type="PanelContainer" parent="Scroll/Page/Tree"]
+layout_mode = 2
+theme_type_variation = &"CardPanel"
+[node name="Text" type="Label" parent="Scroll/Page/Tree/Railgun"]
+layout_mode = 2
+text = "🔒 RAILGUN\nCOMING SOON\nPenetration"
