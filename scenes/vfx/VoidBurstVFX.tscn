@@ -1,0 +1,117 @@
+[gd_scene load_steps=16 format=3]
+
+[ext_resource type="Script" path="res://scripts/vfx/void_burst_vfx.gd" id="1_burst"]
+[ext_resource type="Script" path="res://scripts/vfx/slice_ribbon_renderer.gd" id="2_renderer"]
+[ext_resource type="Shader" path="res://shaders/vfx/slice_ribbon.gdshader" id="3_shader"]
+[ext_resource type="Texture2D" path="res://resources/vfx/slice_broad_noise.tres" id="4_broad"]
+[ext_resource type="Texture2D" path="res://resources/vfx/slice_fine_noise.tres" id="5_fine"]
+[ext_resource type="Material" path="res://resources/vfx/slice_glow_material.tres" id="6_glow"]
+[ext_resource type="Material" path="res://resources/vfx/slice_spark_material.tres" id="7_spark"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_purple"]
+resource_local_to_scene = true
+shader = ExtResource("3_shader")
+shader_parameter/broad_noise = ExtResource("4_broad")
+shader_parameter/fine_noise = ExtResource("5_fine")
+shader_parameter/core_color = Color(1, 0.92, 1, 1)
+shader_parameter/hot_color = Color(0.72, 0.18, 1, 1)
+shader_parameter/energy_color = Color(0.34, 0.025, 0.86, 1)
+shader_parameter/void_color = Color(0.72, 0.16, 1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_orange"]
+resource_local_to_scene = true
+shader = ExtResource("3_shader")
+shader_parameter/broad_noise = ExtResource("4_broad")
+shader_parameter/fine_noise = ExtResource("5_fine")
+shader_parameter/hot_color = Color(1, 0.72, 0.06, 1)
+shader_parameter/energy_color = Color(1, 0.07, 0.01, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_white"]
+resource_local_to_scene = true
+shader = ExtResource("3_shader")
+shader_parameter/broad_noise = ExtResource("4_broad")
+shader_parameter/fine_noise = ExtResource("5_fine")
+shader_parameter/core_width = 0.2
+shader_parameter/body_width = 0.46
+shader_parameter/glow_intensity = 1.7
+shader_parameter/overall_intensity = 1.35
+
+[sub_resource type="Curve" id="Curve_burst_width"]
+_data = [Vector2(0, 0), 0.0, 2.2, 0, 0, Vector2(0.16, 0.42), 1.4, 1.4, 0, 0, Vector2(0.68, 1), 0.0, 0.0, 0, 0, Vector2(0.9, 0.62), -2.0, -2.0, 0, 0, Vector2(1, 0.04), -5.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcess_burst"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 28.0
+spread = 180.0
+initial_velocity_min = 180.0
+initial_velocity_max = 430.0
+damping_min = 170.0
+damping_max = 250.0
+scale_min = 0.8
+scale_max = 2.0
+color = Color(0.82, 0.28, 1, 1)
+
+[sub_resource type="Gradient" id="Gradient_burst"]
+offsets = PackedFloat32Array(0, 0.24, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 0.55, 0.06, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture_burst"]
+gradient = SubResource("Gradient_burst")
+width = 28
+height = 6
+fill_from = Vector2(0, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[node name="VoidBurstVFX" type="Node2D"]
+z_index = 90
+script = ExtResource("1_burst")
+
+[node name="DarkOverlay" type="Polygon2D" parent="."]
+color = Color(0.025, 0.005, 0.06, 0)
+
+[node name="ArcPurple" type="MeshInstance2D" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_purple")
+script = ExtResource("2_renderer")
+width_profile = SubResource("Curve_burst_width")
+
+[node name="ArcOrange" type="MeshInstance2D" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_orange")
+script = ExtResource("2_renderer")
+width_profile = SubResource("Curve_burst_width")
+
+[node name="ArcWhite" type="MeshInstance2D" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_white")
+script = ExtResource("2_renderer")
+width_profile = SubResource("Curve_burst_width")
+
+[node name="ShockRing" type="Line2D" parent="."]
+material = ExtResource("6_glow")
+z_index = 4
+width = 8.0
+default_color = Color(0.78, 0.4, 1, 0.9)
+joint_mode = 2
+antialiased = true
+
+[node name="IntersectionFlash" type="Polygon2D" parent="."]
+visible = false
+material = ExtResource("6_glow")
+z_index = 5
+polygon = PackedVector2Array(-70, -6, -18, -16, 0, -68, 18, -16, 70, -6, 22, 7, 0, 62, -22, 7)
+color = Color(1, 0.86, 0.4, 0.95)
+
+[node name="OutwardSparks" type="GPUParticles2D" parent="."]
+material = ExtResource("7_spark")
+z_index = 6
+emitting = false
+amount = 54
+lifetime = 0.48
+one_shot = true
+explosiveness = 0.92
+randomness = 0.7
+process_material = SubResource("ParticleProcess_burst")
+texture = SubResource("GradientTexture_burst")

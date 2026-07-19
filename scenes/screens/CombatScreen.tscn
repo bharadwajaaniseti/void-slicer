@@ -5,6 +5,8 @@
 [ext_resource type="Script" uid="uid://c2gbx0sf8ftei" path="res://scripts/screens/combat_arena.gd" id="3_du8md"]
 [ext_resource type="PackedScene" uid="uid://d1ocuum5i81g7" path="res://scenes/combat/Dot.tscn" id="4_3vgso"]
 [ext_resource type="PackedScene" uid="uid://dh68htdp12jt4" path="res://scenes/combat/SlashFx.tscn" id="5_rt7mn"]
+[ext_resource type="PackedScene" path="res://scenes/vfx/SliceVFX.tscn" id="5_slice_vfx"]
+[ext_resource type="PackedScene" path="res://scenes/vfx/VoidBurstVFX.tscn" id="5_void_burst_vfx"]
 [ext_resource type="PackedScene" uid="uid://rxuelmis28tf" path="res://scenes/combat/Projectile.tscn" id="6_b01tc"]
 [ext_resource type="PackedScene" uid="uid://bgl2tonk3yclx" path="res://scenes/combat/BeamFx.tscn" id="7_4ega6"]
 [ext_resource type="PackedScene" uid="uid://bwx7obpymlela" path="res://scenes/combat/Turret.tscn" id="8_1plxt"]
@@ -1471,6 +1473,8 @@ dot_scene = ExtResource("4_3vgso")
 dot_layer_path = NodePath("DotLayer")
 slash_fx_scene = ExtResource("5_rt7mn")
 fx_layer_path = NodePath("FxLayer")
+slice_vfx_scene = ExtResource("5_slice_vfx")
+void_burst_vfx_scene = ExtResource("5_void_burst_vfx")
 projectile_scene = ExtResource("6_b01tc")
 projectile_layer_path = NodePath("ProjectileLayer")
 beam_fx_scene = ExtResource("7_4ega6")

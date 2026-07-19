@@ -31,6 +31,8 @@ class DamageEvent:
 
 @export var slash_fx_scene: PackedScene
 @export var fx_layer_path: NodePath
+@export var slice_vfx_scene: PackedScene
+@export var void_burst_vfx_scene: PackedScene
 
 @export var projectile_scene: PackedScene
 @export var projectile_layer_path: NodePath
@@ -120,6 +122,9 @@ class DamageEvent:
 @export var void_burst_boss_damage_multiplier: float = 2.5
 @export var void_burst_attack_speed_bonus: float = 0.5
 @export var void_burst_attack_speed_duration: float = 5.0
+@export var slice_path_minimum_distance: float = 4.0
+@export var slice_path_interpolation_distance: float = 18.0
+@export var slice_path_maximum_points: int = 64
 
 
 @export_group("Boss Progress")
@@ -263,6 +268,12 @@ var slice_gesture_hit_dots: Array[DotEnemy] = []
 var slice_gesture_hit_boss: bool = false
 var slice_gesture_path_length: float = 0.0
 var void_burst_attack_speed_timer: float = 0.0
+var active_slice_vfx: SliceVFX = null
+var active_void_burst_vfx: VoidBurstVFX = null
+var camera_impulse_remaining: float = 0.0
+var camera_impulse_duration: float = 0.0
+var camera_impulse_strength: float = 0.0
+var camera_impulse_active: bool = false
 
 
 func configure_incremental_systems(
@@ -362,6 +373,12 @@ func _late_initialize_arena() -> void:
 
 	if slash_fx_scene == null:
 		push_warning("CombatArena: slash_fx_scene is missing. Slicing still damages enemies, but no mouse slash trail will appear.")
+
+	if slice_vfx_scene == null:
+		push_warning("CombatArena: slice_vfx_scene is missing. Slicing still works, but the gesture trail will not appear.")
+
+	if void_burst_vfx_scene == null:
+		push_warning("CombatArena: void_burst_vfx_scene is missing. Void Burst still works, but its presentation will not appear.")
 
 	if beam_fx_scene == null:
 		push_warning("CombatArena: beam_fx_scene is missing. Tesla and laser still deal damage, but no beam visual will appear.")
@@ -712,6 +729,7 @@ func _process(delta: float) -> void:
 	if not _is_play_area_ready():
 		return
 
+	_update_camera_impulse(delta)
 	_update_ability_timers(delta)
 
 	if is_forming_boss:
@@ -761,8 +779,6 @@ func _gui_input(event: InputEvent) -> void:
 		if is_slicing:
 			var current_position: Vector2 = motion.position
 			_update_slice_gesture(current_position)
-			_spawn_slash_fx(last_mouse_position, current_position)
-			last_mouse_position = current_position
 
 
 func _draw() -> void:
@@ -2455,6 +2471,7 @@ func _slice_between(from: Vector2, to: Vector2) -> void:
 
 
 func _begin_slice_gesture(start_position: Vector2) -> void:
+	_cancel_active_slice_vfx()
 	is_slicing = true
 	last_mouse_position = start_position
 	slice_gesture_id_counter += 1
@@ -2468,6 +2485,7 @@ func _begin_slice_gesture(start_position: Vector2) -> void:
 	slice_gesture_hit_boss = false
 	slice_gesture_path_length = 0.0
 	slice_gesture_path_points.append(start_position)
+	_start_slice_vfx(start_position)
 
 
 func _update_slice_gesture(current_position: Vector2) -> void:
@@ -2475,21 +2493,42 @@ func _update_slice_gesture(current_position: Vector2) -> void:
 		_begin_slice_gesture(current_position)
 		return
 
-	var previous_position: Vector2 = last_mouse_position
+	var segment_start: Vector2 = last_mouse_position
+	var distance: float = segment_start.distance_to(current_position)
 
-	if previous_position.distance_to(current_position) < 2.0:
+	if distance < slice_path_minimum_distance:
 		return
 
-	slice_gesture_path_length += previous_position.distance_to(current_position)
+	var step_distance: float = maxf(slice_path_interpolation_distance, slice_path_minimum_distance)
+	var step_count: int = maxi(ceili(distance / step_distance), 1)
+	var previous_position: Vector2 = segment_start
+
+	for step: int in range(1, step_count + 1):
+		var weight: float = float(step) / float(step_count)
+		var accepted_position: Vector2 = segment_start.lerp(current_position, weight)
+		_accept_slice_point(previous_position, accepted_position)
+		previous_position = accepted_position
+
+	last_mouse_position = current_position
+
+
+func _accept_slice_point(previous_position: Vector2, current_position: Vector2) -> void:
+	var segment_length: float = previous_position.distance_to(current_position)
+	if segment_length < 0.01:
+		return
+
+	slice_gesture_path_length += segment_length
 	slice_gesture_end_position = current_position
 
-	if slice_gesture_path_points.size() < 48:
+	if slice_gesture_path_points.size() < slice_path_maximum_points:
 		slice_gesture_path_points.append(current_position)
 	else:
 		slice_gesture_path_points[slice_gesture_path_points.size() - 1] = current_position
 
 	_slice_segment_between(previous_position, current_position)
-	last_mouse_position = current_position
+
+	if active_slice_vfx != null and is_instance_valid(active_slice_vfx):
+		active_slice_vfx.add_authoritative_point(current_position)
 
 
 func _finish_slice_gesture(end_position: Vector2) -> void:
@@ -2525,6 +2564,82 @@ func _finish_slice_gesture(end_position: Vector2) -> void:
 		combo_multiplier,
 		current_combo
 	)
+	_release_active_slice_vfx(unique_hit_count, current_combo)
+
+
+func _start_slice_vfx(start_position: Vector2) -> void:
+	if slice_vfx_scene == null or fx_layer == null:
+		return
+
+	active_slice_vfx = slice_vfx_scene.instantiate() as SliceVFX
+	if active_slice_vfx == null:
+		push_error("CombatArena: slice_vfx_scene must use the SliceVFX script.")
+		return
+
+	fx_layer.add_child(active_slice_vfx)
+	active_slice_vfx.begin_gesture(start_position)
+
+
+func _release_active_slice_vfx(hit_count: int, combo_count: int) -> void:
+	if active_slice_vfx == null or not is_instance_valid(active_slice_vfx):
+		active_slice_vfx = null
+		return
+
+	active_slice_vfx.release_gesture(hit_count, combo_count)
+	active_slice_vfx = null
+	if hit_count > 0:
+		var combo_strength: float = clampf(float(combo_count) / 50.0, 0.0, 1.0)
+		_start_camera_impulse(1.5 + combo_strength * 3.0, 0.07 + combo_strength * 0.05)
+
+
+func _cancel_active_slice_vfx() -> void:
+	if active_slice_vfx != null and is_instance_valid(active_slice_vfx):
+		active_slice_vfx.cancel_immediately()
+	active_slice_vfx = null
+
+
+func _start_camera_impulse(strength: float, duration: float) -> void:
+	camera_impulse_strength = maxf(camera_impulse_strength, clampf(strength, 0.0, 6.0))
+	camera_impulse_duration = maxf(camera_impulse_duration, clampf(duration, 0.01, 0.18))
+	camera_impulse_remaining = camera_impulse_duration
+	camera_impulse_active = true
+
+
+func _update_camera_impulse(delta: float) -> void:
+	if not camera_impulse_active:
+		return
+
+	camera_impulse_remaining = maxf(camera_impulse_remaining - delta, 0.0)
+	var ratio: float = camera_impulse_remaining / maxf(camera_impulse_duration, 0.01)
+	var offset: Vector2 = Vector2(
+		rng.randf_range(-1.0, 1.0),
+		rng.randf_range(-1.0, 1.0)
+	) * camera_impulse_strength * ratio * ratio
+	_set_camera_impulse_layer_positions(offset)
+
+	if camera_impulse_remaining <= 0.0:
+		_reset_camera_impulse_layers()
+		camera_impulse_strength = 0.0
+		camera_impulse_duration = 0.0
+		camera_impulse_active = false
+
+
+func _set_camera_impulse_layer_positions(offset: Vector2) -> void:
+	var layers: Array[Node2D] = [
+		dot_layer,
+		fx_layer,
+		projectile_layer,
+		turret_layer,
+		boss_layer,
+		drone_layer
+	]
+	for layer: Node2D in layers:
+		if layer != null and is_instance_valid(layer):
+			layer.position = offset
+
+
+func _reset_camera_impulse_layers() -> void:
+	_set_camera_impulse_layer_positions(Vector2.ZERO)
 
 
 func _slice_segment_between(from: Vector2, to: Vector2) -> void:
@@ -3363,14 +3478,8 @@ func activate_void_burst() -> bool:
 		return false
 
 	var burst_center: Vector2 = _get_play_area_rect().get_center()
-	_spawn_slash_fx(
-		Vector2(0.0, burst_center.y),
-		Vector2(size.x, burst_center.y)
-	)
-	_spawn_slash_fx(
-		Vector2(burst_center.x, 0.0),
-		Vector2(burst_center.x, size.y)
-	)
+	_spawn_void_burst_vfx()
+	_start_camera_impulse(5.0, 0.16)
 	_spawn_impact_fx(burst_center, purple_color)
 
 	var slice_power_damage: float = _get_effective_slice_damage()
@@ -3456,9 +3565,32 @@ func activate_void_burst() -> bool:
 	return true
 
 
+func _spawn_void_burst_vfx() -> void:
+	if void_burst_vfx_scene == null or fx_layer == null:
+		return
+
+	if active_void_burst_vfx != null and is_instance_valid(active_void_burst_vfx):
+		active_void_burst_vfx.cancel_immediately()
+
+	active_void_burst_vfx = void_burst_vfx_scene.instantiate() as VoidBurstVFX
+	if active_void_burst_vfx == null:
+		push_error("CombatArena: void_burst_vfx_scene must use the VoidBurstVFX script.")
+		return
+
+	fx_layer.add_child(active_void_burst_vfx)
+	active_void_burst_vfx.play(size)
+
+
 func set_combat_paused(paused: bool) -> void:
 	combat_paused = paused
 	is_slicing = false
+	if paused and slice_gesture_active:
+		_cancel_active_slice_vfx()
+		_clear_slice_gesture_tracking()
+	if paused:
+		camera_impulse_remaining = 0.0
+		camera_impulse_active = false
+		_reset_camera_impulse_layers()
 
 	# Pause/resume all gameplay tweens created below this arena.
 	# SceneTree pausing is still controlled by CombatScreen.
@@ -3734,6 +3866,10 @@ func end_combat() -> void:
 	frenzy_timer = 0.0
 	focus_fire_timer = 0.0
 	void_burst_attack_speed_timer = 0.0
+	camera_impulse_remaining = 0.0
+	camera_impulse_active = false
+	_reset_camera_impulse_layers()
+	_clear_slice_vfx_instances()
 	_clear_slice_gesture_tracking()
 
 	if weapon_upgrade_manager != null:
@@ -3767,3 +3903,15 @@ func _clear_slice_gesture_tracking() -> void:
 	slice_gesture_hit_dots.clear()
 	slice_gesture_hit_boss = false
 	slice_gesture_path_length = 0.0
+
+
+func _clear_slice_vfx_instances() -> void:
+	_cancel_active_slice_vfx()
+	active_void_burst_vfx = null
+
+	if fx_layer == null:
+		return
+
+	for child: Node in fx_layer.get_children():
+		if child is SliceVFX or child is VoidBurstVFX:
+			child.queue_free()
